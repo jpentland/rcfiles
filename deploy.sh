@@ -7,5 +7,6 @@ function delete_and_link {
 	ln -s $PWD/SOURCE $HOME/DEST
 }
 
-delete_and_link bashrc .bashrc
-delete_and_link vimrc .vimrc
+delete_and_link "bashrc"	".bashrc"
+delete_and_link "vimrc"		".vimrc"
+delete_and_link "xmonad.hs"	".xmonad/xmonad.hs"
