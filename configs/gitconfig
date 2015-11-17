@@ -1,0 +1,27 @@
+[http]
+	sslCAInfo = /home/jpe/.config/opsy/cacert.crt
+	sslCert = /home/jpe/.config/opsy/cert.crt
+	sslKey = /home/jpe/.config/opsy/key.pem
+	sslVerify = false
+[user]
+	name = Joseph Pentland
+	email = jpe@opensynergy.com
+[sendemail]
+	smtpserver = localhost
+	smtpserverport = 1025
+	smtpuser = jpe
+[color]
+	ui = auto
+[gui]
+	warndetachedcommit = true
+[push]
+	default = matching
+[alias]
+    ci = commit
+    co = checkout
+    st = status
+    cp = cherry-pick
+    ls = ls-files
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
+[merge]
+	tool = meld
