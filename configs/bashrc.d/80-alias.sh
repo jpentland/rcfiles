@@ -5,15 +5,11 @@ alias ..="cd .."
 alias bashrc="vim ~/.bashrc && source ~/.bashrc"
 alias foscm=/home/jpe/apps/foscm/foscm
 alias halp="cat ~/.halp | shuf -n 1"
-alias food="cat ~/.food | shuf -n 1"
 alias addhalp="cat >> ~/.halp"
 alias get=git
 alias got=git
 alias g=git
 alias v=vim
-alias updateall='sudo apt-get update && sudo apt-get upgrade && sudo apt-get dist-upgrade'
-alias target-reset='ssh 10.25.40.143 -C /opt/relayboard.sh r 1'
-alias target-powerdown='ssh 10.25.40.63 -C /opt/relayboard.sh stop 1'
 alias updateall='sudo apt-get update && sudo apt-get upgrade && sudo apt-get dist-upgrade'
 alias diff='diff -u'
 alias grep='grep --color=auto'
