@@ -1,4 +1,6 @@
 #!/bin/bash
 [ -z "$PS1" ] && return
 
-source ~/.bashrc.d/*
+for rcfile in ~/.bashrc.d/*; do
+	. $rcfile
+done
