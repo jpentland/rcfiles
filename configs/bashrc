@@ -1,6 +1,11 @@
 #!/bin/bash
 [ -z "$PS1" ] && return
 
+LOCAL="$HOME/.bashrc_local"
+
 for rcfile in ~/.bashrc.d/*; do
 	. $rcfile
 done
+
+touch $LOCAL
+. $LOCAL
