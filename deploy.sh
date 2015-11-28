@@ -5,6 +5,7 @@ FORCE=$1
 function delete_and_link {
 	SOURCE=$1
 	DEST=$2
+	mkdir -p $(dirname $HOME/$DEST)
 	rm -i $FORCE "$HOME/$DEST"
 	ln -s "$PWD/$CFGDIR/$SOURCE" "$HOME/$DEST"
 }
