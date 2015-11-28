@@ -1,5 +1,6 @@
 #!/bin/bash
 CFGDIR=configs
+FORCE=$1
 
 function delete_and_link {
 	SOURCE=$1
@@ -9,7 +10,7 @@ function delete_and_link {
 }
 
 if [ " $FORCE" != " -f" ]; then
-	echo "Note: Set FORCE="-f" to force deletion of source files"
+	echo "Note: Use -f to force deletion of source files"
 fi
 
 #		Source filename		# Destination filebane (relative to $HOME)
