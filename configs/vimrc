@@ -5,5 +5,7 @@ endif
 
 match ErrorMsg '\s\+$'
 
+filetype plugin indent on
+
 ":set expandtab"
 ":set tabstop=4"
