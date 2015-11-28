@@ -12,18 +12,17 @@ function proml {
     local WHITE="\[\033[1;37m\]"
     local LIGHT_GRAY="\[\033[0;37m\]"
     case $TERM in
-        xterm*)
-TITLEBAR='\[\033]0;\u@\h:\W\007\]'
-;;
-*)
-TITLEBAR=""
-;;
-esac
-PS1="${TITLEBAR}\
-\u:$RED [\$(date +'%H:%M')]$LIGHT_GRAY [\W]$GREEN \$(parse_git_branch) \
-$LIGHT_GRAY> "
-PS2='> '
-PS4='+ '
+    xterm*)
+        TITLEBAR='\[\033]0;\u@\h:\W\007\]';
+    *)
+        TITLEBAR="";
+    esac
+
+    PS1="${TITLEBAR}\
+        \u:$RED [\$(date +'%H:%M')]$LIGHT_GRAY [\W]$GREEN \$(parse_git_branch) \
+        $LIGHT_GRAY> "
+    PS2='> '
+    PS4='+ '
 }
 proml
 
