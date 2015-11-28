@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 CFGDIR=configs
 
 function delete_and_link {
