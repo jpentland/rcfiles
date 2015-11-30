@@ -13,14 +13,12 @@ function proml {
     local LIGHT_GRAY="\[\033[0;37m\]"
     case $TERM in
     xterm*)
-        TITLEBAR='\[\033]0;\u@\h:\W\007\]';
+        TITLEBAR='\[\033]0;\u@\h:\W\007\]';;
     *)
-        TITLEBAR="";
+        TITLEBAR="";;
     esac
 
-    PS1="${TITLEBAR}\
-        \u:$RED [\$(date +'%H:%M')]$LIGHT_GRAY [\W]$GREEN \$(parse_git_branch) \
-        $LIGHT_GRAY> "
+    PS1="${TITLEBAR}\u:$RED [\$(date +'%H:%M')]$LIGHT_GRAY [\W]$GREEN \$(parse_git_branch) $LIGHT_GRAY> "
     PS2='> '
     PS4='+ '
 }
