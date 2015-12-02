@@ -16,6 +16,10 @@ import qualified Data.Map as M
 myLayout = (layoutHook defaultConfig) ||| simpleTabbed
 --myLayout = Tall 1 (1/2) (1/2) ||| simpleTabbed
 
+myStartup = do
+	spawn "feh --bg-scale $(cat ~/.xmonadbg)"
+	spawn "google-chrome"
+
 main = do
   xmproc <- spawnPipe "xmobar"
   xmonad $ defaultConfig
@@ -32,6 +36,7 @@ main = do
                         }
 	, modMask = mod4Mask
 	, focusFollowsMouse = False
+	, startupHook = myStartup
 	}
  where
   mykeys (XConfig {modMask = modm}) = M.fromList $
