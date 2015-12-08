@@ -36,6 +36,7 @@ main = do
                         }
 	, modMask = mod4Mask
 	, focusFollowsMouse = False
+	, clickJustFocuses = False
 	, startupHook = myStartup
 	}
  where
