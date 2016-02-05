@@ -18,6 +18,8 @@ myLayout = (layoutHook defaultConfig) ||| simpleTabbed
 
 myStartup = do
 	spawn "feh --bg-scale $(cat ~/.xmonadbg)"
+	spawn "trayer --expand true --widthtype request --align left"
+	spawn "nm-applet"
 	spawn "google-chrome"
 
 main = do
