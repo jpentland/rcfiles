@@ -20,7 +20,6 @@ myStartup = do
 	spawn "feh --bg-scale $(cat ~/.xmonadbg)"
 	spawn "trayer --expand true --widthtype request --align left"
 	spawn "nm-applet"
-	spawn "google-chrome"
 	spawn "volumeicon"
 
 main = do
