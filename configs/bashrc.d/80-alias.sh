@@ -12,3 +12,6 @@ alias diff='diff -u'
 alias grep='grep --color=auto'
 alias checkcommit="git show | ~/script/checkpatch.pl --notree --no-signoff --strict --subjective -"
 alias checkkcommit="git show | ~/script/checkpatch.pl --no-signoff --strict --subjective -"
+alias gb="setxkbmap gb && echo 'Set keyboard to gb'"
+alias us="setxkbmap us && echo 'Set keyboard to us'"
+alias de="setxkbmap de && echo 'Set keyboard to de'"
