@@ -21,6 +21,7 @@ myStartup = do
 	spawn "trayer --expand true --widthtype request --align left"
 	spawn "nm-applet"
 	spawn "google-chrome"
+	spawn "volumeicon"
 
 main = do
   xmproc <- spawnPipe "xmobar"
