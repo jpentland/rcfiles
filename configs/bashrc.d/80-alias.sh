@@ -21,3 +21,7 @@ function ban {
 
 	sudo su -c "echo 0.0.0.0 $1 | tee -a /etc/hosts"
 }
+
+function unban {
+	sudo su -c "cat /etc/hosts | grep -v $1 > /etc/hosts"
+}
