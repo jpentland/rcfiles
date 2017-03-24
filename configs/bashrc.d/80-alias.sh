@@ -16,3 +16,8 @@ alias gb="setxkbmap gb && echo 'Set keyboard to gb'"
 alias us="setxkbmap us && echo 'Set keyboard to us'"
 alias de="setxkbmap de && echo 'Set keyboard to de'"
 alias gvim="gvim --remote-tab-silent"
+
+function ban {
+
+	sudo su -c "echo 0.0.0.0 $1 | tee -a /etc/hosts"
+}
