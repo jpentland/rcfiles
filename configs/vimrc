@@ -10,3 +10,11 @@ filetype plugin indent on
 
 ":set expandtab"
 ":set tabstop=4"
+":set guioptions-=m  "remove menu bar
+:set guioptions-=T
+:set guioptions-=r  "remove right-hand scroll bar
+:set guioptions-=L  "remove left-hand scroll bar
+:set guifont=Inconsolata\ 12
+colorscheme torte
+:set nu
+:set iskeyword-=_
