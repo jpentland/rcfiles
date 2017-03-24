@@ -25,3 +25,7 @@ function ban {
 function unban {
 	sudo su -c "cat /etc/hosts | grep -v $1 > /etc/hosts"
 }
+
+function noerr {
+	$@ 2> /dev/null
+}
