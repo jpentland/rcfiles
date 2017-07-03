@@ -5,7 +5,7 @@
 	sslVerify = false
 [user]
 	name = Joseph Pentland
-	email = jpe@opensynergy.com
+	email = Joseph.Pentland@opensynergy.com
 [sendemail]
 	smtpserver = localhost
 	smtpserverport = 1025
