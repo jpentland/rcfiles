@@ -27,3 +27,5 @@
 	tool = meld
 [gerrit]
 	createChangeId = false
+[mergetool]
+	keepBackup = false
