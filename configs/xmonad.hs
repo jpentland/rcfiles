@@ -17,6 +17,7 @@ myLayout = (layoutHook defaultConfig) ||| simpleTabbed
 --myLayout = Tall 1 (1/2) (1/2) ||| simpleTabbed
 
 myStartup = do
+	spawn "xrandr --output eDP1 --auto --output DP2 --right-of eDP1"
 	spawn "feh --bg-scale $(cat ~/.xmonadbg)"
 	spawn "trayer --expand true --widthtype request --align left"
 	spawn "nm-applet"
