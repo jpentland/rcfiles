@@ -18,3 +18,4 @@ filetype plugin indent on
 colorscheme torte
 :set nu
 :set iskeyword-=_
+autocmd Filetype gitcommit setlocal spell textwidth=72
