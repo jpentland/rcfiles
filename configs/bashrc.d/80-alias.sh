@@ -16,6 +16,7 @@ alias gb="setxkbmap gb && echo 'Set keyboard to gb'"
 alias us="setxkbmap us && echo 'Set keyboard to us'"
 alias de="setxkbmap de && echo 'Set keyboard to de'"
 alias gvim="gvim --remote-tab-silent"
+alias fix_samba="umount -a -t cifs -l && echo 'Unmounted all CIFS shares'"
 
 function ban {
 
