@@ -29,3 +29,5 @@
 	createChangeId = false
 [mergetool]
 	keepBackup = false
+[rebase]
+	autosquash = true
