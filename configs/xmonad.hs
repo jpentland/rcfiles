@@ -17,7 +17,9 @@ import qualified XMonad.StackSet as W
 
 import qualified Data.Map as M
 
-myLayout = (layoutHook defaultConfig) ||| simpleTabbed ||| (windowNavigation $ subTabbed $ boringWindows $ Tall 1 (3/100) (1/2))
+myLayout =  (windowNavigation $ subTabbed $ boringWindows $ Tall 1 (3/100) (1/2))
+		||| Full
+		||| simpleTabbed
 --myLayout = Tall 1 (1/2) (1/2) ||| simpleTabbed
 
 myStartup = do
