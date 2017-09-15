@@ -10,10 +10,14 @@ import System.IO
 import XMonad.Layout.NoBorders
 import XMonad.Hooks.UrgencyHook
 import XMonad.Hooks.FloatNext
+import XMonad.Layout.SubLayouts
+import XMonad.Layout.WindowNavigation
+import XMonad.Layout.BoringWindows
+import qualified XMonad.StackSet as W
 
 import qualified Data.Map as M
 
-myLayout = (layoutHook defaultConfig) ||| simpleTabbed
+myLayout = (layoutHook defaultConfig) ||| simpleTabbed ||| (windowNavigation $ subTabbed $ boringWindows $ Tall 1 (3/100) (1/2))
 --myLayout = Tall 1 (1/2) (1/2) ||| simpleTabbed
 
 myStartup = do
@@ -61,5 +65,19 @@ main = do
 	, ((modm, xK_x),		focusUrgent)
 	, ((modm, xK_e),		toggleFloatNext)
 	, ((modm .|. shiftMask, xK_e),  toggleFloatAllNew)
+	, ((modm .|. controlMask, xK_h), sendMessage $ pullGroup L)
+	, ((modm .|. controlMask, xK_l), sendMessage $ pullGroup R)
+ 	, ((modm .|. controlMask, xK_k), sendMessage $ pullGroup U)
+ 	, ((modm .|. controlMask, xK_j), sendMessage $ pullGroup D)
+
+ 	, ((modm .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
+ 	, ((modm .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
+
+	, ((modm .|. controlMask, xK_period), onGroup W.focusUp')
+	, ((modm .|. controlMask, xK_comma), onGroup W.focusDown')
+
+	, ((modm, xK_j), focusDown)
+	, ((modm, xK_k), focusUp)
+
 	]
 
