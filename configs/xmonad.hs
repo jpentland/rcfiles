@@ -75,8 +75,8 @@ main = do
  	, ((modm .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
  	, ((modm .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
 
-	, ((modm .|. controlMask, xK_period), onGroup W.focusUp')
-	, ((modm .|. controlMask, xK_comma), onGroup W.focusDown')
+	, ((modm .|. controlMask, xK_period), onGroup W.focusDown')
+	, ((modm .|. controlMask, xK_comma), onGroup W.focusUp')
 
 	, ((modm, xK_j), focusDown)
 	, ((modm, xK_k), focusUp)
