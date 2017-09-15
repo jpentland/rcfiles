@@ -22,6 +22,10 @@ myStartup = do
 	spawn "trayer --expand true --widthtype request --align left"
 	spawn "nm-applet"
 	spawn "volumeicon"
+	spawn "gnome-do"
+
+myManageHook = composeAll
+	[ resource =? "Do"	--> doFloat ]
 
 main = do
   xmproc <- spawnPipe "xmobar"
@@ -32,7 +36,7 @@ main = do
 	, focusedBorderColor = "#8888dd"
 	, keys          = \c -> mykeys c `M.union` keys defaultConfig c
 	, layoutHook = avoidStruts $ smartBorders $ myLayout
-	, manageHook = manageDocks <+> floatNextHook <+> manageHook defaultConfig
+	, manageHook = manageDocks <+> myManageHook <+> floatNextHook <+> manageHook defaultConfig
 	, logHook = dynamicLogWithPP xmobarPP
                         { ppOutput = hPutStrLn xmproc
                         , ppTitle = xmobarColor "green" "" . shorten 50
