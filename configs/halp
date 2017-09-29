@@ -20,3 +20,4 @@ Is the cachemanager properly enabled?
 Have you used all the correct OPSY uboot modifications?
 LALALALALA I can't hear you.
 Try disabling the L2 cache and see if that fixes it.
+Update the JIRA ticket with current status
