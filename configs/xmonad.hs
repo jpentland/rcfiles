@@ -20,7 +20,6 @@ import qualified Data.Map as M
 myLayout =  (windowNavigation $ subTabbed $ boringWindows $ Tall 1 (3/100) (1/2))
 		||| Full
 		||| simpleTabbed
---myLayout = Tall 1 (1/2) (1/2) ||| simpleTabbed
 
 myStartup = do
 	spawn "xrandr --output eDP1 --auto --output DP2 --right-of eDP1"
