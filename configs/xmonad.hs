@@ -37,7 +37,7 @@ main = do
   xmproc <- spawnPipe "xmobar"
   xmonad $ defaultConfig
 	{ borderWidth	= 1
-	, terminal	= "konsole"
+	, terminal	= "gnome-terminal"
 	, normalBorderColor = "#444444"
 	, focusedBorderColor = "#8888dd"
 	, keys          = \c -> mykeys c `M.union` keys defaultConfig c
