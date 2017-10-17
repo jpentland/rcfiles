@@ -25,6 +25,7 @@ myStartup = do
 	spawn "xrandr --output eDP1 --auto --output DP2 --right-of eDP1"
 	spawn "feh --bg-scale $(cat ~/.xmonadbg)"
 	spawn "trayer --expand true --widthtype request --align left"
+	spawn "xsetroot -cursor_name left_ptr"
 	spawn "nm-applet"
 	spawn "volumeicon"
 	spawn "gnome-do"
