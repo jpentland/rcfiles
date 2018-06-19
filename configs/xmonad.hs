@@ -18,8 +18,8 @@ import qualified XMonad.StackSet as W
 import qualified Data.Map as M
 
 myLayout =  (windowNavigation $ subTabbed $ boringWindows $ Tall 1 (3/100) (1/2))
-		||| Full
-		||| simpleTabbed
+		||| (windowNavigation $ Full)
+		||| (windowNavigation $ simpleTabbed)
 
 myStartup = do
 	spawn "xrandr --output eDP1 --auto --output DP2 --right-of eDP1"
