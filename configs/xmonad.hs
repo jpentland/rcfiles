@@ -13,6 +13,7 @@ import XMonad.Hooks.FloatNext
 import XMonad.Layout.SubLayouts
 import XMonad.Layout.WindowNavigation
 import XMonad.Layout.BoringWindows
+import XMonad.Hooks.SetWMName
 import qualified XMonad.StackSet as W
 
 import qualified Data.Map as M
@@ -50,7 +51,7 @@ main = do
 	, modMask = mod4Mask
 	, focusFollowsMouse = False
 	, clickJustFocuses = False
-	, startupHook = myStartup
+	, startupHook = myStartup >> setWMName "LG3D"
 	}
  where
   mykeys (XConfig {modMask = modm}) = M.fromList $
