@@ -14,6 +14,7 @@ import XMonad.Layout.SubLayouts
 import XMonad.Layout.WindowNavigation
 import XMonad.Layout.BoringWindows
 import XMonad.Hooks.SetWMName
+import Graphics.X11.ExtraTypes.XF86
 import qualified XMonad.StackSet as W
 
 import qualified Data.Map as M
@@ -23,22 +24,24 @@ myLayout =  (windowNavigation $ subTabbed $ boringWindows $ Tall 1 (3/100) (1/2)
 		||| (windowNavigation $ simpleTabbed)
 
 myStartup = do
-	spawn "xrandr --output eDP1 --auto --output DP2 --right-of eDP1"
+	spawn "xrandr --output eDP1 --auto --output HDMI1 --auto --right-of eDP1"
 	spawn "feh --bg-scale $(cat ~/.xmonadbg)"
 	spawn "trayer --expand true --widthtype request --align left"
 	spawn "xsetroot -cursor_name left_ptr"
 	spawn "nm-applet"
-	spawn "volumeicon"
+	spawn "if ! ps -U $USER | grep volumeicon; then volumeicon; fi"
 	spawn "gnome-do"
 
 myManageHook = composeAll
-	[ resource =? "Do"	--> doFloat ]
+	[ resource =? "Do"	--> doFloat,
+	  resource =? "Yakuake" --> doFloat,
+	  resource =? "yakuake" --> doFloat ]
 
 main = do
   xmproc <- spawnPipe "xmobar"
   xmonad $ defaultConfig
 	{ borderWidth	= 1
-	, terminal	= "gnome-terminal"
+	, terminal	= "konsole"
 	, normalBorderColor = "#444444"
 	, focusedBorderColor = "#8888dd"
 	, keys          = \c -> mykeys c `M.union` keys defaultConfig c
@@ -52,8 +55,9 @@ main = do
 	, focusFollowsMouse = False
 	, clickJustFocuses = False
 	, startupHook = myStartup >> setWMName "LG3D"
+	, handleEventHook = docksEventHook <+> handleEventHook defaultConfig
 	}
- where
+  where
   mykeys (XConfig {modMask = modm}) = M.fromList $
 	[ ((modm , xK_g), goToSelected defaultGSConfig)
 	, ((modm , xK_z), spawn "slock")
@@ -79,8 +83,18 @@ main = do
 	, ((modm .|. controlMask, xK_period), onGroup W.focusDown')
 	, ((modm .|. controlMask, xK_comma), onGroup W.focusUp')
 
-	, ((modm, xK_j), focusDown)
-	, ((modm, xK_k), focusUp)
+	, ((modm, xK_j), windows W.focusDown)
+	, ((modm, xK_k), windows W.focusUp)
+	, ((modm .|. mod1Mask, xK_j), focusDown)
+	, ((modm .|. mod1Mask, xK_k), focusUp)
+	, ((modm, xK_p), spawn "exe=`dmenu_path | dmenu` && eval \"exec $exe\"")
+
+	, ((0, xF86XK_AudioRaiseVolume), spawn "pactl set-sink-volume @DEFAULT_SINK@ +1.5%")
+	, ((0, xF86XK_AudioLowerVolume), spawn "pactl set-sink-volume @DEFAULT_SINK@  -1.5%")
+	, ((0, xF86XK_AudioMute), spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
+
+	, ((0, xF86XK_MonBrightnessUp), spawn "lux -a 20%")
+	, ((0, xF86XK_MonBrightnessDown), spawn "lux -s 20%")
 
 	]
 
