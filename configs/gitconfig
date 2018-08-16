@@ -1,15 +1,3 @@
-[http]
-	sslCAInfo = /home/jpe/.config/opsy/cacert.crt
-	sslCert = /home/jpe/.config/opsy/cert.crt
-	sslKey = /home/jpe/.config/opsy/key.pem
-	sslVerify = false
-[user]
-	name = Joseph Pentland
-	email = Joseph.Pentland@opensynergy.com
-[sendemail]
-	smtpserver = localhost
-	smtpserverport = 1025
-	smtpuser = jpe
 [color]
 	ui = auto
 [gui]
