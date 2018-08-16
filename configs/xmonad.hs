@@ -32,11 +32,13 @@ myStartup = do
 	spawn "if ! ps -U $USER | grep volumeicon; then volumeicon; fi"
 	spawn "setxkbmap gb"
 	spawn "if ! ps -U $USER | grep cbatticon; then cbatticon; fi"
+	spawn "~/script/powerbutton.sh"
 
 myManageHook = composeAll
 	[ resource =? "Do"	--> doFloat,
 	  resource =? "Yakuake" --> doFloat,
-	  resource =? "yakuake" --> doFloat ]
+	  resource =? "yakuake" --> doFloat,
+	  resource =? "yad" --> doFloat]
 
 myTheme = defaultTheme { fontName = "xft:DejaVu Sans:size=12" }
 
