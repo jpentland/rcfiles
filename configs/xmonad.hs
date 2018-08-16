@@ -30,6 +30,7 @@ myStartup = do
 	spawn "xsetroot -cursor_name left_ptr"
 	spawn "nm-applet"
 	spawn "if ! ps -U $USER | grep volumeicon; then volumeicon; fi"
+	spawn "setxkbmap gb"
 
 myManageHook = composeAll
 	[ resource =? "Do"	--> doFloat,
