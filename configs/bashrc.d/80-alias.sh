@@ -18,6 +18,7 @@ alias de="setxkbmap de && echo 'Set keyboard to de'"
 alias gvim="gvim --remote-tab-silent"
 alias fix_samba="umount -a -t cifs -l && echo 'Unmounted all CIFS shares'"
 alias vi=vim
+alias editor=$EDITOR
 
 function noerr {
 	$@ 2> /dev/null
