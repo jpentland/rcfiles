@@ -31,6 +31,7 @@ myStartup = do
 	spawn "nm-applet"
 	spawn "if ! ps -U $USER | grep volumeicon; then volumeicon; fi"
 	spawn "setxkbmap gb"
+	spawn "if ! ps -U $USER | grep cbatticon; then cbatticon; fi"
 
 myManageHook = composeAll
 	[ resource =? "Do"	--> doFloat,
