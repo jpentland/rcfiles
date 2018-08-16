@@ -18,15 +18,6 @@ alias de="setxkbmap de && echo 'Set keyboard to de'"
 alias gvim="gvim --remote-tab-silent"
 alias fix_samba="umount -a -t cifs -l && echo 'Unmounted all CIFS shares'"
 
-function ban {
-
-	sudo su -c "echo 0.0.0.0 $1 | tee -a /etc/hosts"
-}
-
-function unban {
-	sudo su -c "cat /etc/hosts | grep -v $1 > /etc/hosts"
-}
-
 function noerr {
 	$@ 2> /dev/null
 }
