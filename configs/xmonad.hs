@@ -19,9 +19,9 @@ import qualified XMonad.StackSet as W
 
 import qualified Data.Map as M
 
-myLayout =  (windowNavigation $ subTabbed $ boringWindows $ Tall 1 (3/100) (1/2))
+myLayout =   (windowNavigation $ subTabbed $ boringWindows $ Tall 1 (3/100) (1/2))
 		||| (windowNavigation $ Full)
-		||| (windowNavigation $ simpleTabbed)
+		||| (windowNavigation $ tabbed shrinkText myTheme)
 
 myStartup = do
 	spawn "xrandr --output eDP1 --auto --scale 0.75x0.75 --output HDMI1 --auto --right-of eDP1"
@@ -36,6 +36,8 @@ myManageHook = composeAll
 	[ resource =? "Do"	--> doFloat,
 	  resource =? "Yakuake" --> doFloat,
 	  resource =? "yakuake" --> doFloat ]
+
+myTheme = defaultTheme { fontName = "xft:DejaVu Sans:size=12" }
 
 main = do
   xmproc <- spawnPipe "xmobar"
