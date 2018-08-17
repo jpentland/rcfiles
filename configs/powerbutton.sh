@@ -1,5 +1,5 @@
 #!/bin/bash
-TMP_FILE=/tmp/$USER-$0-running
+TMP_FILE=/tmp/$USER-$(basename $0)-running
 set -x
 function ask {
 	echo "yad --center --image \"dialog-question\" --title \"Alert\" --button=gtk-yes:\"$2\" --button=gtk-no:1 --text \"$1?\""
