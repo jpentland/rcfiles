@@ -1,5 +1,5 @@
 #!/bin/bash
-TMP_FLE=/tmp/$USER-$0-running
+TMP_FILE=/tmp/$USER-$0-running
 set -x
 function ask {
 	echo "yad --center --image \"dialog-question\" --title \"Alert\" --button=gtk-yes:\"$2\" --button=gtk-no:1 --text \"$1?\""
@@ -11,7 +11,7 @@ Suspend!bash -c 'slock & systemctl suspend'\
 |Restart!$(ask 'Restart' 'systemctl reboot')\
 "
 
-if [ -f $TMP_FILE ]; then exit 0
+if [ -f $TMP_FILE ]; then exit 0; fi
 
 touch $TMP_FILE
 yad --notification --menu="$menu" --image="system-shutdown"  --command=
