@@ -25,7 +25,7 @@ myLayout =   (windowNavigation $ subTabbed $ boringWindows $ Tall 1 (3/100) (1/2
 
 myStartup = do
 	spawn "xrandr --output eDP-1 --auto --scale 0.75x0.75 --output HDMI1 --auto --right-of eDP1"
-	spawn "feh --bg-scale $(cat ~/.xmonadbg)"
+	spawn "feh --bg-scale ~/.xmonadbg"
 	spawn "killall trayer && trayer --edge top --expand true --widthtype percent --width 10 --transparent true  --tint 0x000000 --height 18 --align right --SetPartialStrut true"
 	spawn "xsetroot -cursor_name left_ptr"
 	spawn "nm-applet"
