@@ -24,7 +24,7 @@ myLayout =   (windowNavigation $ subTabbed $ boringWindows $ Tall 1 (3/100) (1/2
 		||| (windowNavigation $ tabbed shrinkText myTheme)
 
 myStartup = do
-	spawn "xrandr --output eDP-1 --auto --scale 0.75x0.75 --output HDMI1 --auto --right-of eDP1"
+	spawn "xrandr $(cat ~/.xrandr.conf | grep -v \"^#\")"
 	spawn "feh --bg-scale ~/.xmonadbg"
 	spawn "killall trayer; trayer $(cat ~/.trayer.conf | grep -v \"^#\")"
 	spawn "xsetroot -cursor_name left_ptr"
