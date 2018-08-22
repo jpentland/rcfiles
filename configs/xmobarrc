@@ -1,7 +1,7 @@
-Config { font = "-*-Fixed-Bold-R-Normal-*-14-*-*-*-*-*-*-*"
+Config { font = "-*-Fixed-Bold-R-Normal-*-16-*-*-*-*-*-*-*"
        , bgColor = "black"
        , fgColor = "grey"
-       , position = TopW L 90
+       , position = TopW R 95
        , commands = [ Run Weather "EDDT" ["-t"," <tempC>C","-L","5","-H","25","--normal","green","--high","red","--low","lightblue" ] 36000
                     , Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10
                     , Run Memory ["-t","Mem: <usedratio>%"] 10
@@ -12,6 +12,6 @@ Config { font = "-*-Fixed-Bold-R-Normal-*-14-*-*-*-*-*-*-*"
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{ %uname% | %cpu% | %memory% * %swap%    <fc=#ee9a00>%date%</fc> | %EDDT%"
+       , template = "%StdinReader% }{ %uname% | %cpu% | %memory% * %swap% | %EDDT% | <fc=#ee9a00>%date%</fc>"
        }
 
