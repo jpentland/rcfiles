@@ -1,6 +1,8 @@
 #!/bin/bash
 CFGDIR=configs
+SCRIPTDIR=scripts
 FORCE=$1
+BIN=$HOME/.local/bin
 
 function delete_and_link {
 	SOURCE=$1
@@ -27,3 +29,10 @@ delete_and_link "vim"			".vim"
 delete_and_link "muttrc"		".muttrc"
 delete_and_link "powerbutton.sh"	"script/powerbutton.sh"
 delete_and_link "trayer.conf"		".trayer.conf"
+
+# Link all scripts to local bin dir
+mkdir -p $BIN/$s
+for s in $(ls -1 $SCRIPTDIR); do
+	rm -i $FORCE "$BIN/$s"
+	ln -s "$PWD/$SCRIPTDIR/$s" "$BIN/$s"
+done

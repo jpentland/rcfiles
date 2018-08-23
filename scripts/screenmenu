@@ -1,0 +1,19 @@
+#!/bin/bash
+screens="$(screen -ls | tail -n+2 | head -n-1)"
+count=$(expr $(echo $screens | wc -w) / 2 + 1)
+height=0
+width=0
+selection=$(dialog --menu Screen $height $width $count "New Screen" "..." $screens --stdout)
+
+if [ "$selection" == "New Screen" ]; then
+	selection=$(dialog --inputbox "Name?" $height $width --stdout)
+fi
+
+if [[ ! "$selection" ]]; then
+	exit 0
+fi
+
+if echo "$screens" | grep $selection | grep Attached > /dev/null; then
+	dialog --yesno "Force Detach?" $height $width --stdout || exit 0
+fi
+screen -Rd $selection
