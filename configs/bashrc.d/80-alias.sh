@@ -19,6 +19,7 @@ alias gvim="gvim --remote-tab-silent"
 alias fix_samba="umount -a -t cifs -l && echo 'Unmounted all CIFS shares'"
 alias vi=vim
 alias editor=$EDITOR
+alias term="bash -c 'konsole &'"
 
 function noerr {
 	$@ 2> /dev/null
