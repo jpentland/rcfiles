@@ -15,10 +15,12 @@ if [ "$selection" == "New Screen" ]; then
 fi
 
 if [[ ! "$selection" ]]; then
+	clear
 	exit 0
 fi
 
 if echo "$screens" | grep $selection | grep Attached > /dev/null; then
-	dialog --yesno "Force Detach?" $height $width --stdout || exit 0
+	dialog --yesno "Force Detach?" $height $width --stdout || { clear; exit 0; }
 fi
+clear
 screen -Rd $selection
