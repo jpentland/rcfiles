@@ -32,7 +32,7 @@ myStartup = do
 	spawn "if ! ps -U $USER | grep volumeicon; then volumeicon; fi"
 	spawn "setxkbmap gb"
 	spawn "if ! ps -U $USER | grep cbatticon; then cbatticon; fi"
-	spawn "~/script/powerbutton.sh"
+	spawn "~/.local/bin/powerbutton.sh"
 
 myManageHook = composeAll
 	[ resource =? "Do"	--> doFloat,

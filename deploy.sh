@@ -27,7 +27,6 @@ delete_and_link "gitconfig"		".gitconfig"
 delete_and_link "konsolerc"		".config/konsolerc"
 delete_and_link "vim"			".vim"
 delete_and_link "muttrc"		".muttrc"
-delete_and_link "powerbutton.sh"	"script/powerbutton.sh"
 delete_and_link "trayer.conf"		".trayer.conf"
 
 # Link all scripts to local bin dir
