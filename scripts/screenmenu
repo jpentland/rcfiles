@@ -1,5 +1,10 @@
 #!/bin/bash
 screens="$(screen -ls | tail -n+2 | head -n-1)"
+
+if [[ $1 ]]; then
+	screens="$(echo "$screens" | grep -e "^\s[0-9]\+\.$1" | tee /dev/stderr)"
+fi
+
 count=$(expr $(echo $screens | wc -w) / 2 + 1)
 height=0
 width=0
