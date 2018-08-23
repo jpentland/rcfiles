@@ -20,6 +20,8 @@ alias fix_samba="umount -a -t cifs -l && echo 'Unmounted all CIFS shares'"
 alias vi=vim
 alias editor=$EDITOR
 alias term="bash -c 'konsole &'"
+alias sm=screenmenu
+
 
 function noerr {
 	$@ 2> /dev/null
