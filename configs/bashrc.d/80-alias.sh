@@ -25,7 +25,7 @@ alias sm=screenmenu
 # Open a file in a vim screen session
 function svim {
 	file=$(basename $1)
-	dir=$(dirname $1 | xargs basename)
+	dir=$(dirname $1 | xargs readlink -f | xargs basename)
 	screen -Rd vim.$dir.$file vim $1
 }
 
