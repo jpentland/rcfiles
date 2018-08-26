@@ -1,14 +1,17 @@
 #!/bin/bash
 screens="$(screen -ls | tail -n+2 | head -n-1)"
+title=Screen
 
 if [[ $1 ]]; then
 	screens="$(echo "$screens" | grep -e "^\s[0-9]\+\.$1" | tee /dev/stderr)"
+	title="$title ($1)"
 fi
 
 count=$(expr $(echo $screens | wc -w) / 2 + 1)
 height=0
 width=0
-selection=$(dialog --menu Screen $height $width $count "New Screen" "..." $screens --stdout)
+
+selection=$(dialog --menu "$title" $height $width $count "New Screen" "..." $screens --stdout)
 
 if [ "$selection" == "New Screen" ]; then
 	selection=$(dialog --inputbox "Name?" $height $width --stdout)
