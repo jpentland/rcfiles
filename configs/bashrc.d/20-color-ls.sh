@@ -17,4 +17,4 @@ alias l='ls-l'
 alias lh='ls -alFh'
 
 # Use 'exa' for 'l' if available
-which exa && alias l='exa -l'
+which exa > /dev/null  && alias l='exa -l'
