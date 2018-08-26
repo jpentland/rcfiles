@@ -24,7 +24,7 @@ myLayout =   (windowNavigation $ subTabbed $ boringWindows $ Tall 1 (3/100) (1/2
 		||| (windowNavigation $ tabbed shrinkText myTheme)
 
 myStartup = do
-	spawn "xrandr $(cat ~/.xrandr.conf | grep -v \"^#\")"
+	spawn "~/.local/bin/xrandr-update.sh"
 	spawn "feh --bg-scale ~/.xmonadbg"
 	spawn "killall trayer; trayer $(cat ~/.trayer.conf | grep -v \"^#\")"
 	spawn "xsetroot -cursor_name left_ptr"
@@ -100,8 +100,8 @@ main = do
 	, ((0, xF86XK_AudioLowerVolume), spawn "pactl set-sink-volume @DEFAULT_SINK@  -1.5%")
 	, ((0, xF86XK_AudioMute), spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
 
-	, ((0, xF86XK_MonBrightnessUp), spawn "lux -a 20%")
-	, ((0, xF86XK_MonBrightnessDown), spawn "lux -s 20%")
+	, ((0, xF86XK_MonBrightnessUp), spawn "~/.local/bin/xrandr-update.sh +10")
+	, ((0, xF86XK_MonBrightnessDown), spawn "~/.local/bin/xrandr-update.sh -10")
 
 	]
 
