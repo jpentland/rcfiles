@@ -13,7 +13,7 @@ fi
 # some more ls aliases
 alias ll='ls -alF'
 alias la='ls -A'
-alias l='ls-l'
+alias l='ls -l'
 alias lh='ls -alFh'
 
 # Use 'exa' for 'l' if available
