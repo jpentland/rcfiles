@@ -67,7 +67,7 @@ main = do
   mykeys (XConfig {modMask = modm}) = M.fromList $
 	[ ((modm , xK_g), goToSelected defaultGSConfig)
 	, ((modm , xK_z), spawn "slock")
-	, ((modm .|. controlMask , xK_z), spawn "slock & systemctl suspend")
+	, ((modm .|. controlMask , xK_z), spawn "slock & sleep 2s && systemctl suspend")
 	, ((modm,               xK_Right),  nextWS)
 	, ((modm,               xK_Left),    prevWS)
 	, ((modm .|. shiftMask, xK_Right),  shiftToNext)
