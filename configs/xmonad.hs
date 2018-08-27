@@ -90,10 +90,10 @@ main = do
 	, ((modm .|. controlMask, xK_period), onGroup W.focusDown')
 	, ((modm .|. controlMask, xK_comma), onGroup W.focusUp')
 
-	, ((modm, xK_j), windows W.focusDown)
-	, ((modm, xK_k), windows W.focusUp)
-	, ((modm .|. mod1Mask, xK_j), focusDown)
-	, ((modm .|. mod1Mask, xK_k), focusUp)
+	, ((modm, xK_j), focusDown)
+	, ((modm, xK_k), focusUp)
+	, ((modm .|. mod1Mask, xK_j), windows W.focusDown)
+	, ((modm .|. mod1Mask, xK_k), windows W.focusUp)
 	, ((modm, xK_p), spawn "exe=`dmenu_path | dmenu` && eval \"exec $exe\"")
 
 	, ((0, xF86XK_AudioRaiseVolume), spawn "pactl set-sink-volume @DEFAULT_SINK@ +1.5%")
