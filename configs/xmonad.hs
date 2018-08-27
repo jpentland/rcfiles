@@ -24,15 +24,7 @@ myLayout =   (windowNavigation $ subTabbed $ boringWindows $ Tall 1 (3/100) (1/2
 		||| (windowNavigation $ tabbed shrinkText myTheme)
 
 myStartup = do
-	spawn "~/.local/bin/xrandr-update.sh"
-	spawn "feh --bg-scale ~/.xmonadbg"
-	spawn "killall trayer; trayer $(cat ~/.trayer.conf | grep -v \"^#\")"
-	spawn "xsetroot -cursor_name left_ptr"
-	spawn "nm-applet"
-	spawn "if ! ps -U $USER | grep volumeicon; then volumeicon; fi"
-	spawn "setxkbmap gb"
-	spawn "if ! ps -U $USER | grep cbatticon; then cbatticon; fi"
-	spawn "~/.local/bin/powerbutton.sh"
+	spawn "~/.xmonad/startup.sh"
 
 myManageHook = composeAll
 	[ resource =? "Do"	--> doFloat,

@@ -20,6 +20,7 @@ fi
 delete_and_link "bashrc"		".bashrc"
 delete_and_link "vimrc"			".vimrc"
 delete_and_link "xmonad.hs"		".xmonad/xmonad.hs"
+delete_and_link "startup.conf"		".xmonad/startup.conf"
 delete_and_link "xmobarrc"		".xmobarrc"
 delete_and_link "halp"			".halp"
 delete_and_link "bashrc.d"		".bashrc.d"
