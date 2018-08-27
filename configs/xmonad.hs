@@ -106,15 +106,9 @@ main = do
 	]
 
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
-    -- mod-button1, Set the window to floating mode and move by dragging
     [ ((modMask, button1), (\w -> focus w >> mouseMoveWindow w))
-    -- mod-button2, Raise the window to the top of the stack
     , ((modMask, button2), (\w -> focus w >> windows W.swapMaster))
-    -- mod-button3, Set the window to floating mode and resize by dragging
     , ((modMask, button3), (\w -> focus w >> mouseResizeWindow w))
-    -- you may also bind events to the mouse scroll wheel (button4 and button5)
-    -- cycle focus
-    -- cycle through workspaces
     , ((modMask, button5), (\_ -> nextWS))
     , ((modMask, button4), (\_ -> prevWS))
     ]
