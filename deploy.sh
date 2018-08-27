@@ -28,6 +28,7 @@ delete_and_link "konsolerc"		".config/konsolerc"
 delete_and_link "vim"			".vim"
 delete_and_link "muttrc"		".muttrc"
 delete_and_link "trayer.conf"		".trayer.conf"
+delete_and_link "Xresources"		".Xresources"
 
 # Link all scripts to local bin dir
 mkdir -p $BIN/$s
