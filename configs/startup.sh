@@ -31,7 +31,7 @@ nm-applet &
 singlestart volumeicon &
 singlestart cbatticon &
 ~/.local/bin/powerbutton.sh &
-killstart redshift-gtk -l 52.520645:13.409779 & # berlin, make configurable later
+killall redshift; killstart redshift-gtk -l 52.520645:13.409779 & # berlin, make configurable later
 singlestart yakuake &
 
 # Dont kill everything when script ends
