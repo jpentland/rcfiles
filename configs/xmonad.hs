@@ -20,8 +20,8 @@ import qualified XMonad.StackSet as W
 import qualified Data.Map as M
 
 myLayout =   (windowNavigation $ subTabbed $ boringWindows $ Tall 1 (3/100) (1/2))
-		||| (windowNavigation $ Full)
-		||| (windowNavigation $ tabbed shrinkText myTheme)
+		||| (windowNavigation $ boringWindows $ Full)
+		||| (windowNavigation $ boringWindows $ tabbed shrinkText myTheme)
 
 myStartup = do
 	spawn "~/.xmonad/startup.sh"
