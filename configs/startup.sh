@@ -15,6 +15,7 @@ function singlestart {
 
 # Update screen config
 ~/.local/bin/xrandr-update.sh
+autorandr
 
 # Background image
 feh --bg-scale ~/.xmonadbg
