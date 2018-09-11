@@ -3,6 +3,7 @@ Config { font = "xft:Bitstream Vera Sans Mono:size=10:bold:antialias=true"
        , fgColor = "grey"
        , position = TopW R 92
        , commands = [ Run Weather "EDDT" ["-t"," <tempC>C","-L","5","-H","25","--normal","green","--high","red","--low","lightblue" ] 36000
+		    , Run Network "enp0s31f6" ["-L","0","-H","32","--normal","green","--high","red"] 10
                     , Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10
                     , Run Memory ["-t","Mem: <usedratio>%"] 10
                     , Run Swap [] 10
@@ -12,6 +13,6 @@ Config { font = "xft:Bitstream Vera Sans Mono:size=10:bold:antialias=true"
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{ %uname% | %cpu% | %memory% * %swap% | %EDDT% | <fc=#ee9a00>%date%</fc>"
+       , template = "%StdinReader% }{ %uname% | %enp0s31f6% | %cpu% | %memory% * %swap% | %EDDT% | <fc=#ee9a00>%date%</fc>"
        }
 
