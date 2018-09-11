@@ -15,6 +15,7 @@ import XMonad.Layout.WindowNavigation
 import XMonad.Layout.BoringWindows
 import XMonad.Hooks.SetWMName
 import Graphics.X11.ExtraTypes.XF86
+import XMonad.Actions.WindowGo
 import qualified XMonad.StackSet as W
 
 import qualified Data.Map as M
@@ -94,6 +95,9 @@ main = do
 
 	, ((0, xF86XK_MonBrightnessUp), spawn "~/.local/bin/xrandr-update.sh +10")
 	, ((0, xF86XK_MonBrightnessDown), spawn "~/.local/bin/xrandr-update.sh -10")
+
+	, ((modm .|. shiftMask, xK_p), raise (className =? "Pidgin"))
+	, ((modm .|. shiftMask, xK_o), raise (className =? "Spotify"))
 
 	]
 
