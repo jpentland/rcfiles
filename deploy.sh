@@ -21,6 +21,7 @@ delete_and_link "bashrc"		".bashrc"
 delete_and_link "vimrc"			".vimrc"
 delete_and_link "xmonad.hs"		".xmonad/xmonad.hs"
 delete_and_link "startup.sh"		".xmonad/startup.sh"
+delete_and_link "mediacontrol.sh"	".xmonad/mediacontrol.sh"
 delete_and_link "xmobarrc"		".xmobarrc"
 delete_and_link "halp"			".halp"
 delete_and_link "bashrc.d"		".bashrc.d"
@@ -30,6 +31,7 @@ delete_and_link "vim"			".vim"
 delete_and_link "muttrc"		".muttrc"
 delete_and_link "trayer.conf"		".trayer.conf"
 delete_and_link "Xresources"		".Xresources"
+
 
 # Link all scripts to local bin dir
 mkdir -p $BIN/$s
