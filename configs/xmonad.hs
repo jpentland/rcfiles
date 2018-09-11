@@ -96,6 +96,11 @@ main = do
 	, ((0, xF86XK_MonBrightnessUp), spawn "~/.local/bin/xrandr-update.sh +10")
 	, ((0, xF86XK_MonBrightnessDown), spawn "~/.local/bin/xrandr-update.sh -10")
 
+	, ((controlMask, xK_Pause), spawn "~/.xmonad/mediacontrol.sh playpause")
+	, ((0, xF86XK_AudioPause), spawn "~/.xmonad/mediacontrol.sh pause")
+	, ((0, xF86XK_AudioPlay), spawn "~/.xmonad/mediacontrol.sh play")
+	, ((0, xF86XK_AudioNext), spawn "~/.xmonad/mediacontrol.sh next")
+	, ((0, xF86XK_AudioPrev), spawn "~/.xmonad/mediacontrol.sh previous")
 	, ((modm .|. shiftMask, xK_p), raise (className =? "Pidgin"))
 	, ((modm .|. shiftMask, xK_o), raise (className =? "Spotify"))
 
