@@ -87,6 +87,9 @@ main = do
 	, ((modm, xK_k), focusUp)
 	, ((modm .|. mod1Mask, xK_j), windows W.focusDown)
 	, ((modm .|. mod1Mask, xK_k), windows W.focusUp)
+
+	,((modm, xK_b     ), sendMessage ToggleStruts)
+
 	, ((modm, xK_p), spawn "exe=`dmenu_path | dmenu` && eval \"exec $exe\"")
 
 	, ((0, xF86XK_AudioRaiseVolume), spawn "pactl set-sink-volume @DEFAULT_SINK@ +1.5%")
