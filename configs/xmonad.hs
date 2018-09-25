@@ -106,6 +106,7 @@ main = do
 	, ((0, xF86XK_AudioPrev), spawn "~/.xmonad/mediacontrol.sh previous")
 	, ((modm .|. shiftMask, xK_p), raise (className =? "Pidgin"))
 	, ((modm .|. shiftMask, xK_o), raise (className =? "Spotify"))
+	, ((modm .|. shiftMask, xK_i), windowPrompt def { autoComplete = Just 50000 } Goto allWindows)
 
 	]
 
