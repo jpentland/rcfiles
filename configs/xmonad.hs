@@ -96,8 +96,8 @@ main = do
 	, ((0, xF86XK_AudioLowerVolume), spawn "pactl set-sink-volume @DEFAULT_SINK@  -1.5%")
 	, ((0, xF86XK_AudioMute), spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
 
-	, ((0, xF86XK_MonBrightnessUp), spawn "~/.local/bin/xrandr-update.sh +10")
-	, ((0, xF86XK_MonBrightnessDown), spawn "~/.local/bin/xrandr-update.sh -10")
+	, ((0, xF86XK_MonBrightnessUp), spawn "~/.local/bin/backlight.sh +5")
+	, ((0, xF86XK_MonBrightnessDown), spawn "~/.local/bin/backlight.sh -5")
 
 	, ((controlMask, xK_Pause), spawn "~/.xmonad/mediacontrol.sh playpause")
 	, ((0, xF86XK_AudioPause), spawn "~/.xmonad/mediacontrol.sh pause")
