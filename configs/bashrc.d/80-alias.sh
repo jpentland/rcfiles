@@ -40,6 +40,15 @@ function sdir  {
 	echo "Created session: $session"
 }
 
+function bashrc {
+	files="$(find ~/.bashrc.d/ -name '*.sh' | xargs -n1 basename)"
+	count=$(($(echo "$files" | wc -l) + 1))
+	selection=$(dialog --keep-tite --menu "bashrc" 0 0 $count $(for a in $files; do echo "$a ..."; done) --stdout)
+	if [[ $selection ]]; then
+		vim ~/.bashrc.d/$selection
+		source ~/.bashrc
+	fi
+}
 
 function smcup {
 	if [ $1 == "-p" ]; then
