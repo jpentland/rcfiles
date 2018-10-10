@@ -15,13 +15,11 @@ width=0
 if [[ $1 ]] && [ "$(echo "$screens" | wc -l)" == "1" ]; then
 	selection=$(echo $screens | awk '{print $1}')
 else
-	selection=$(dialog --menu "$title" $height $width $count "New Screen" "..." $screens --stdout)
-	clear
+	selection=$(dialog --keep-tite --menu "$title" $height $width $count "New Screen" "..." $screens --stdout)
 fi
 
 if [ "$selection" == "New Screen" ]; then
-	selection=$(dialog --inputbox "Name?" $height $width --stdout)
-	clear
+	selection=$(dialog --keep-tite --inputbox "Name?" $height $width --stdout)
 fi
 
 if [[ ! "$selection" ]]; then
@@ -29,6 +27,6 @@ if [[ ! "$selection" ]]; then
 fi
 
 if echo "$screens" | grep $selection | grep Attached > /dev/null; then
-	dialog --yesno "Force Detach?" $height $width --stdout || { clear; exit 0; }
+	dialog --keep-tite --yesno "Force Detach?" $height $width --stdout || { exit 0; }
 fi
 screen -Rd $selection
