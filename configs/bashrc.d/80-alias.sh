@@ -17,6 +17,10 @@ alias editor=$EDITOR
 alias term="bash -c 'konsole &'"
 alias sm=screenmenu
 
+function hexdiff {
+	cmp -l $1 $2 | gawk '{printf "%08X %02X %02X\n", $1, strtonum(0$2), strtonum(0$3)}'
+}
+
 # Open a file in a vim screen session
 function svim {
 	file=$(basename $1)
