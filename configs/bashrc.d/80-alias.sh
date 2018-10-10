@@ -28,3 +28,15 @@ function svim {
 function noerr {
 	$@ 2> /dev/null
 }
+
+function sdir  {
+	dir=$1
+	if [[ ! $dir ]]; then
+		dir=$PWD
+	fi
+
+	session=dir.$(echo $dir | xargs readlink -f | xargs basename)
+	screen -dmS $session bash -c "cd $dir; PRE='(screen) ' bash"
+	echo "Created session: $session"
+}
+
