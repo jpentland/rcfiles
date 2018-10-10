@@ -14,6 +14,8 @@ import XMonad.Layout.SubLayouts
 import XMonad.Layout.WindowNavigation
 import XMonad.Layout.BoringWindows
 import XMonad.Hooks.SetWMName
+import XMonad.Prompt
+import XMonad.Prompt.Window
 import Graphics.X11.ExtraTypes.XF86
 import XMonad.Actions.WindowGo
 import qualified XMonad.StackSet as W
