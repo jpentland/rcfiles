@@ -8,7 +8,7 @@ if [[ $1 ]]; then
 
 fi
 
-count=$(expr $(echo $screens | wc -w) / 2 + 1)
+count=$(expr $(echo "$screens" | wc -w) / 2 + 1)
 height=0
 width=0
 
