@@ -40,3 +40,18 @@ function sdir  {
 	echo "Created session: $session"
 }
 
+
+function smcup {
+	if [ $1 == "-p" ]; then
+		P=1
+		shift
+	fi
+
+	tput smcup
+	clear
+	$@
+	if [[ $P ]];
+		then read -p "Press RETURN to exit";
+	fi;
+	tput rmcup
+};
