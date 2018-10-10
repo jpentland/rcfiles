@@ -12,7 +12,7 @@ function proml {
     local WHITE="\[\033[1;37m\]"
     local LIGHT_GRAY="\[\033[0;37m\]"
 
-    PS1="\u@\h:$RED [\$(date +'%H:%M')]$LIGHT_GRAY [\W]$GREEN \$(parse_git_branch) $LIGHT_GRAY\n--> "
+    PS1="$GREEN$PRE$LIGHT_GRAY\u@\h:$RED [\$(date +'%H:%M')]$LIGHT_GRAY [\W]$GREEN \$(parse_git_branch) $LIGHT_GRAY\n--> "
     PS2='> '
     PS4='+ '
 }
