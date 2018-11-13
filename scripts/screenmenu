@@ -1,4 +1,5 @@
 #!/bin/bash
+alias screen="screen -h 10240"
 screens="$(screen -ls | tail -n+2 | head -n-1 | sort -t. -k2)"
 title=Screen
 
