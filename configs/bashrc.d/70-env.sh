@@ -2,7 +2,7 @@
 export PATH=~/.local/bin:$PATH
 export EDITOR=vim
 export BROWSER=chromium-browser
-export GOPATH=/home/jpe/.gopath
+export GOPATH=~/.gopath
 export PATH=$GOPATH/bin:/opt/google-cloud-sdk/platform/google_appengine/:$PATH
 shopt -s histappend
 
