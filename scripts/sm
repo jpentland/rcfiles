@@ -2,16 +2,39 @@
 alias screen="screen -h 10240"
 screens="$(screen -ls | tail -n+2 | head -n-1 | sort -t. -k2)"
 title=Screen
+height=0
+width=0
+
+if [[ $1 == "-h" ]] || [[ $1 == "--help" ]]; then
+	echo "Usage: $(basename $0) [-h|--help] [-k] [pattern]"
+fi
+
+if [[ $1 == "-k" ]]; then
+	# Multikill
+	for screen in $screens; do
+		if echo $screen | grep -q '(..tached)'; then
+			screen="$screen off"
+		fi
+		screens2="$screens2 $screen"
+	done
+	count=$(expr $(echo "$screens" | wc -w) / 2 + 1)
+	selection=$(dialog --stdout --keep-tite --checklist "Kill Screens" $height $width $count $screens2)
+
+	for screen in $selection; do
+		echo "Killing screen session '$screen'" > /dev/stderr
+		screen -S $screen -X quit
+	done
+
+	exit 0
+fi
 
 if [[ $1 ]]; then
-	screens="$(echo "$screens" | grep -e "^\s[0-9]\+\.$1" | tee /dev/stderr)"
+	screens="$(echo "$screens" | grep -e "^\s[0-9]\+\.$1")"
 	title="$title ($1)"
 
 fi
 
 count=$(expr $(echo "$screens" | wc -w) / 2 + 1)
-height=0
-width=0
 
 if [[ $1 ]] && [ "$(echo "$screens" | wc -l)" == "1" ]; then
 	selection=$(echo $screens | awk '{print $1}')
@@ -28,6 +51,7 @@ if [[ ! "$selection" ]]; then
 fi
 
 if echo "$screens" | grep $selection | grep Attached > /dev/null; then
-	dialog --keep-tite --yesno "Force Detach?" $height $width --stdout || { exit 0; }
+	dialog --keep-tite --yesno "Force Detach?" $height $width --stdout || exit 0
 fi
+echo "Opening session '$selection'" >> /dev/stderr
 screen -Rd $selection
