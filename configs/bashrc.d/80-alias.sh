@@ -67,3 +67,17 @@ function smcup {
 	fi;
 	tput rmcup
 };
+
+function archupdate {
+	echo "Backing up kernel modules in /lib/modules/$(uname -r)."
+	sudo cp -r /lib/modules/$(uname -r) /lib/modules/$(uname -r).bak
+	echo "aurman -Syu"
+	aurman -Syu
+	if [[ ! -d "/lib/modules/$(uname -r)" ]]; then
+		echo "Restore modules backup."
+		sudo cp -r /lib/modules/$(uname -r).bak /lib/modules/$(uname -r)
+	else
+		echo "Kernel not updated, no need to restore backup."
+	fi
+	sudo rm -rf /lib/modules/$(uname -r).bak
+}
