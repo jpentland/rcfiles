@@ -1,6 +1,6 @@
 #!/bin/bash
 alias screen="screen -h 10240"
-screens="$(screen -ls | tail -n+2 | head -n-1 | sort -t. -k2)"
+screens="$(screen -ls | sed -n 's/^\s*\([0-9\.a-zA-Z\-]\+\)\s\+.*\((.*)\)/\1 \2/p' | sort -t. -k2)"
 title=Screen
 height=0
 width=0
