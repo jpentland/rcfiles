@@ -11,18 +11,24 @@ function get_device_ip {
 	ip addr show $device | sed -n 's/.*inet \([0-9\.]\+\)\/.*/\1/p'
 }
 
-devices=$(get_net_devices)
-
-if ! [[ "$device" ]]; then
-	echo "Usage: $(basename $0) device" >> /dev/stderr
-	exit 1
-fi
-
-if ! echo $devices | grep $device > /dev/null; then
+function show_devices {
 	echo "Available devices:" >> /dev/stderr
 	for d in $devices; do
 		echo $d >> /dev/stderr
 	done
+}
+
+devices=$(get_net_devices)
+
+if ! [[ "$device" ]]; then
+	echo "Usage: $(basename $0) device" >> /dev/stderr
+	show_devices
+	exit 1
+fi
+
+if ! echo $devices | grep $device > /dev/null; then
+	echo "Device $device not found"
+	show_devices
 	exit 1
 fi
 
