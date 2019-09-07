@@ -72,7 +72,7 @@ function archupdate {
 	echo "Backing up kernel modules in /lib/modules/$(uname -r)."
 	sudo cp -r /lib/modules/$(uname -r) /lib/modules/$(uname -r).bak
 	echo "aurman -Syu"
-	aurman -Syu
+	yay -Syu
 	if [[ ! -d "/lib/modules/$(uname -r)" ]]; then
 		echo "Restore modules backup."
 		sudo cp -r /lib/modules/$(uname -r).bak /lib/modules/$(uname -r)
