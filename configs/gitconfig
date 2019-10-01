@@ -35,3 +35,5 @@
 	    cmd = git rebase --abort
 [guitool "Pull with Rebase"]
 	    cmd = git pull --rebase
+[cola]
+	spellcheck = false
