@@ -80,4 +80,11 @@ function archupdate {
 		echo "Kernel not updated, no need to restore backup."
 	fi
 	sudo rm -rf /lib/modules/$(uname -r).bak
+
+	if which xmonad > /dev/null; then
+		echo "Recompiling xmonad..."
+		xmonad --recompile
+	fi
+
+	echo "Update Complete"
 }
