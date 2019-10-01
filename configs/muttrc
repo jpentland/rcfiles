@@ -46,4 +46,3 @@ bind index,pager \CO sidebar-open
 
 source ~/.muttrc-local
 source ~/.gpg.rc
-alias cryx Cristian Yxen <cryx@gsmk.de>
