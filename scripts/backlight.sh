@@ -18,4 +18,8 @@ if echo $1 | grep -e '^+\|-' > /dev/null; then
 	echo $B > $BFILE
 fi
 
-xbacklight -set $B
+# Try all ways of setting the backlight
+xbacklight -set $B || \
+	for mon in $(xrandr --listactivemonitors | grep -o ' [^ ]*$' | tail -n-1); do
+		xrandr --output $mon --brightness 0.$B
+	done
