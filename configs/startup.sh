@@ -28,7 +28,7 @@ setxkbmap gb
 # Default apps
 killstart trayer $(cat ~/.trayer.conf | grep -ve '^#') &
 nm-applet &
-singlestart volumeicon &
+singlestart pasystray &
 singlestart cbatticon &
 ~/.local/bin/powerbutton.sh &
 killall redshift; killstart redshift-gtk -l 52.520645:13.409779 & # berlin, make configurable later
