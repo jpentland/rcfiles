@@ -1,4 +1,5 @@
 #!/bin/sh
+set -x
 BFILE=~/.brightness
 BMAX=99
 BMIN=0
@@ -18,8 +19,29 @@ if echo $1 | grep -e '^+\|-' > /dev/null; then
 	echo $B > $BFILE
 fi
 
-# Try all ways of setting the backlight
-xbacklight -set $B || \
+function try_xbacklight {
+	B=$1
+	xbacklight -set $B
+}
+
+function try_xrandr {
+	B=$1
 	for mon in $(xrandr --listactivemonitors | grep -o ' [^ ]*$' | tail -n-1); do
-		xrandr --output $mon --brightness 0.$B
+		set -e
+		xrandr --output $mon --brightness $(bc -l <<< $B/100)
+		set +e
 	done
+}
+
+function try_sys {
+	B=$1
+	for device in /sys/class/backlight/*; do
+		max=$(cat $device/max_brightness)
+		echo $(expr $B \* $max / 100) > $device/brightness
+	done
+}
+
+# Try all ways of setting the backlight
+try_xbacklight $B ||
+	try_sys $B ||
+	try_xrandr $B
