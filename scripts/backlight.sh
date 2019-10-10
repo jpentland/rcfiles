@@ -1,8 +1,8 @@
 #!/bin/sh
 set -x
 BFILE=~/.brightness
-BMAX=99
-BMIN=0
+BMAX=100
+BMIN=1
 if [ ! -f $BFILE ]; then
 	echo $BMAX > $BFILE
 fi
