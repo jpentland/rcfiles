@@ -10,8 +10,8 @@ match ErrorMsg '\s\+$'
 syntax on
 filetype plugin indent on
 
-":set expandtab"
-":set tabstop=4"
+:set expandtab
+:set tabstop=4
 ":set guioptions-=m  "remove menu bar
 :set guioptions-=T
 :set guioptions-=r  "remove right-hand scroll bar
