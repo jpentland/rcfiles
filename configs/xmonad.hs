@@ -3,6 +3,7 @@ import XMonad.Actions.GridSelect
 import XMonad.Layout.Tabbed
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.InsertPosition
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.EZConfig(additionalKeys)
 import XMonad.Actions.CycleWS
@@ -13,18 +14,25 @@ import XMonad.Hooks.FloatNext
 import XMonad.Layout.SubLayouts
 import XMonad.Layout.WindowNavigation
 import XMonad.Layout.BoringWindows
+import XMonad.Layout.ResizableTile
 import XMonad.Hooks.SetWMName
 import XMonad.Prompt
 import XMonad.Prompt.Window
 import Graphics.X11.ExtraTypes.XF86
+import XMonad.Layout.NoBorders
 import XMonad.Actions.WindowGo
 import qualified XMonad.StackSet as W
+import qualified XMonad.Layout.Renamed as XLR
+import XMonad.Util.Themes
 
 import qualified Data.Map as M
 
-myLayout =   (windowNavigation $ subTabbed $ boringWindows $ Tall 1 (3/100) (1/2))
-		||| (windowNavigation $ boringWindows $ Full)
-		||| (windowNavigation $ boringWindows $ tabbed shrinkText myTheme)
+resizableTall = ResizableTall 1 (3/100) (1/2) []
+
+myLayout = (avoidStruts $ smartBorders $
+			(windowNavigation $ subTabbed $ boringWindows $ resizableTall)
+			||| (windowNavigation $ boringWindows $ Full)
+			||| (windowNavigation $ boringWindows $ tabbed shrinkText myTheme))
 
 myStartup = do
 	spawn "~/.xmonad/startup.sh"
@@ -46,7 +54,7 @@ main = do
 	, focusedBorderColor = "#8888dd"
 	, keys          = \c -> mykeys c `M.union` keys defaultConfig c
 	, mouseBindings = myMouseBindings
-	, layoutHook = avoidStruts $ smartBorders $ myLayout
+	, layoutHook = myLayout
 	, manageHook = manageDocks <+> myManageHook <+> floatNextHook <+> manageHook defaultConfig
 	, logHook = dynamicLogWithPP xmobarPP
                         { ppOutput = hPutStrLn xmproc
@@ -78,6 +86,8 @@ main = do
 	, ((modm .|. controlMask, xK_l), sendMessage $ pullGroup R)
  	, ((modm .|. controlMask, xK_k), sendMessage $ pullGroup U)
  	, ((modm .|. controlMask, xK_j), sendMessage $ pullGroup D)
+	, ((modm .|. mod1Mask, xK_k), sendMessage MirrorExpand)
+	, ((modm .|. mod1Mask, xK_j), sendMessage MirrorShrink)
 
  	, ((modm .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
  	, ((modm .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
@@ -87,8 +97,6 @@ main = do
 
 	, ((modm, xK_j), focusDown)
 	, ((modm, xK_k), focusUp)
-	, ((modm .|. mod1Mask, xK_j), windows W.focusDown)
-	, ((modm .|. mod1Mask, xK_k), windows W.focusUp)
 
 	,((modm, xK_b     ), sendMessage ToggleStruts)
 
