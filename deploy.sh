@@ -32,6 +32,7 @@ delete_and_link "muttrc"		".muttrc"
 delete_and_link "trayer.conf"		".trayer.conf"
 delete_and_link "Xresources"		".Xresources"
 delete_and_link "redshift.conf"		".config/redshift.conf"
+delete_and_link "ranger"		".config/ranger"
 
 
 # Link all scripts to local bin dir
