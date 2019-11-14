@@ -9,3 +9,5 @@ done
 
 touch $LOCAL
 . $LOCAL
+
+cd "$AUTOCD"
