@@ -11,8 +11,9 @@ function proml {
     local LIGHT_GREEN="\[\033[1;32m\]"
     local WHITE="\[\033[1;37m\]"
     local LIGHT_GRAY="\[\033[0;37m\]"
+    local RESET="\e[39m"
 
-    PS1="$GREEN$PRE$LIGHT_GRAY\u@\h:$RED [\$(date +'%H:%M')]$LIGHT_GRAY [\W]$GREEN \$(parse_git_branch) $LIGHT_GRAY\n--> "
+    PS1="$GREEN$PRE$LIGHT_GRAY\u@\h:$RED [\$(date +'%H:%M')]$LIGHT_GRAY [\W]$GREEN \$(parse_git_branch) $RESET\n--> "
     PS2='> '
     PS4='+ '
 }
