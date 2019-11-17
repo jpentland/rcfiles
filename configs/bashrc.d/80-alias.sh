@@ -71,7 +71,7 @@ function smcup {
 function archupdate {
 	echo "Backing up kernel modules in /lib/modules/$(uname -r)."
 	sudo cp -r /lib/modules/$(uname -r) /lib/modules/$(uname -r).bak
-	echo "aurman -Syu"
+	echo "yay -Syu"
 	yay -Syu
 	if [[ ! -d "/lib/modules/$(uname -r)" ]]; then
 		echo "Restore modules backup."
