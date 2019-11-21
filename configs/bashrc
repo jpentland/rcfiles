@@ -10,4 +10,6 @@ done
 touch $LOCAL
 . $LOCAL
 
-cd "$AUTOCD"
+if ! [ -z "$AUTOCD" ]; then
+        cd "$AUTOCD"
+fi
