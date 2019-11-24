@@ -1,0 +1,17 @@
+#!/bin/sh
+if [ -z $1 ]; then
+        echo "Usage: $(basename $0) [shell]" > /dev/stderr
+        exit 1
+fi
+shell=$1; shift
+
+pushd ~ >/dev/null
+files=".${shell}rc $(find .shrc.d/ -name '*.sh' | sort) $(find .shrc.d/ -name "*.$shell" | sort)"
+popd >/dev/null
+count=$(($(echo "$files" | wc -l) + 1))
+selection=$(dialog --keep-tite --menu "shrc" 0 0 $count $(for a in $files; do echo "$a ..."; done) --stdout)
+if ! [ -z $selection ]; then
+    $EDITOR ~/$selection
+else
+    exit 1
+fi
