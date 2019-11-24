@@ -1,14 +1,12 @@
 #!/bin/bash
 CFGDIR=configs
-SCRIPTDIR=scripts
 FORCE=$1
-BIN=$HOME/.local/bin
 
 function delete_and_link {
 	SOURCE=$1
 	DEST=$2
 	mkdir -p $(dirname $HOME/$DEST)
-	rm -i $FORCE "$HOME/$DEST"
+	rm -ir $FORCE "$HOME/$DEST"
 	ln -s "$PWD/$CFGDIR/$SOURCE" "$HOME/$DEST"
 }
 
@@ -34,11 +32,4 @@ delete_and_link "trayer.conf"		".trayer.conf"
 delete_and_link "Xresources"		".Xresources"
 delete_and_link "redshift.conf"		".config/redshift.conf"
 delete_and_link "ranger"		".config/ranger"
-
-
-# Link all scripts to local bin dir
-mkdir -p $BIN/$s
-for s in $(ls -1 $SCRIPTDIR); do
-	rm -i $FORCE "$BIN/$s"
-	ln -s "$PWD/$SCRIPTDIR/$s" "$BIN/$s"
-done
+delete_and_link "../scripts"       ".local/scripts"
