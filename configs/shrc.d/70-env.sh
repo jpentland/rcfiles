@@ -5,7 +5,8 @@ export EDITOR=vim
 export BROWSER=chromium-browser
 export GOPATH=~/.gopath
 export PATH=$GOPATH/bin:/opt/google-cloud-sdk/platform/google_appengine/:$PATH
-shopt -s histappend
+export PATH=$HOME/.local/scripts:$PATH
+export shell=$(sh -c 'ps -p $$ -o ppid=' | xargs ps -o comm= -p)
 
 # Add some colour to LESS/MAN pages
 export LESS_TERMCAP_mb=$'\E[01;31m'
@@ -18,3 +19,9 @@ export LESS_TERMCAP_us=$'\E[01;36m'
 
 export RANGER_LOAD_DEFAULT_RC=false
 [[ -r "/usr/share/z/z.sh" ]] && source /usr/share/z/z.sh
+
+# Always use 32 bit wine prefix
+export WINEPREFIX="$HOME/.wine32"
+export WINEARCH=win32
+
+export PATH=$PATH:~/.cargo/bin

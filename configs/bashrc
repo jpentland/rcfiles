@@ -3,8 +3,9 @@
 
 LOCAL="$HOME/.bashrc_local"
 
-for rcfile in ~/.bashrc.d/*; do
-	. $rcfile
+rcfiles=$(ls -1 ~/.shrc.d/ | grep -e "\.sh$" -e "\.bash$")
+for rcfile in $rcfiles; do
+	. ~/.shrc.d/$rcfile
 done
 
 touch $LOCAL
@@ -13,3 +14,5 @@ touch $LOCAL
 if ! [ -z "$AUTOCD" ]; then
         cd "$AUTOCD"
 fi
+
+which starship 2>&1 > /dev/null && eval "$(starship init bash)"

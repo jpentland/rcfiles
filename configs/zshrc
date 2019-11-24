@@ -1,0 +1,27 @@
+# Lines configured by zsh-newuser-install
+LOCALRC="$HOME/.zshrc_local"
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+setopt appendhistory autocd extendedglob nomatch notify
+unsetopt beep
+bindkey -e
+# End of lines configured by zsh-newuser-install
+# The following lines were added by compinstall
+zstyle :compinstall filename '/home/jpe/.zshrc'
+unsetopt nomatch
+set -o shwordsplit
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+
+rcfiles=$(ls -1 ~/.shrc.d | grep -e "\.sh$" -e "\.zsh$")
+for rcfile in $rcfiles; do
+        . ~/.shrc.d/$rcfile
+done
+
+touch $LOCALRC
+. $LOCALRC
+
+which starship 2>&1 > /dev/null && eval "$(starship init zsh)"

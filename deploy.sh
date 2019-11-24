@@ -18,13 +18,14 @@ fi
 
 #		Source filename		# Destination filebane (relative to $HOME)
 delete_and_link "bashrc"		".bashrc"
+delete_and_link "zshrc"         ".zshrc"
 delete_and_link "vimrc"			".vimrc"
 delete_and_link "xmonad.hs"		".xmonad/xmonad.hs"
 delete_and_link "startup.sh"		".xmonad/startup.sh"
 delete_and_link "mediacontrol.sh"	".xmonad/mediacontrol.sh"
 delete_and_link "xmobarrc"		".xmobarrc"
 delete_and_link "halp"			".halp"
-delete_and_link "bashrc.d"		".bashrc.d"
+delete_and_link "shrc.d"		".shrc.d"
 delete_and_link "gitconfig"		".gitconfig"
 delete_and_link "konsolerc"		".config/konsolerc"
 delete_and_link "vim"			".vim"
