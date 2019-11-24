@@ -1,6 +1,6 @@
 #!/bin/bash
 alias screen="screen -h 10240"
-screens="$(screen -ls | sed -n 's/^\s*\([0-9\.a-zA-Z\-]\+\)\s\+.*\((.*)\)/\1 \2/p' | sort -t. -k2)"
+screens="$(screen -ls | sed -n 's/^\s*\(.*\)\s\+.*\((.*)\)/\1 \2/p' | sort -t. -k2)"
 title=Screen
 height=0
 width=0
@@ -29,7 +29,7 @@ if [[ $1 == "-k" ]]; then
 fi
 
 if [[ $1 ]]; then
-	screens="$(echo "$screens" | grep -e "^\s[0-9]\+\.$1")"
+	screens="$(echo "$screens" | grep -e "^\s*[0-9]\+\.$1")"
 	title="$title ($1)"
 
 fi
