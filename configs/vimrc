@@ -1,4 +1,29 @@
-execute pathogen#infect()
+" Vundle config
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'ekalinin/Dockerfile.vim'
+Plugin 'neovimhaskell/haskell-vim'
+Plugin 'wagnerf42/vim-clippy'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'tpope/vim-sleuth'
+Plugin 'cespare/vim-toml'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+" see :h vundle for more details or wiki for FAQ
 
 if has("autocmd")
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
@@ -31,6 +56,8 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+highlight Normal ctermfg=white ctermbg=black
 
+let g:syntastic_rust_checkers = ['clippy']
 let g:rainbow_active = 1
 "set mouse-=a"
