@@ -56,7 +56,7 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-highlight Normal ctermfg=white ctermbg=black
+highlight Normal ctermfg=white ctermbg=NONE
 
 let g:syntastic_rust_checkers = ['clippy']
 let g:rainbow_active = 1
