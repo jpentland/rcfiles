@@ -1,4 +1,4 @@
-ANTIGEN="$HOME/.antigen.zsh"
+ANTIGEN="$HOME/antigen.zsh"
 [ -f $ANTIGEN ] || wget -c git.io/antigen -O $ANTIGEN
 source $ANTIGEN
 
