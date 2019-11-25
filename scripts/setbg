@@ -1,0 +1,16 @@
+#!/bin/sh
+BGFILE="$HOME/.xmonadbg"
+if [ -z $1 ]; then
+	echo "Usage: $(basename $0) [bgfile]"
+	exit 1
+fi
+bg=$(readlink -f $1); shift
+
+if ! [ -f $bg ]; then
+	echo "File not found: $bg" > /dev/stderr
+	exit 1
+fi
+
+rm -rf $BGFILE
+ln -s $bg $BGFILE
+feh --bg-scale $BGFILE
