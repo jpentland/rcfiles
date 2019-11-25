@@ -1,6 +1,8 @@
 #!/bin/bash
 CFGDIR=configs
 FORCE=$1
+git submodule init
+git submodule update
 
 function delete_and_link {
 	SOURCE=$1
