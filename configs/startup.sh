@@ -35,6 +35,7 @@ killall redshift; killstart redshift-gtk -l 52.520645:13.409779 & # berlin, make
 singlestart yakuake &
 picom
 xrdb ~/.Xresources
+wal --theme solarized
 
 # Dont kill everything when script ends
 wait
