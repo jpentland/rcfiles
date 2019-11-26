@@ -1,0 +1,70 @@
+#!/bin/sh
+function git_modified {
+	git status --porcelain | sed -n 's/^ M\(.*\)$/\1/p'
+}
+
+function git_untracked {
+	git status --porcelain | sed -n 's/^??\(.*\)$/\1/p'
+}
+
+function yn {
+	if [ -z "$1" ]; then
+		echo "Usage: yn [prompt]"
+		exit 1
+	fi
+	prompt=$1; shift
+
+	read -p "$prompt [Y/n]" answer
+	if [ "$answer" == "y" ] || [ "$answer" == "" ]; then
+		return 0
+	elif [ "$answer" == "n" ]; then
+		return 1
+	else
+		yn $prompt
+	fi
+}
+
+function select_untracked {
+	untracked=$(git_untracked)
+	count=$(expr $(echo "$untracked" | wc -w) / 2 + 1)
+
+	dialog \
+		--keep-tite \
+		--stdout \
+		--checklist \
+		"Select untracked files to add" \
+		0 0 $count \
+		$(echo "$untracked" | sed 's/\(.*\)/\1 ... off/') \
+		| xargs git add
+}
+
+function select_modified {
+	for file in $(git_modified); do
+		git diff $file
+		if yn "Open $file in vim?"; then
+			vim $file
+		fi
+		if yn "Stage entire file?"; then
+			git add $file
+		fi
+		if ! yn "Continue adding files?"; then
+			return 0
+		fi
+	done
+}
+
+while true; do
+	git status
+	if yn "Add untracked files?"; then
+		select_untracked
+	fi
+	if yn "Open modified files in vim?"; then
+		select_modified
+	fi
+	if yn "Commit?"; then
+		git commit
+	fi
+	if ! yn "Continue?"; then
+		exit 1
+	fi
+done
