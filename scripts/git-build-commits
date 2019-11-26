@@ -42,7 +42,7 @@ function select_modified {
 	for file in $(git_modified); do
 		git diff $file
 		if yn "Open $file in vim?"; then
-			vim $file
+			vimcommit $file
 		fi
 		if yn "Stage entire file?"; then
 			git add $file
