@@ -1,0 +1,39 @@
+#!/bin/sh
+# Move a file to rcfiles
+RCFILES=$HOME/rcfiles
+function showusage {
+	echo "Usage: $(basename $0) file [options]" > /dev/stderr
+	echo "options:" > /dev/stderr
+	echo "\t -m message - Automatically commit with given message" > /dev/stderr
+}
+
+if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+	showusage
+	exit 0
+fi
+
+if [ -z "$1" ] || ! [ -e "$1" ]; then
+	>&2 showusage
+	exit 1
+fi
+source=$1; shift
+
+if ! [ -z "$1" ]; then
+	if [ "$1" != "-m" ] || [ -z "$2" ]; then
+		>&2 showusage
+		exit 1
+	else
+		message=$1; shift
+	fi
+fi
+
+filename=$(basename $source)
+link_target=$(realpath --relative-to $HOME $source)
+mv $source $RCFILES/configs
+ln -s $RCFILES/configs/$filename $source
+echo -e  "delete_and_link \"$filename\"\t\"$link_target\"" >> $RCFILES/deploy.sh
+if ! [ -z "$message" ]; then
+	git -C $RCFILES add $RCFILES/deploy.sh
+	git -C $RCFILES add $RCFILES/configs/$filename
+	git -C $RCFILES commit $RCFILES/configs/$filename -m $message
+fi
