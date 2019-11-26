@@ -1,15 +1,28 @@
 #!/bin/sh
 if [ -z $1 ]; then
-        echo "Usage: $(basename $0) [shell]" > /dev/stderr
+        echo "Usage: $(basename $0) shell [grep pattern]" > /dev/stderr
         exit 1
 fi
 shell=$1; shift
 
+if ! [ -z $1 ]; then
+    match="grep $1"; shift
+else
+    match="cat"
+fi
+
 pushd ~ >/dev/null
-files=".${shell}rc $(find .shrc.d/ -name '*.sh' | sort) $(find .shrc.d/ -name "*.$shell" | sort)"
+files=".${shell}rc\n$(find .shrc.d/ -name '*.sh' -o -name "*.$shell" | sort)"
+files="$(echo "$files" | $match)"
 popd >/dev/null
 count=$(($(echo "$files" | wc -l) + 1))
-selection=$(dialog --keep-tite --menu "shrc" 0 0 $count $(for a in $files; do echo "$a ..."; done) --stdout)
+
+if ! [ $(echo "$files" | wc -l) == "1" ]; then
+    selection=$(dialog --keep-tite --menu "shrc" 0 0 $count $(for a in $files; do echo "$a ..."; done) --stdout)
+else
+    selection=$files
+fi
+
 if ! [ -z $selection ]; then
     $EDITOR ~/$selection
 else
