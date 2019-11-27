@@ -17,11 +17,20 @@ alias halp="cat ~/.halp | shuf -n 1"
 alias addhalp="cat >> ~/.halp"
 alias argh="echo argh"
 alias bashrc="shrc bash && source ~/.bashrc"
-alias zshrc="shrc zsh && source ~/.zshrc"
 
 for a in {0..10}; do
 	alias awk$a="awk '{print \$$a}'"
 done
+
+function bashrc {
+	shrc bash $@
+	source ~/.bashrc
+}
+
+function zshrc {
+	shrc zsh $@
+	source ~/.zshrc
+}
 
 function hexdiff {
 	cmp -l $1 $2 | gawk '{printf "%08X %02X %02X\n", $1, strtonum(0$2), strtonum(0$3)}'
