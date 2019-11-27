@@ -16,8 +16,7 @@ antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle zsh-users/zsh-history-substring-search
 
 # Load the theme.
-POWERLEVEL9K_INSTALLATION_PATH=$ANTIGEN_BUNDLES/bhilburn/powerlevel9k
-antigen theme bhilburn/powerlevel9k powerlevel9k
+antigen theme robbyrussell
 
 # Tell Antigen that you're done.
 antigen apply
