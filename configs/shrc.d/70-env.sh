@@ -18,7 +18,6 @@ export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;36m'
 
 export RANGER_LOAD_DEFAULT_RC=false
-[[ -r "/usr/share/z/z.sh" ]] && source /usr/share/z/z.sh
 
 # Always use 32 bit wine prefix
 export WINEPREFIX="$HOME/.wine32"
