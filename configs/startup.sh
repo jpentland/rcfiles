@@ -31,7 +31,6 @@ nm-applet &
 singlestart pasystray &
 singlestart cbatticon &
 ~/.local/bin/powerbutton.sh &
-killall redshift; killstart redshift-gtk -l 52.520645:13.409779 & # berlin, make configurable later
 singlestart yakuake &
 picom
 xrdb ~/.Xresources
