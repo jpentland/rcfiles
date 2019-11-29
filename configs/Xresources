@@ -1,3 +1,22 @@
 Xcursor.size:  16
 st.alpha: 0.95
-st.font: Source Code Pro for Powerline:pixelsize=14:antialias=true:autohint=true
+st.font: Source Code Pro:pixelsize=14:antialias=true:autohint=true
+st.color0: #002b36
+st.color1: #dc322f
+st.color2: #859900
+st.color3: #b58900
+st.color4: #268bd2
+st.color5: #6c71c4
+st.color6: #2aa198
+st.color7: #93a1a1
+st.color8: #657b83
+st.color9: #dc322f
+st.color10: #859900
+st.color11: #b58900
+st.color12: #268bd2
+st.color13: #6c71c4
+st.color14: #2aa198
+st.color15: #fdf6e3
+st.background: #002b36
+st.foreground: #93a1a1
+st.cursorColor: #93a1a1
