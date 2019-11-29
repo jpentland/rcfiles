@@ -33,7 +33,6 @@ singlestart cbatticon &
 ~/.local/bin/powerbutton.sh &
 picom
 xrdb ~/.Xresources
-wal --theme solarized
 
 # Dont kill everything when script ends
 wait
