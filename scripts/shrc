@@ -12,7 +12,7 @@ else
 fi
 
 pushd ~ >/dev/null
-files=".${shell}rc\n$(find .shrc.d/ -name '*.sh' -o -name "*.$shell" | sort)"
+files=".${shell}rc $(find .shrc.d/ -name '*.sh' -o -name "*.$shell" | sort)"
 files="$(echo "$files" | $match)"
 popd >/dev/null
 count=$(($(echo "$files" | wc -l) + 1))
