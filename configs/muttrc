@@ -47,6 +47,7 @@ bind index,pager \CP sidebar-prev
 bind index,pager \CN sidebar-next
 # Ctrl-Shift-N – Next Mailbox
 bind index,pager \CO sidebar-open
+bind index G imap-fetch-mail
 
 source ~/.muttrc-local
 source ~/.gpg.rc
