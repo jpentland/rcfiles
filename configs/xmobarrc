@@ -2,7 +2,7 @@ Config { font = "xft:Bitstream Vera Sans Mono:size=10:bold:antialias=true"
        , bgColor = "black"
        , fgColor = "grey"
        , position = TopW R 92
-       , commands = [ Run Weather "EDDT" ["-t"," <tempC>C","-L","5","-H","25","--normal","green","--high","red","--low","lightblue" ] 36000
+       , commands = [ Run Com "curl" ["wttr.in/?format=3"] "weather" 600
                     , Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10
                     , Run Memory ["-t","Mem: <usedratio>%"] 10
                     , Run Swap [] 10
@@ -12,6 +12,6 @@ Config { font = "xft:Bitstream Vera Sans Mono:size=10:bold:antialias=true"
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{ %uname% | %cpu% | %memory% * %swap% | %EDDT% | <fc=#ee9a00>%date%</fc>"
+       , template = "%StdinReader% }{ %uname% | %cpu% | %memory% * %swap% | %weather% <fc=#ee9a00>%date%</fc>"
        }
 
