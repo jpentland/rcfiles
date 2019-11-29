@@ -37,11 +37,16 @@ myLayout = (avoidStruts $ smartBorders $
 myStartup = do
     spawn "~/.xmonad/startup.sh"
 
-myManageHook = composeAll
+customManageHooks = composeAll
     [ resource =? "Do"    --> doFloat,
       resource =? "Yakuake" --> doFloat,
       resource =? "yakuake" --> doFloat,
       resource =? "yad" --> doFloat]
+
+myManageHook = manageDocks <+>
+               customManageHooks <+>
+               floatNextHook <+>
+               manageHook defaultConfig
 
 myTheme = defaultTheme { fontName = "xft:DejaVu Sans:size=12" }
 
@@ -55,7 +60,7 @@ main = do
     , keys          = \c -> mykeys c `M.union` keys defaultConfig c
     , mouseBindings = myMouseBindings
     , layoutHook = myLayout
-    , manageHook = manageDocks <+> myManageHook <+> floatNextHook <+> manageHook defaultConfig
+    , manageHook = myManageHook
     , logHook = dynamicLogWithPP xmobarPP
                         { ppOutput = hPutStrLn xmproc
                         , ppTitle = xmobarColor "green" "" . shorten 50
