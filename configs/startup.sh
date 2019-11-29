@@ -31,7 +31,6 @@ nm-applet &
 singlestart pasystray &
 singlestart cbatticon &
 ~/.local/bin/powerbutton.sh &
-singlestart yakuake &
 picom
 xrdb ~/.Xresources
 wal --theme solarized
