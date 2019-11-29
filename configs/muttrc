@@ -12,7 +12,7 @@ ignore          *
 unignore        From To Cc Bcc Date Subject
 unhdr_order     *
 hdr_order       From: To: Cc: Bcc: Date: Subject:
-color normal      white          black
+color normal      white          default
 color hdrdefault  green          default
 color quoted      green          default
 color quoted1     yellow         default
@@ -25,9 +25,11 @@ color tree        brightmagenta  black
 color tilde       blue           default
 color attachment  brightyellow   default
 color markers     brightred      default
-color message     white          black
+color message     white          default
 color search      brightwhite    magenta
 color bold        brightyellow   default
+color index       brightyellow   default "~N"
+color index       red            default "~D"
 set header_cache=/var/tmp/.mutt
 set sidebar_visible = yes
 set sidebar_width = 15
@@ -36,6 +38,8 @@ set sidebar_short_path = yes
 set sidebar_format = "%B%?F? [%F]?%* %?N?%N/?%S"
 set mail_check_stats
 set new_mail_command="yad --notification --image=mail-unread &"
+set sort_aux = last-date-received
+set sort = threads
 
 # keys
 bind index,pager \CP sidebar-prev
