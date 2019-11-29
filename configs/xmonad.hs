@@ -24,6 +24,7 @@ import XMonad.Actions.WindowGo
 import qualified XMonad.StackSet as W
 import qualified XMonad.Layout.Renamed as XLR
 import XMonad.Util.Themes
+import XMonad.Util.NamedScratchpad
 
 import qualified Data.Map as M
 
@@ -37,6 +38,8 @@ myLayout = (avoidStruts $ smartBorders $
 myStartup = do
     spawn "~/.xmonad/startup.sh"
 
+myTerminal = "st"
+
 customManageHooks = composeAll
     [ resource =? "Do"    --> doFloat,
       resource =? "Yakuake" --> doFloat,
@@ -46,15 +49,38 @@ customManageHooks = composeAll
 myManageHook = manageDocks <+>
                customManageHooks <+>
                floatNextHook <+>
-               manageHook defaultConfig
+               manageHook defaultConfig <+>
+               namedScratchpadManageHook myScratchpads
 
 myTheme = defaultTheme { fontName = "xft:DejaVu Sans:size=12" }
+
+myScratchpads = [
+  NS "terminal" spawnTerm findTerm manageTerm,
+  NS "mixer" spawnMixer findMixer manageMixer
+  ]
+  where
+    spawnTerm = myTerminal ++ " -c scratchpad"
+    findTerm = className =? "scratchpad"
+    manageTerm = customFloating $ W.RationalRect l t w h
+      where
+        h = 0.3
+        w = 1
+        t = 0.02
+        l = (1 - w) / 2
+    spawnMixer = "pavucontrol"
+    findMixer = className =? "Pavucontrol"
+    manageMixer = customFloating $ W.RationalRect l t w h
+      where
+        h = 0.4
+        w = 1
+        t = 0.02
+        l = (1 - w)/2
 
 main = do
   xmproc <- spawnPipe "xmobar"
   xmonad $ defaultConfig
     { borderWidth    = 1
-    , terminal    = "st"
+    , terminal    = myTerminal
     , normalBorderColor = "#444444"
     , focusedBorderColor = "#8888dd"
     , keys          = \c -> mykeys c `M.union` keys defaultConfig c
@@ -122,7 +148,8 @@ main = do
     , ((modm .|. shiftMask, xK_p), raise (className =? "Pidgin"))
     , ((modm .|. shiftMask, xK_o), raise (className =? "Spotify"))
     , ((modm .|. shiftMask, xK_i), windowPrompt def { autoComplete = Just 50000 } Goto allWindows)
-
+    , ((0, xK_F12), namedScratchpadAction myScratchpads "terminal")
+    , ((modm, xK_F12), namedScratchpadAction myScratchpads "mixer")
     ]
 
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
