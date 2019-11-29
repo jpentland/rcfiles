@@ -16,6 +16,7 @@ alias editor=$EDITOR
 alias halp="cat ~/.halp | shuf -n 1"
 alias addhalp="cat >> ~/.halp"
 alias argh="echo argh"
+alias vimrc="vim ~/.vimrc"
 alias bashrc="shrc bash && source ~/.bashrc"
 alias bt="bluetoothctl"
 
