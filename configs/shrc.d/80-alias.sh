@@ -17,6 +17,8 @@ alias halp="cat ~/.halp | shuf -n 1"
 alias addhalp="cat >> ~/.halp"
 alias argh="echo argh"
 alias vimrc="vim ~/.vimrc"
+alias sctl="sudo systemctl"
+alias jctl="journalctl"
 alias bt="bluetoothctl"
 
 for a in {0..10}; do
