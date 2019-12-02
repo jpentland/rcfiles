@@ -1,0 +1,91 @@
+#!/bin/sh
+ICON="audio-headset"
+FIFO="/tmp/$(basename $0)-fifo"
+TMP_FILE="/tmp/$(basename $0)-running"
+alias bt=bluetoothctl
+
+function build_device {
+	code=$1; shift
+	device=$1; shift
+	connected=$(bt info $code | grep 'Connected:' | awk '{print $2}')
+	if [ "$connected" == yes ]; then
+		echo "|* $device!$0 disconnect $code"
+	else
+		echo "|$device!$0 connect $code"
+	fi
+}
+
+function build_menu {
+	powered="$(bt show | grep 'Powered' | awk '{print $2}')"
+	discoverable="$(bt show | grep 'Discoverable:' | awk '{print $2}')"
+
+	if [ "$powered" == "no" ]; then
+		echo "Power on!$0 power_on"
+	else
+		echo "Power off!$0 power_off"
+		bt devices | awk '{print $3 " " "("$2")"}' | \
+		while read device; do
+			code=$(echo $device | sed 's/.*(\(.*\))/\1/')
+			build_device $code "$device"
+		done
+	fi
+
+	if [ "$discoverable" == "no" ]; then
+		echo "|Set Discoverable (180s)!$0 disoverable"
+	else
+		echo "|Discoverable!echo"
+	fi
+}
+
+function power_on {
+	bt power on
+}
+
+function power_off {
+	bt power off
+}
+
+function discoverable {
+	bt discoverable-timeout
+}
+
+function connect {
+	bt connect $1
+}
+
+function disconnect {
+	bt disconnect $1
+}
+
+function refresh {
+	command="menu:$(build_menu)"
+	echo $command > $FIFO
+}
+
+function working {
+	echo "visible:blink" > $FIFO
+}
+
+function doneworking {
+	echo "disible:true" > $FIFO
+}
+
+if ! [ -p "$FIFO" ]; then
+	mkfifo $FIFO
+	echo "$(build_menu)"
+	tail -n1 -f $FIFO | yad --notification --menu="$(build_menu)" --image="$ICON" --command= --listen &
+	echo $! > $TMP_FILE
+	trap "$0: cleanup" SIGINT
+	wait
+	kill $(cat $TMP_FILE)
+	rm $FIFO $TMP_FILE
+	exit 0
+fi
+
+if ! [ -z "$1" ]; then
+	command=$1; shift
+	working
+	$command $@
+	refresh
+	doneworking
+fi
