@@ -30,7 +30,7 @@ killstart trayer $(cat ~/.trayer.conf | grep -ve '^#') &
 nm-applet &
 singlestart pasystray &
 singlestart cbatticon &
-~/.local/bin/powerbutton.sh &
+~/.local/scripts/powerbutton.sh &
 picom
 xrdb ~/.Xresources
 
