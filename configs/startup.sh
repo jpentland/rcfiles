@@ -32,7 +32,7 @@ singlestart pasystray &
 singlestart cbatticon &
 ~/.local/scripts/powerbutton.sh &
 killstart ~/.local/scripts/bticon &
-picom
+picom &
 xrdb ~/.Xresources
 
 # Dont kill everything when script ends
