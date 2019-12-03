@@ -56,7 +56,8 @@ myTheme = defaultTheme { fontName = "xft:DejaVu Sans:size=12" }
 
 myScratchpads = [
   NS "terminal" spawnTerm findTerm manageTerm,
-  NS "mixer" spawnMixer findMixer manageMixer
+  NS "mixer" spawnMixer findMixer manageMixer,
+  NS "spotify" spawnSpotify findSpotify manageSpotify
   ]
   where
     spawnTerm = myTerminal ++ " -c scratchpad"
@@ -75,6 +76,14 @@ myScratchpads = [
         w = 1
         t = 0.02
         l = (1 - w)/2
+    spawnSpotify = "spotify"
+    findSpotify = className =? "Spotify"
+    manageSpotify = customFloating $ W.RationalRect l t w h
+      where
+        h = 1
+        w = 0.4
+        t = 0
+        l = 0
 
 main = do
   xmproc <- spawnPipe "xmobar"
@@ -150,6 +159,7 @@ main = do
     , ((modm .|. shiftMask, xK_i), windowPrompt def { autoComplete = Just 50000 } Goto allWindows)
     , ((0, xK_F12), namedScratchpadAction myScratchpads "terminal")
     , ((modm, xK_F12), namedScratchpadAction myScratchpads "mixer")
+    , ((0, xK_F11), namedScratchpadAction myScratchpads "spotify")
     ]
 
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
