@@ -1,4 +1,6 @@
+" Leader
 :let mapleader = ","
+
 " Vundle config
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -25,19 +27,21 @@ endif
 
 match ErrorMsg '\s\+$'
 
-syntax on
-filetype plugin indent on
-
-:set expandtab
-:set tabstop=4
+"Gui options
 :set guioptions-=T
 :set guioptions-=r  "remove right-hand scroll bar
 :set guioptions-=L  "remove left-hand scroll bar
 :set guifont=Inconsolata\ 12
-colorscheme torte
-:set nu
+
+" Editor options
 :set iskeyword-=_
-autocmd Filetype gitcommit setlocal spell textwidth=72
+"set mouse-=a"
+:set expandtab
+:set tabstop=4
+filetype plugin indent on
+syntax on
+highlight Normal ctermfg=white ctermbg=NONE
+:set so=5
 
 " Relative number
 :set number relativenumber
@@ -48,4 +52,10 @@ autocmd Filetype gitcommit setlocal spell textwidth=72
 :  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 :augroup END
 
-"set mouse-=a"
+" Use bar on insert mode
+autocmd VimEnter,InsertLeave * silent exec "! echo -ne '\e[1 q'"
+autocmd VimLeave,InsertEnter * silent exec "! echo -ne '\e[5 q'"
+
+"File types
+autocmd Filetype gitcommit setlocal spell textwidth=72
+au BufReadPost,BufNewFile .xmobarrc setlocal ft=haskell
