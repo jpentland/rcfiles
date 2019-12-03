@@ -31,6 +31,7 @@ nm-applet &
 singlestart pasystray &
 singlestart cbatticon &
 ~/.local/scripts/powerbutton.sh &
+killstart ~/.local/scripts/bticon &
 picom
 xrdb ~/.Xresources
 
