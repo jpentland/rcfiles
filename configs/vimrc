@@ -13,6 +13,7 @@ Plugin 'wagnerf42/vim-clippy'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-sleuth'
 Plugin 'cespare/vim-toml'
+Plugin 'tpope/vim-surround'
 Plugin 'dense-analysis/ale'
 call vundle#end()            " required
 filetype plugin indent on    " required
