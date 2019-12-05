@@ -12,16 +12,16 @@ nmcli connection show --active | \
 
 		case $ctype in
 			"wifi")
-				echo -n -e "\xef\x87\xab $name | "
+				echo -n -e "\xef\x87\xab $name "
 				;;
 			"ethernet")
-				echo -n -e "\xef\x83\xa8 | "
+				echo -n -e "\xef\x83\xa8 "
 				;;
 			"vpn")
-				echo -n -e "\xef\x80\xa3 $name | "
+				echo -n -e "\xef\x80\xa3 $name "
 				;;
 			*)
 				;;
 		esac
 	done | \
-		sed 's/ | $//'
+		sed 's/ $//'
