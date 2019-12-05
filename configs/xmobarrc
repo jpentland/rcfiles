@@ -1,17 +1,22 @@
-Config { font = "xft:Bitstream Vera Sans Mono:size=10:bold:antialias=true"
+Config { font = "xft:SauceCodePro Nerd Font:autohint=true:size=10:bold:antialias=true"
+       , additionalFonts = [ "xft:FontAwesome:size=12:antialias=true:autohint=true"
+                           , "xft:Symbola:size=12:antialias=true:autohint=true"]
        , bgColor = "black"
        , fgColor = "grey"
        , position = TopW R 92
-       , commands = [ Run Com "curl" ["wttr.in/?format=3"] "weather" 600
-                    , Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10
-                    , Run Memory ["-t","Mem: <usedratio>%"] 10
+       , commands = [ Run Com ".local/xmobar/weather.sh" [] "weather" 600
+                    , Run Com ".local/xmobar/network.sh" [] "connection" 100
+                    , Run Com ".local/xmobar/bitcoin.sh" [] "bitcoin" 600
+                    , Run Com ".local/xmobar/bluetooth.sh" [] "bluetooth" 100
+                    , Run Com ".local/xmobar/volume.sh" [] "volume" 10
+                    , Run Com ".local/xmobar/battery.sh" [] "battery" 10
+                    , Run Cpu ["-t"," <total>%", "-L","3","-H","50","--normal","green","--high","red"] 10
+                    , Run Memory ["-t"," <usedratio>%"] 10
                     , Run Swap [] 10
                     , Run Date "%a %b %_d %k:%M" "date" 10
                     , Run StdinReader
-		    , Run Com "uname" ["-s","-r"] "" 36000
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{ %uname% | %cpu% | %memory% * %swap% | %weather% <fc=#ee9a00>%date%</fc>"
+       , template = "%StdinReader% }{ %bitcoin% | %bluetooth% | %connection% | %volume% | %cpu% %memory% %battery% | %weather% | <fc=#ee9a00>%date%</fc>"
        }
-
