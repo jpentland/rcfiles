@@ -20,6 +20,7 @@ alias vimrc="vim ~/.vimrc"
 alias sctl="sudo systemctl"
 alias jctl="journalctl"
 alias bt="bluetoothctl"
+alias wttr="curl wttr.in"
 
 for a in {0..10}; do
 	alias awk$a="awk '{print \$$a}'"
