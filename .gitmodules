@@ -6,4 +6,4 @@
 	url = https://github.com/VundleVim/Vundle.vim.git
 [submodule "dmenu-emoji"]
 	path = dmenu-emoji
-	url = https://github.com/porras/dmenu-emoji
+	url = https://github.com/jpentland/dmenu-emoji
