@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Kill before starting
 function killstart {
 	ps -U $USER | grep $1 | awk '{print $1}' | xargs -n1 kill
@@ -27,11 +26,6 @@ setxkbmap gb
 
 # Default apps
 killstart trayer $(cat ~/.trayer.conf | grep -ve '^#') &
-nm-applet &
-singlestart pasystray &
-singlestart cbatticon &
-~/.local/scripts/powerbutton.sh &
-killstart ~/.local/scripts/bticon &
 picom &
 xrdb ~/.Xresources
 
