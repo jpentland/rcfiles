@@ -1,0 +1,54 @@
+#!/bin/sh
+alias bt=bluetoothctl
+function get_show {
+	bt show | awk "/$1/{print \$2}"
+}
+
+function show_bool {
+	[ "$(get_show $1)" == "yes" ]
+}
+
+function get_info {
+	bt info $1 | awk "/$2/{print \$2}"
+}
+
+function info_bool {
+	[ "$(get_info $1 $2)" == "yes" ]
+}
+
+function list_devices {
+	bt devices | \
+	while read device id name; do
+		if info_bool $id Connected; then
+			echo "$device $name $id (Connected)"
+		else
+			echo "$device $name $id (Not connected)"
+		fi
+	done
+}
+
+function list_options {
+	if ! show_bool Powered; then
+		echo "Power on"
+	else
+		echo "Power off"
+		list_devices
+	fi
+}
+
+function process_option {
+	case $1 in
+		"Power")
+			bt power $2
+			;;
+		"Device")
+			if info_bool $3 Connected; then
+				bt disconnect $3
+			else
+				bt connect $3
+			fi
+			;;
+	esac
+}
+
+process_option $(list_options | dmenu -i -l 10)
