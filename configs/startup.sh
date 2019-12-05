@@ -25,9 +25,9 @@ xsetroot -cursor_name left_ptr
 setxkbmap gb
 
 # Default apps
-killstart trayer $(cat ~/.trayer.conf | grep -ve '^#') &
 picom &
 xrdb ~/.Xresources
+singlestart pulseaudio &
 
 # Dont kill everything when script ends
 wait
