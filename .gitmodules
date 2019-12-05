@@ -4,3 +4,6 @@
 [submodule "configs/vim/bundle/Vundle.vim"]
 	path = configs/vim/bundle/Vundle.vim
 	url = https://github.com/VundleVim/Vundle.vim.git
+[submodule "dmenu-emoji"]
+	path = dmenu-emoji
+	url = https://github.com/porras/dmenu-emoji
