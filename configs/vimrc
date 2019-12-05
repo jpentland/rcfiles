@@ -17,6 +17,7 @@ Plugin 'tpope/vim-sleuth'
 Plugin 'cespare/vim-toml'
 Plugin 'tpope/vim-surround'
 Plugin 'dense-analysis/ale'
+Plugin 'hsanson/vim-android'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -52,6 +53,9 @@ highlight Normal ctermfg=white ctermbg=NONE
 :  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 :augroup END
 
+" Color options
+:hi SpellBad ctermbg='Red'
+
 " Use bar on insert mode
 autocmd VimEnter,InsertLeave * silent exec "! echo -ne '\e[1 q'"
 autocmd VimLeave,InsertEnter * silent exec "! echo -ne '\e[5 q'"
@@ -59,3 +63,14 @@ autocmd VimLeave,InsertEnter * silent exec "! echo -ne '\e[5 q'"
 "File types
 autocmd Filetype gitcommit setlocal spell textwidth=72
 au BufReadPost,BufNewFile .xmobarrc setlocal ft=haskell
+
+" Email
+au BufRead /tmp/mutt-* set tw=72
+augroup filetypedetect
+
+" Mail
+  autocmd BufRead,BufNewFile *mutt-*              setfiletype mail
+augroup END
+
+"Android
+let g:andoid_sdk_path="~/Android/Sdk/"
