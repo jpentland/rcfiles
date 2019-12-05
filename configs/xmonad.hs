@@ -145,6 +145,9 @@ main = do
     , ((0, xF86XK_AudioRaiseVolume), spawn "pactl set-sink-volume @DEFAULT_SINK@ +1.5%")
     , ((0, xF86XK_AudioLowerVolume), spawn "pactl set-sink-volume @DEFAULT_SINK@  -1.5%")
     , ((0, xF86XK_AudioMute), spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
+    , ((modm, xK_equal), spawn "pactl set-sink-volume @DEFAULT_SINK@ +1.5%")
+    , ((modm, xK_minus), spawn "pactl set-sink-volume @DEFAULT_SINK@  -1.5%")
+    , ((modm, xK_0), spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
 
     , ((0, xF86XK_MonBrightnessUp), spawn "~/.local/scripts/backlight.sh +5")
     , ((0, xF86XK_MonBrightnessDown), spawn "~/.local/scripts/backlight.sh -5")
