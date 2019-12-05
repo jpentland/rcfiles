@@ -163,6 +163,9 @@ main = do
     , ((0, xK_F12), namedScratchpadAction myScratchpads "terminal")
     , ((modm, xK_F12), namedScratchpadAction myScratchpads "mixer")
     , ((0, xK_F11), namedScratchpadAction myScratchpads "spotify")
+    , ((modm .|. shiftMask, xK_x), spawn "~/.local/scripts/btmenu")
+    , ((modm, xK_x), spawn "networkmanager_dmenu")
+    , ((modm, xK_q), spawn "~/rcfiles/dmenu-emoji/dmenu-emoji.sh -l 10")
     ]
 
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
