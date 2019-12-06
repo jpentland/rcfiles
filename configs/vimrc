@@ -68,10 +68,9 @@ au BufReadPost,BufNewFile .xmobarrc setlocal ft=haskell
 " Email
 au BufRead /tmp/mutt-* set tw=72
 augroup filetypedetect
-
-" Mail
   autocmd BufRead,BufNewFile *mutt-*              setfiletype mail
 augroup END
+autocmd Filetype mail setlocal spell
 
 "Android
 let g:andoid_sdk_path="~/Android/Sdk/"
