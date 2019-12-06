@@ -215,7 +215,7 @@ case $(codetodesc $code) in
 esac
 
 if [ "$temp" -lt "5" ]; then
-    col="#ccccff"
+    col="#aaaaff"
 elif [ "$temp" -gt "30" ]; then
     col="#ff0000"
 else
