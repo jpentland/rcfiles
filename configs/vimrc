@@ -35,8 +35,6 @@ match ErrorMsg '\s\+$'
 :set guifont=Inconsolata\ 12
 
 " Editor options
-:set iskeyword-=_
-"set mouse-=a"
 :set expandtab
 :set tabstop=4
 filetype plugin indent on
