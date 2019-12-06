@@ -1,4 +1,5 @@
 #!/bin/sh
+# Show active network connections
 nmcli connection show --active | \
 	while read line; do
 		name=$(echo "$line" | awk -F '  +' '{print $1}')
@@ -25,3 +26,8 @@ nmcli connection show --active | \
 		esac
 	done | \
 		sed 's/ $//'
+
+# Show red disconnected symbol if no network access
+if ! ping -c3 8.8.8.8 1>&2; then
+	echo -n -e "<fc=#ff0000>\uf818</fc> "
+fi
