@@ -219,6 +219,6 @@ if [ "$temp" -lt "5" ]; then
 elif [ "$temp" -gt "30" ]; then
     col="#ff0000"
 else
-    col="#000000"
+    col="#ffffff"
 fi
 echo -n -e " <fc=$col>$temp\u00b0C</fc>"
