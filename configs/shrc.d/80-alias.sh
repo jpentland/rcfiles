@@ -1,5 +1,4 @@
 # Aliases
-alias ..="cd .."
 alias get=git
 alias got=git
 alias g=git
