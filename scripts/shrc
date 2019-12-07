@@ -21,7 +21,7 @@ if ! [ $(echo "$files" | wc -l) == "1" ]; then
     if [ -z "$DISPLAY" ]; then
         selection=$(dialog --keep-tite --menu "shrc" 0 0 $count $(for a in $files; do echo "$a ..."; done) --stdout)
     else
-        selection=$(echo "$files" | dmenu)
+        selection=$(echo "$files" | dmenu -l 10)
     fi
 else
     selection=$files
