@@ -1,3 +1,5 @@
 configs/vim/.netrwhist
 configs/vim/bundle*
 !configs/vim/bundle/Vundle.vim
+*.pyc
+*.zwc
