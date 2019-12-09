@@ -15,6 +15,7 @@ import XMonad.Layout.SubLayouts
 import XMonad.Layout.WindowNavigation
 import XMonad.Layout.BoringWindows
 import XMonad.Layout.ResizableTile
+import XMonad.Layout.Spacing
 import XMonad.Hooks.SetWMName
 import XMonad.Prompt
 import XMonad.Prompt.Window
@@ -30,8 +31,10 @@ import qualified Data.Map as M
 
 resizableTall = ResizableTall 1 (3/100) (1/2) []
 
+mySpacing = spacingRaw True (Border 0 10 10 10) True (Border 10 10 10 10) True
+
 myLayout = (avoidStruts $ smartBorders $
-            (windowNavigation $ subTabbed $ boringWindows $ resizableTall)
+            (mySpacing $ windowNavigation $ subTabbed $ boringWindows $ resizableTall)
             ||| (windowNavigation $ boringWindows $ Full)
             ||| (windowNavigation $ boringWindows $ tabbed shrinkText myTheme))
 
