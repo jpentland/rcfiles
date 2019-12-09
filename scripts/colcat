@@ -1,6 +1,6 @@
 #!/bin/sh
 pattern=""
 if ! [ -z $1 ]; then
-	pattern=$1; shift
+	pattern="\(AndroidRuntime\|$1\)"; shift
 fi
-adb logcat -v color,printable | sed -n "s/\(.*\)[0-9][0-9]-[0-9][0-9].*$pattern[^:]*:\(.*\)/\1\2/p"
+adb logcat -v color,printable | sed -n "s/\(.*\)[0-9][0-9]-[0-9][0-9].*$pattern[^:]*:\(.*\)/\1\2:\3/p"
