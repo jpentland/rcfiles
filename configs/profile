@@ -1,0 +1,2 @@
+source ~/.shrc.d/70-env.sh
+source ~/.shrc.d/80-alias.sh
