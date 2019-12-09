@@ -27,9 +27,9 @@ if ! [ -z "$1" ]; then
 	fi
 fi
 
-filename=$(basename $source)
+filename=$(basename $source | sed 's/^\.//')
 link_target=$(realpath --relative-to $HOME $source)
-mv $source $RCFILES/configs
+mv $source $RCFILES/configs/$filename
 ln -s $RCFILES/configs/$filename $source
 echo -e  "delete_and_link \"$filename\"\t\"$link_target\"" >> $RCFILES/deploy.sh
 if ! [ -z "$message" ]; then
