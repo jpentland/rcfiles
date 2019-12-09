@@ -1,57 +1,56 @@
 #!/bin/bash
 alias screen="screen -h 10240"
-screens="$(screen -ls | sed -n 's/^\s*\(.*\)\s\+.*\((.*)\)/\1 \2/p' | sort -t. -k2)"
+screens="$(screen -ls | sed -n '/ached/s/^\s\+//p' | sort -t. -k2)"
 title=Screen
 height=0
 width=0
 
-if [[ $1 == "-h" ]] || [[ $1 == "--help" ]]; then
+if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
 	echo "Usage: $(basename $0) [-h|--help] [-k] [pattern]"
+	exit 0
 fi
 
 if [[ $1 == "-k" ]]; then
 	# Multikill
-	for screen in $screens; do
-		if echo $screen | grep -q '(..tached)'; then
-			screen="$screen off"
-		fi
-		screens2="$screens2 $screen"
-	done
-	count=$(expr $(echo "$screens" | wc -w) / 2 + 1)
-	selection=$(dialog --stdout --keep-tite --checklist "Kill Screens" $height $width $count $screens2)
-
-	for screen in $selection; do
-		echo "Killing screen session '$screen'" > /dev/stderr
-		screen -S $screen -X quit
-	done
-
+	echo "$screens" | fzf -m | \
+		while read screen extra; do
+			echo "Killing screen session '$screen'" > /dev/stderr
+			screen -S $screen -X quit
+		done
 	exit 0
 fi
 
 if [[ $1 ]]; then
 	screens="$(echo "$screens" | grep -e "^\s*[0-9]\+\.$1")"
 	title="$title ($1)"
-
 fi
 
 count=$(expr $(echo "$screens" | wc -w) / 2 + 1)
 
 if [[ $1 ]] && [ "$(echo "$screens" | wc -l)" == "1" ]; then
-	selection=$(echo $screens | awk '{print $1}')
+	selection=$(echo "$screens" | awk '{print $1}')
 else
-	selection=$(dialog --keep-tite --menu "$title" $height $width $count "New Screen" "..." $screens --stdout)
+	selection=$(echo -e "New Screen\n$screens" | fzf | awk '{print $1}')
 fi
 
-if [ "$selection" == "New Screen" ]; then
-	selection=$(dialog --keep-tite --inputbox "Name?" $height $width --stdout)
+if [ "$selection" == "New" ]; then
+	read -p "Name > " selection
 fi
 
-if [[ ! "$selection" ]]; then
+if [ -z "$selection" ]; then
 	exit 0
 fi
 
 if echo "$screens" | grep $selection | grep Attached > /dev/null; then
-	dialog --keep-tite --yesno "Force Detach?" $height $width --stdout || exit 0
+	while true; do
+		read -p "Force Detach [Y/n]" detach
+		if [ "$detach" == "y" ] || [ -n "$detach" ]; then
+			break
+		elif [ "$detatch" == "n" ]; then
+			exit 0
+		fi
+	done
 fi
+
 echo "Opening session '$selection'" >> /dev/stderr
 screen -Rd $selection
