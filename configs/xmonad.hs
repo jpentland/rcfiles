@@ -152,10 +152,11 @@ main = do
     , ((modm, xK_minus), spawn "pactl set-sink-volume @DEFAULT_SINK@  -1.5%")
     , ((modm, xK_0), spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
 
-    , ((0, xF86XK_MonBrightnessUp), spawn "~/.local/scripts/backlight.sh +5")
-    , ((0, xF86XK_MonBrightnessDown), spawn "~/.local/scripts/backlight.sh -5")
+    , ((0, xF86XK_MonBrightnessUp), spawn "backlight.sh +5")
+    , ((0, xF86XK_MonBrightnessDown), spawn "backlight.sh -5")
+    , ((modm .|. shiftMask, xK_equal), spawn "backlight.sh +5")
+    , ((modm .|. shiftMask, xK_minus), spawn "backlight.sh -5")
 
-    , ((controlMask, xK_Pause), spawn "~/.xmonad/player.sh playpause")
     , ((0, xF86XK_AudioPause), spawn "playerctl pause")
     , ((0, xF86XK_AudioPlay), spawn "playerctl play")
     , ((0, xF86XK_AudioNext), spawn "playerctl next")
@@ -166,7 +167,7 @@ main = do
     , ((0, xK_F12), namedScratchpadAction myScratchpads "terminal")
     , ((modm, xK_F12), namedScratchpadAction myScratchpads "mixer")
     , ((0 .|. mod1Mask, xK_F12), namedScratchpadAction myScratchpads "spotify")
-    , ((modm .|. shiftMask, xK_x), spawn "~/.local/scripts/btmenu")
+    , ((modm .|. shiftMask, xK_x), spawn "btmenu")
     , ((modm, xK_x), spawn "networkmanager_dmenu")
     , ((modm, xK_q), spawn "~/rcfiles/dmenu-emoji/dmenu-emoji.sh -l 10")
     ]
