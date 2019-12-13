@@ -20,6 +20,8 @@ alias sctl="sudo systemctl"
 alias jctl="journalctl"
 alias bt="bluetoothctl"
 alias wttr="curl wttr.in"
+alias xmonadhs="$EDITOR ~/.xmonad/xmonad.hs"
+alias startup="$EDITOR ~/.xmonad/startup.sh"
 
 for a in {0..10}; do
 	alias awk$a="awk '{print \$$a}'"
