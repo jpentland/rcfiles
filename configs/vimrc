@@ -19,6 +19,7 @@ Plugin 'tpope/vim-surround'
 Plugin 'dense-analysis/ale'
 Plugin 'hsanson/vim-android'
 Plugin 'craigemery/vim-autotag'
+Plugin 'sirtaj/vim-openscad'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
