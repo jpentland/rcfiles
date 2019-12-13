@@ -26,7 +26,7 @@ function try_xbacklight {
 
 function try_xrandr {
 	B=$1
-	for mon in $(xrandr --listactivemonitors | grep -o ' [^ ]*$' | tail -n-1); do
+	for mon in $(xrandr --listactivemonitors | awk '/^ [0-9]:/{print $4}'); do
 		set -e
 		xrandr --output $mon --brightness $(bc -l <<< $B/100)
 		set +e
@@ -43,5 +43,5 @@ function try_sys {
 
 # Try all ways of setting the backlight
 try_xbacklight $B ||
-	try_sys $B ||
-	try_xrandr $B
+	try_xrandr $B ||
+	try_sys $B
