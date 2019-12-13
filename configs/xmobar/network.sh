@@ -1,5 +1,7 @@
 #!/bin/sh
 # Show active network connections
+colour="#aaee88"
+echo -n -e "<fc=$colour>"
 nmcli connection show --active | \
 	while read line; do
 		name=$(echo "$line" | awk -F '  +' '{print $1}')
@@ -13,21 +15,21 @@ nmcli connection show --active | \
 
 		case $ctype in
 			"wifi")
-				echo -n -e "\xef\x87\xab $name "
+				echo -n -e " \xef\x87\xab $name"
 				;;
 			"ethernet")
-				echo -n -e "\xef\x83\xa8 "
+				echo -n -e " \xef\x83\xa8"
 				;;
 			"vpn")
-				echo -n -e "\xef\x80\xa3 $name "
+				echo -n -e " \xef\x80\xa3 $name"
 				;;
 			*)
 				;;
 		esac
-	done | \
-		sed 's/ $//'
+	done
 
 # Show red disconnected symbol if no network access
 if ! ping -c3 8.8.8.8 1>&2; then
-	echo -n -e "<fc=#ff0000>\uf818</fc> "
+	echo -n -e "<fc=#ff0000> \uf818</fc> "
 fi
+echo -n -e "</fc>"

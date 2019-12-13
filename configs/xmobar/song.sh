@@ -7,4 +7,4 @@ fi
 data="$(playerctl metadata)"
 title=$(echo "$data" | sed -n 's/.*:title \+\(.*\)/\1/p')
 artist=$(echo "$data" | sed -n 's/.*:artist \+\(.*\)/\1/p')
-echo -n -e "$icon $title - $artist"
+echo -n -e " $icon $title - $artist"
