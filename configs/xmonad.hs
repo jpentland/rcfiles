@@ -95,7 +95,7 @@ main = do
     , handleEventHook = docksEventHook <+> handleEventHook defaultConfig
     }
   where
-  mykeys (XConfig {modMask = modm}) = M.fromList $
+  mykeys XConfig {modMask = modm} = M.fromList
     [ ((modm , xK_g), goToSelected defaultGSConfig)
     , ((modm , xK_z), spawn "slock")
     , ((modm .|. controlMask , xK_z), spawn "slock & sleep 2s && systemctl suspend")
@@ -112,8 +112,8 @@ main = do
     , ((modm .|. shiftMask, xK_e),  toggleFloatAllNew)
     , ((modm .|. controlMask, xK_h), sendMessage $ pullGroup L)
     , ((modm .|. controlMask, xK_l), sendMessage $ pullGroup R)
-     , ((modm .|. controlMask, xK_k), sendMessage $ pullGroup U)
-     , ((modm .|. controlMask, xK_j), sendMessage $ pullGroup D)
+    , ((modm .|. controlMask, xK_k), sendMessage $ pullGroup U)
+    , ((modm .|. controlMask, xK_j), sendMessage $ pullGroup D)
     , ((modm .|. mod1Mask, xK_k), sendMessage MirrorExpand)
     , ((modm .|. mod1Mask, xK_j), sendMessage MirrorShrink)
 
@@ -150,8 +150,6 @@ main = do
     , ((0, xF86XK_AudioPlay), spawn "playerctl play")
     , ((0, xF86XK_AudioNext), spawn "playerctl next")
     , ((0, xF86XK_AudioPrev), spawn "playerctl previous")
-    , ((modm .|. shiftMask, xK_p), raise (className =? "Pidgin"))
-    , ((modm .|. shiftMask, xK_o), raise (className =? "Spotify"))
     , ((modm .|. shiftMask, xK_i), windowPrompt def { autoComplete = Just 50000 } Goto allWindows)
     , ((0, xK_F12), namedScratchpadAction myScratchpads "terminal")
     , ((modm, xK_F12), namedScratchpadAction myScratchpads "mixer")
@@ -163,11 +161,11 @@ main = do
     , ((modm, xK_q), spawn "~/rcfiles/dmenu-emoji/dmenu-emoji.sh -l 10")
     ]
 
-myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
-    [ ((modMask, button1), (\w -> focus w >> mouseMoveWindow w))
-    , ((modMask, button2), (\w -> focus w >> windows W.swapMaster))
-    , ((modMask, button3), (\w -> focus w >> mouseResizeWindow w))
-    , ((modMask, button5), (\_ -> nextWS))
-    , ((modMask, button4), (\_ -> prevWS))
+myMouseBindings XConfig {XMonad.modMask = modMask} = M.fromList
+    [ ((modMask, button1), \w -> focus w >> mouseMoveWindow w)
+    , ((modMask, button2), \w -> focus w >> windows W.swapMaster)
+    , ((modMask, button3), \w -> focus w >> mouseResizeWindow w)
+    , ((modMask, button5), const nextWS)
+    , ((modMask, button4), const prevWS)
     ]
 
