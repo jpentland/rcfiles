@@ -29,15 +29,19 @@ import qualified XMonad.StackSet as W
 
 resizableTall = ResizableTall 1 (3/100) (1/2) []
 
-mySpacing = spacingRaw True (Border 0 10 10 10) True (Border 10 10 10 10) True
+role = stringProperty "WM_WINDOW_ROLE"
 
-myLayout = (avoidStruts $ smartBorders $
-            (mySpacing $ windowNavigation $ subTabbed $ boringWindows $ resizableTall)
-            ||| (windowNavigation $ boringWindows $ Full)
-            ||| (windowNavigation $ boringWindows $ tabbed shrinkText myTheme))
+mySpacing = spacingRaw True (Border 5 5 5 5) True (Border 5 5 5 5) True
 
-myStartup = do
-    spawn "~/.xmonad/startup.sh"
+myLayout = avoidStruts $ smartBorders $ windowNavigation $ mySubLayout $ boringWindows $
+  (XLR.renamed [ XLR.Replace "Tall" ] $ mySpacing resizableTall)
+  ||| Full
+  ||| (XLR.renamed [ XLR.Replace "Tabbed" ] $ tabbed shrinkText myTheme)
+
+mySubSpacing = spacingRaw True (Border 0 0 0 0) True (Border 5 5 5 5) True
+mySubLayout = subLayout [0,1,2] $ mySubSpacing ( Tall 1 (3/100) (1/2)) ||| tabbed shrinkText myTheme
+
+myStartup = spawn "~/.xmonad/startup.sh"
 
 myTerminal = "st"
 
@@ -130,8 +134,9 @@ main = do
     , ((modm .|. mod1Mask, xK_k), sendMessage MirrorExpand)
     , ((modm .|. mod1Mask, xK_j), sendMessage MirrorShrink)
 
-     , ((modm .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
-     , ((modm .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
+    , ((modm .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
+    , ((modm .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
+    , ((modm .|. controlMask, xK_space), toSubl NextLayout)
 
     , ((modm .|. controlMask, xK_period), onGroup W.focusDown')
     , ((modm .|. controlMask, xK_comma), onGroup W.focusUp')
@@ -139,7 +144,10 @@ main = do
     , ((modm, xK_j), focusDown)
     , ((modm, xK_k), focusUp)
 
-    ,((modm, xK_b     ), sendMessage ToggleStruts)
+    , ((modm, xK_b     ), sendMessage ToggleStruts)
+    , ((modm, xK_s), toggleWindowSpacingEnabled >> toggleScreenSpacingEnabled)
+    , ((modm, xK_d), incWindowSpacing 2 >> incScreenSpacing 2)
+    , ((modm, xK_a), decWindowSpacing 2 >> decScreenSpacing 2)
 
     , ((modm, xK_p), spawn "dmenu_run -l 10")
 
