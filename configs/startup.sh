@@ -28,7 +28,7 @@ setxkbmap gb
 picom &
 xrdb ~/.Xresources
 singlestart pulseaudio &
-singlestart statnot ~/.config/statnot/rc.py &
+killstart statnot ~/.config/statnot/rc.py &
 
 # Dont kill everything when script ends
 wait
