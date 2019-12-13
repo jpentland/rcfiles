@@ -60,40 +60,23 @@ myManageHook = manageDocks <+>
 myTheme = defaultTheme { fontName = "xft:DejaVu Sans:size=12" }
 
 myScratchpads = [
-  NS "terminal" spawnTerm findTerm manageTerm,
-  NS "mixer" spawnMixer findMixer manageMixer,
-  NS "spotify" spawnSpotify findSpotify manageSpotify
+  NS "terminal" (myTerminal ++ " -c scratchpad") (className =? "scratchpad") (customFloating $ W.RationalRect 0 0.02 1 0.3),
+  NS "mixer" "pavucontrol" (className =? "Pavucontrol") (customFloating $ W.RationalRect 0 0.02 1 0.4),
+  NS "spotify" "spotify" (className =? "Spotify") (customFloating $ W.RationalRect 0 0 0.4 1),
+  NS "pidgin_list" "pidgin" (role =? "buddy_list") (customFloating $ W.RationalRect 0 0.2 0.2 0.8),
+  NS "pidgin_conversation" "pidgin" (role =? "conversation") (customFloating $ W.RationalRect 0.6 0.6 0.4 0.4)
   ]
-  where
-    spawnTerm = myTerminal ++ " -c scratchpad"
-    findTerm = className =? "scratchpad"
-    manageTerm = customFloating $ W.RationalRect l t w h
-      where
-        h = 0.3
-        w = 1
-        t = 0.02
-        l = (1 - w) / 2
-    spawnMixer = "pavucontrol"
-    findMixer = className =? "Pavucontrol"
-    manageMixer = customFloating $ W.RationalRect l t w h
-      where
-        h = 0.4
-        w = 1
-        t = 0.02
-        l = (1 - w)/2
-    spawnSpotify = "spotify"
-    findSpotify = className =? "Spotify"
-    manageSpotify = customFloating $ W.RationalRect l t w h
-      where
-        h = 1
-        w = 0.4
-        t = 0
-        l = 0
+
+data PidginUrgencyHook = PidginUrgencyHook deriving (Read, Show)
+instance UrgencyHook PidginUrgencyHook where
+  urgencyHook PidginUrgencyHook w = do
+    runQuery (role =? "conversation") w
+    namedScratchpadAction myScratchpads "pidgin_conversation"
 
 main = do
   xmproc <- spawnPipe "xmobar"
-  xmonad $ defaultConfig
-    { borderWidth    = 1
+  xmonad $ withUrgencyHook PidginUrgencyHook $ defaultConfig
+    { borderWidth    = 2
     , terminal    = myTerminal
     , normalBorderColor = "#444444"
     , focusedBorderColor = "#8888dd"
@@ -173,6 +156,8 @@ main = do
     , ((0, xK_F12), namedScratchpadAction myScratchpads "terminal")
     , ((modm, xK_F12), namedScratchpadAction myScratchpads "mixer")
     , ((0 .|. mod1Mask, xK_F12), namedScratchpadAction myScratchpads "spotify")
+    , ((modm .|. shiftMask, xK_p), namedScratchpadAction myScratchpads "pidgin_list")
+    , ((modm .|. mod1Mask, xK_p), namedScratchpadAction myScratchpads "pidgin_conversation")
     , ((modm .|. shiftMask, xK_x), spawn "btmenu")
     , ((modm, xK_x), spawn "networkmanager_dmenu")
     , ((modm, xK_q), spawn "~/rcfiles/dmenu-emoji/dmenu-emoji.sh -l 10")
