@@ -1,33 +1,31 @@
-import XMonad
-import XMonad.Actions.GridSelect
-import XMonad.Layout.Tabbed
-import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.InsertPosition
-import XMonad.Util.Run(spawnPipe)
-import XMonad.Util.EZConfig(additionalKeys)
-import XMonad.Actions.CycleWS
+import Graphics.X11.ExtraTypes.XF86
 import System.IO
-import XMonad.Layout.NoBorders
-import XMonad.Hooks.UrgencyHook
+import XMonad
+import XMonad.Actions.CycleWS
+import XMonad.Actions.GridSelect
+import XMonad.Actions.WindowGo
+import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.FloatNext
-import XMonad.Layout.SubLayouts
-import XMonad.Layout.WindowNavigation
+import XMonad.Hooks.InsertPosition
+import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.SetWMName
+import XMonad.Hooks.UrgencyHook
 import XMonad.Layout.BoringWindows
+import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Spacing
-import XMonad.Hooks.SetWMName
+import XMonad.Layout.SubLayouts
+import XMonad.Layout.Tabbed
+import XMonad.Layout.WindowNavigation
 import XMonad.Prompt
 import XMonad.Prompt.Window
-import Graphics.X11.ExtraTypes.XF86
-import XMonad.Layout.NoBorders
-import XMonad.Actions.WindowGo
-import qualified XMonad.StackSet as W
-import qualified XMonad.Layout.Renamed as XLR
-import XMonad.Util.Themes
+import XMonad.Util.EZConfig(additionalKeys)
 import XMonad.Util.NamedScratchpad
-
+import XMonad.Util.Run(spawnPipe)
+import XMonad.Util.Themes
 import qualified Data.Map as M
+import qualified XMonad.Layout.Renamed as XLR
+import qualified XMonad.StackSet as W
 
 resizableTall = ResizableTall 1 (3/100) (1/2) []
 
