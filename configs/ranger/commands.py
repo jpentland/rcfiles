@@ -15,6 +15,36 @@ import os
 # You always need to import ranger.api.commands here to get the Command class:
 from ranger.api.commands import Command
 
+class vimserver(Command):
+    """ Open a file in vim server
+
+    Usage:
+        :vimserver <filename>
+            Open file using configured vimserver (default: ranger)
+        :vimserver -s <server_name> <filename>
+            Open file in specified vimserver
+        :vimserver --set <server_name>
+            Set configured vimserver
+    """
+
+    server_name = "ranger"
+
+    def execute(self):
+        if self.arg(1):
+            if (self.arg(1) == "--set") and self.arg(2):
+                vimserver.server_name = self.arg(2)
+            elif (self.arg(1) == "-s") and self.arg(2):
+                self.open(self.arg(2), self.rest(3))
+            else:
+                self.open(self.server_name, self.rest(1))
+        else:
+            self.fm.notify("Invalid arguments, see help", bad=True)
+
+    def open(self, server, path):
+        self.fm.execute_command("vim --servername %s --remote-silent %s" % (server, path))
+
+    def tab(self, tabnum):
+        return self._tab_directory_content()
 
 # Any class that is a subclass of "Command" will be integrated into ranger as a
 # command.  Try typing ":my_edit<ENTER>" in ranger!
