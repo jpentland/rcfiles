@@ -59,7 +59,7 @@ myManageHook = manageDocks <+>
                manageHook defaultConfig <+>
                namedScratchpadManageHook myScratchpads
 
-myTheme = defaultTheme { fontName = "xft:DejaVu Sans:size=12" }
+myTheme = defaultTheme { fontName = "xft:SauceCodePro Nerd Font:antialias=true:autohint=true:style=Medium,Regular:size=12" }
 
 myScratchpads = [
   NS "terminal" (myTerminal ++ " -c scratchpad") (className =? "scratchpad") (customFloating $ W.RationalRect 0 0.02 1 0.3),
