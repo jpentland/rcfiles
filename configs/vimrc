@@ -87,3 +87,7 @@ augroup Example
     autocmd!
     autocmd TextYankPost * if v:event.operator ==# 'y' | call Osc52Yank() | endif
 augroup END
+
+" Linters
+let g:ale_linters = {'haskell': ['ghc']}
+let g:ale_haskell_ghc_options = '-fno-code -v0 -dynamic'
