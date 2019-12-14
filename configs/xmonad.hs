@@ -17,6 +17,7 @@ import XMonad.Layout.Spacing
 import XMonad.Layout.SubLayouts
 import XMonad.Layout.Tabbed
 import XMonad.Layout.WindowNavigation
+import XMonad.Layout.Simplest
 import XMonad.Prompt
 import XMonad.Prompt.Window
 import XMonad.Util.EZConfig(additionalKeys)
@@ -33,13 +34,14 @@ role = stringProperty "WM_WINDOW_ROLE"
 
 mySpacing = spacingRaw True (Border 5 5 5 5) True (Border 5 5 5 5) True
 
-myLayout = avoidStruts $ smartBorders $ windowNavigation $ mySubLayout $ boringWindows $
-  (XLR.renamed [ XLR.Replace "Tall" ] $ mySpacing resizableTall)
-  ||| Full
+myLayout = avoidStruts $ smartBorders $ windowNavigation $ boringWindows
+  (XLR.renamed [ XLR.Replace "Tall" ] $ mySpacing $ mySubLayout $ resizableTall)
+  ||| (noBorders Full)
   ||| (XLR.renamed [ XLR.Replace "Tabbed" ] $ tabbed shrinkText myTheme)
 
-mySubSpacing = spacingRaw True (Border 0 0 0 0) True (Border 5 5 5 5) True
-mySubLayout = subLayout [0,1,2] $ mySubSpacing ( Tall 1 (3/100) (1/2)) ||| tabbed shrinkText myTheme
+mySubLayout = subLayout [0,1,2] $
+  (Tall 1 (3/100) (1/2))
+  ||| (addTabs shrinkText myTheme Simplest)
 
 myStartup = spawn "~/.xmonad/startup.sh"
 
@@ -114,18 +116,19 @@ main = do
     , ((modm .|. controlMask, xK_l), sendMessage $ pullGroup R)
     , ((modm .|. controlMask, xK_k), sendMessage $ pullGroup U)
     , ((modm .|. controlMask, xK_j), sendMessage $ pullGroup D)
-    , ((modm .|. mod1Mask, xK_k), sendMessage MirrorExpand)
-    , ((modm .|. mod1Mask, xK_j), sendMessage MirrorShrink)
+    , ((modm .|. mod1Mask, xK_period), sendMessage MirrorExpand)
+    , ((modm .|. mod1Mask, xK_comma), sendMessage MirrorShrink)
 
     , ((modm .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
     , ((modm .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
     , ((modm .|. controlMask, xK_space), toSubl NextLayout)
-
-    , ((modm .|. controlMask, xK_period), onGroup W.focusDown')
-    , ((modm .|. controlMask, xK_comma), onGroup W.focusUp')
+    , ((modm .|. controlMask, xK_comma), toSubl (IncMasterN 1))
+    , ((modm .|. controlMask, xK_period), toSubl (IncMasterN (-1)))
 
     , ((modm, xK_j), focusDown)
     , ((modm, xK_k), focusUp)
+    , ((modm .|. mod1Mask, xK_j), windows W.focusDown)
+    , ((modm .|. mod1Mask, xK_k), windows W.focusUp)
 
     , ((modm, xK_b     ), sendMessage ToggleStruts)
     , ((modm, xK_s), toggleWindowSpacingEnabled >> toggleScreenSpacingEnabled)
