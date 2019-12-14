@@ -109,7 +109,6 @@ main = do
     , ((modm,               xK_Up),  prevScreen)
     , ((modm .|. shiftMask, xK_Down), shiftNextScreen)
     , ((modm .|. shiftMask, xK_Up),  shiftPrevScreen)
-    , ((modm, xK_x),        focusUrgent)
     , ((modm, xK_e),        toggleFloatNext)
     , ((modm .|. shiftMask, xK_e),  toggleFloatAllNew)
     , ((modm .|. controlMask, xK_h), sendMessage $ pullGroup L)
@@ -130,7 +129,7 @@ main = do
     , ((modm .|. mod1Mask, xK_j), windows W.focusDown)
     , ((modm .|. mod1Mask, xK_k), windows W.focusUp)
 
-    , ((modm, xK_b     ), sendMessage ToggleStruts)
+    , ((modm, xK_b), sendMessage ToggleStruts)
     , ((modm, xK_s), toggleWindowSpacingEnabled >> toggleScreenSpacingEnabled)
     , ((modm, xK_d), incWindowSpacing 2 >> incScreenSpacing 2)
     , ((modm, xK_a), decWindowSpacing 2 >> decScreenSpacing 2)
