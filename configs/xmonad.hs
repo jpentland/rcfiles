@@ -164,6 +164,9 @@ main = do
     , ((modm .|. shiftMask, xK_x), spawn "btmenu")
     , ((modm, xK_x), spawn "networkmanager_dmenu")
     , ((modm, xK_q), spawn "~/rcfiles/dmenu-emoji/dmenu-emoji.sh -l 10")
+    , ((modm, xK_w), spawn "bookmark")
+    , ((modm .|. shiftMask, xK_w), spawn "bookmark -n")
+    , ((modm, xK_m), spawn "mpw-dmenu")
     ]
 
 myMouseBindings XConfig {XMonad.modMask = modMask} = M.fromList
