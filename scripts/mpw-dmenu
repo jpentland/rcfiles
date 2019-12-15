@@ -1,0 +1,36 @@
+#!/bin/sh -e
+pwtypes="maximum x
+long l
+medium m
+basic b
+short s
+pin i
+name n
+phrase p
+key K
+personal P"
+
+function getDomain {
+	sed -E -e 's_.*://([^/@]*@)?([^/:]+).*_\2_' | \
+	   sed 's/.*\.\([^\.]\+\)\.\([^\.]\+\)$/\1.\2/'
+}
+
+function exitIfEmpty {
+	if [ -z "$1" ]; then
+		exit 0
+	fi
+}
+
+fullName=$(dmenu -p "Full Name:")
+exitIfEmpty "$fullName"
+site=$(xclip -o | getDomain | dmenu -p "Site:")
+exitIfEmpty "$site"
+pwtype=$(echo "$pwtypes" | dmenu -p "Type:" | awk '{print $2}')
+exitIfEmpty "$pwtype"
+password=$(dmenu -P -p "Password:")
+exitIfEmpty "$password"
+sitepass=$(echo -n "$password" | mpw -U "$fullName" -t $pwtype -m /dev/stdin -q "$site")
+exitIfEmpty "$sitepass"
+echo -n $sitepass | xclip -selection clipboard
+notify-send $(basename $0) "password for $site copied"
+
