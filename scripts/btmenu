@@ -1,5 +1,6 @@
 #!/bin/sh
 alias bt=bluetoothctl
+
 function get_show {
 	bt show | awk "/$1/{print \$2}"
 }
@@ -20,9 +21,9 @@ function list_devices {
 	bt devices | \
 	while read device id name; do
 		if info_bool $id Connected; then
-			echo "$device $name $id (Connected)"
+			echo "$device $id $name (Connected)"
 		else
-			echo "$device $name $id (Not connected)"
+			echo "$device $id $name (Not connected)"
 		fi
 	done
 }
@@ -33,7 +34,87 @@ function list_options {
 	else
 		echo "Power off"
 		list_devices
+		echo "Scan"
 	fi
+	echo Remove Device
+}
+
+function get_new_devices {
+	seen=""
+	fifo=$1; shift
+	while true; do
+		devices=$(bt devices)
+		IFS=$'\n'
+		for line in $devices; do
+			id=$(echo $line | cut -f 2 -d " ")
+			name=$(echo $line | sed "s/.\+$id \(.\+\)/\1/")
+			if ! echo "$seen" | grep -q "$id"; then
+				seen=$"$devices\n$id"
+				if ! info_bool $id Paired; then
+						echo "$id $name" >> $fifo
+				fi
+			fi
+		done
+		sleep 1
+	done
+}
+
+function scan {
+	BTFIFO=/tmp/btmenu.scan.in
+	DEVICEFIFO=/tmp/btmenu.devices
+	mkfifo $BTFIFO
+	mkfifo $DEVICEFIFO
+	tail -n1 -f $BTFIFO | bt > /dev/null &
+	echo "scan on" >> $BTFIFO &
+	get_new_devices $DEVICEFIFO &
+	device=$(cat $DEVICEFIFO | dmenu -i -l 10 | awk '{print $1}')
+	if [ -z "$device" ]; then
+		scan_cleaup
+		exit 0
+	fi
+	echo "test point" >> /dev/stderr
+	echo "pair $device" >> $BTFIFO
+	sleep 5
+	echo "exit" >> $BTFIFO
+	if info_bool $device Paired; then
+		notify-send $(basename $0) "$(get_info $device Name) paired!"
+	else
+		notify-send $(basename $0) "$(get_info $device Name) pairing failed"
+	fi
+	scan_cleanup
+}
+
+function scan_cleanup {
+	jobs -p | xargs kill
+	rm $BTFIFO
+	rm $DEVICEFIFO
+	removeUnpaired
+}
+
+function remove {
+	device=$(bt devices | while read device id name; do
+		echo "$id $name"
+	done | dmenu -l 10 -i -p "Remove?" | awk '{print $1}')
+	exitIfEmpty "$device"
+	bt remove $device
+	sleep 2
+	if ! bt devices | grep -q $device; then
+		notify-send $(basename $0) "Device removed"
+	fi
+}
+
+function exitIfEmpty {
+	if [ -z $1 ]; then
+		exit 0
+	fi
+}
+
+function removeUnpaired {
+	bt devices | while read device id name; do
+		if ! info_bool $id Paired; then
+			bt remove $id
+		fi
+	done
 }
 
 function process_option {
@@ -42,11 +123,27 @@ function process_option {
 			bt power $2
 			;;
 		"Device")
-			if info_bool $3 Connected; then
-				bt disconnect $3
+			if info_bool $2 Connected; then
+				bt disconnect $2
+				sleep 1
+				if ! info_bool $2 Connected; then
+					notify-send $(basename $0) "Device disconnected"
+				fi
 			else
-				bt connect $3
+				bt connect $2
+				sleep 3
+				if info_bool $2 Connected; then
+					notify-send $(basename $0) "Device connected"
+				else
+					notify-send $(basename $0) "Connection failed"
+				fi
 			fi
+			;;
+		"Scan")
+			scan
+			;;
+		"Remove")
+			remove
 			;;
 	esac
 }
