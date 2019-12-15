@@ -127,10 +127,10 @@ main = do
     , ((modm .|. controlMask, xK_comma), toSubl (IncMasterN 1))
     , ((modm .|. controlMask, xK_period), toSubl (IncMasterN (-1)))
 
-    , ((modm, xK_j), focusDown)
-    , ((modm, xK_k), focusUp)
-    , ((modm .|. mod1Mask, xK_j), windows W.focusDown)
-    , ((modm .|. mod1Mask, xK_k), windows W.focusUp)
+    , ((modm, xK_j), windows W.focusDown)
+    , ((modm, xK_k), windows W.focusUp)
+    , ((modm .|. mod1Mask, xK_j), focusDown)
+    , ((modm .|. mod1Mask, xK_k), focusUp)
 
     , ((modm, xK_b), sendMessage ToggleStruts)
     , ((modm, xK_s), toggleWindowSpacingEnabled >> toggleScreenSpacingEnabled)
