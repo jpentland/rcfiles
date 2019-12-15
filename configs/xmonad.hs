@@ -7,17 +7,18 @@ import XMonad.Actions.WindowGo
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.FloatNext
 import XMonad.Hooks.InsertPosition
+import XMonad.Hooks.InsertPosition
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.UrgencyHook
 import XMonad.Layout.BoringWindows
 import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableTile
+import XMonad.Layout.Simplest
 import XMonad.Layout.Spacing
 import XMonad.Layout.SubLayouts
 import XMonad.Layout.Tabbed
 import XMonad.Layout.WindowNavigation
-import XMonad.Layout.Simplest
 import XMonad.Prompt
 import XMonad.Prompt.Window
 import XMonad.Util.EZConfig(additionalKeys)
@@ -51,10 +52,12 @@ customManageHooks = composeAll
     [ resource =? "Do"    --> doFloat,
       resource =? "Yakuake" --> doFloat,
       resource =? "yakuake" --> doFloat,
-      resource =? "yad" --> doFloat]
+      resource =? "yad" --> doFloat,
+      className =? "Surf" --> insertPosition End Newer]
 
 myManageHook = manageDocks <+>
                customManageHooks <+>
+               insertPosition Master Newer <+>
                floatNextHook <+>
                manageHook defaultConfig <+>
                namedScratchpadManageHook myScratchpads
