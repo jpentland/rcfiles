@@ -59,10 +59,10 @@ myManageHook = manageDocks <+>
                customManageHooks <+>
                insertPosition Master Newer <+>
                floatNextHook <+>
-               manageHook defaultConfig <+>
+               manageHook def <+>
                namedScratchpadManageHook myScratchpads
 
-myTheme = defaultTheme { fontName = "xft:SauceCodePro Nerd Font:antialias=true:autohint=true:style=Medium,Regular:size=12" }
+myTheme = def { fontName = "xft:SauceCodePro Nerd Font:antialias=true:autohint=true:style=Medium,Regular:size=12" }
 
 myScratchpads = [
   NS "terminal" (myTerminal ++ " -c scratchpad") (className =? "scratchpad") (customFloating $ W.RationalRect 0 0.02 1 0.3),
@@ -80,12 +80,12 @@ instance UrgencyHook PidginUrgencyHook where
 
 main = do
   xmproc <- spawnPipe "xmobar"
-  xmonad $ withUrgencyHook PidginUrgencyHook $ defaultConfig
+  xmonad $ withUrgencyHook PidginUrgencyHook $ def
     { borderWidth    = 2
     , terminal    = myTerminal
     , normalBorderColor = "#444444"
     , focusedBorderColor = "#8888dd"
-    , keys          = \c -> mykeys c `M.union` keys defaultConfig c
+    , keys          = \c -> mykeys c `M.union` keys def c
     , mouseBindings = myMouseBindings
     , layoutHook = myLayout
     , manageHook = myManageHook
@@ -97,11 +97,11 @@ main = do
     , focusFollowsMouse = False
     , clickJustFocuses = False
     , startupHook = myStartup >> setWMName "LG3D"
-    , handleEventHook = docksEventHook <+> handleEventHook defaultConfig
+    , handleEventHook = docksEventHook <+> handleEventHook def
     }
   where
   mykeys XConfig {modMask = modm} = M.fromList
-    [ ((modm , xK_g), goToSelected defaultGSConfig)
+    [ ((modm , xK_g), goToSelected def)
     , ((modm , xK_z), spawn "slock")
     , ((modm .|. controlMask , xK_z), spawn "slock & sleep 2s && systemctl suspend")
     , ((modm,               xK_Right),  nextWS)
