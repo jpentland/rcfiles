@@ -45,6 +45,7 @@ highlight Normal ctermfg=white ctermbg=NONE
 :set so=5
 set omnifunc=syntaxcomplete#Complete
 set tags=./tags,tags;$HOME
+map <tab> :bNext<CR>
 
 " Relative number
 :set number relativenumber
