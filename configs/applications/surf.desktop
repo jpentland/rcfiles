@@ -1,0 +1,16 @@
+[Desktop Entry]
+Version=1.0
+Name=surf
+GenericName=Web Browser
+Comment=Browse the World Wide Web
+Keywords=Internet;WWW;Browser;Web;Explorer
+Exec=~/.local/scripts/surf-fork %u
+Icon=surf
+Terminal=false
+X-MultipleArgs=false
+Type=Application
+StartupNotify=true
+StartupWMClass=surf
+Categories=Network;WebBrowser;
+Actions=new-window;new-private-window;
+MimeType=x-scheme-handler/unknown;x-scheme-handler/about;text/html;text/xml;application/xhtml+xml;x-scheme-handler/http;x-scheme-handler/https;application/x-xpinstall;
