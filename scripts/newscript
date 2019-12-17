@@ -1,0 +1,22 @@
+#!/bin/sh
+SCRIPT_DIR=~/.local/scripts
+if [ -z "$1" ]; then
+	echo "Please give script name"
+fi
+name=$1; shift
+pushd $SCRIPT_DIR
+touch $name
+chmod +x $name
+case $2 in
+	py)
+		TYPE=python
+		;;
+	zsh)
+		TYPE=zsh
+		;;
+	*)
+		TYPE=sh
+		;;
+esac
+vim "+setfiletype $TYPE" $name
+popd
