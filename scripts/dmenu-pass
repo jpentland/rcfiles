@@ -1,0 +1,30 @@
+#!/bin/sh -e
+function getDomain {
+	sed -E -e 's_.*://([^/@]*@)?([^/:]+).*_\2_' | \
+	   sed 's/.*\.\([^\.]\+\)\.\([^\.]\+\)$/\1.\2/'
+}
+
+function exitIfEmpty {
+	if [ -z "$1" ]; then
+		exit 0
+	fi
+}
+
+if [ "$1" == "add" ]; then
+	site=$(xclip -o -selection clipboard | getDomain | dmenu -p "Site: ")
+	password=$(dmenu -P -p "Password")
+	exitIfEmpty $password
+	password2=$(dmenu -P -p "Password (again)")
+	exitIfEmpty $password2
+	if [ "$password" == "$password2" ]; then
+		echo -e "$password\n$password" | pass add $site && notify-send $(basename $0) "Password for $site added"
+	else
+		notify-send $(basename $0) "Passwords did not match"
+	fi
+	exit 0
+fi
+
+site=$(xclip -o -selection clipboard | getDomain | dmenu -p "Site: ")
+exitIfEmpty $site
+password=$(pass $site) || notify-send $(basename $0) "Pass failed"
+echo $password | xclip -selection clipboard && notify-send $(basename $0) "Password for $site copied to clipboard"
