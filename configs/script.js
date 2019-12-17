@@ -16,7 +16,7 @@ function hintMode(newtab){
 	hint_num_str = '';
 }
 function hintHandler(e){
-	e.preventDefault();  //Stop Default Event 
+	e.preventDefault();  //Stop Default Event
 	var pressedKey = get_key(e);
 	if (pressedKey == 'Enter') {
 		if (hint_num_str == '')
@@ -114,7 +114,7 @@ function setHints() {
 			hint_elems.push(elem);
 			setHighlight(elem, false);
 			var span = document.createElement('span');
-			span.style.cssText = [ 
+			span.style.cssText = [
 				'left: ', elem_left, 'px;',
 				'top: ', elem_top, 'px;',
 				'position: absolute;',
@@ -161,7 +161,7 @@ function removeHints() {
 function addKeyBind( key, func, eve ){
 	var pressedKey = get_key(eve);
 	if( pressedKey == key ){
-		eve.preventDefault();  //Stop Default Event 
+		eve.preventDefault();  //Stop Default Event
 		eval(func);
 	}
 }
@@ -275,7 +275,7 @@ function get_key(evt){
 		meta = (evt.metaKey || evt.altKey) ? 'M-' : '',
 		shift = evt.shiftKey ? 'S-' : '';
 	if (evt.shiftKey){
-		if (/^[a-z]$/.test(key)) 
+		if (/^[a-z]$/.test(key))
 			return ctrl+meta+key.toUpperCase();
 		if (/^[0-9]$/.test(key)) {
 			switch(key) {
@@ -286,20 +286,20 @@ function get_key(evt){
 			};
 			return key;
 		}
-		if (/^(Enter|Space|BackSpace|Tab|Esc|Home|End|Left|Right|Up|Down|PageUp|PageDown|F(\d\d?))$/.test(key)) 
+		if (/^(Enter|Space|BackSpace|Tab|Esc|Home|End|Left|Right|Up|Down|PageUp|PageDown|F(\d\d?))$/.test(key))
 			return ctrl+meta+shift+key;
 	}
 	return ctrl+meta+key;
 }
- function guarantee_stylesheet(){
- var thehead = document.getElementsByTagName('head')[0];
- if (document.getElementsByTagName('style').length < 1){
-    var thesty = document.createElement('style');
-    thesty.innerHTML = thesty.innerHTML + ' div#diag_kludge{color: #0099ff;} ';
-    thesty.innerHTML = thesty.innerHTML + ' div#diag_kludge{background-color: #660000;} ';
-    thehead.appendChild(thesty);
-    divv = document.getElementById('diag_kludge');
-    titl = headd.getElementsByTagName('title')[0];
-    }
+function guarantee_stylesheet(){
+	var thehead = document.getElementsByTagName('head')[0];
+	if (document.getElementsByTagName('style').length < 1){
+		var thesty = document.createElement('style');
+		thesty.innerHTML = thesty.innerHTML + ' div#diag_kludge{color: #0099ff;} ';
+		thesty.innerHTML = thesty.innerHTML + ' div#diag_kludge{background-color: #660000;} ';
+		thehead.appendChild(thesty);
+		divv = document.getElementById('diag_kludge');
+		titl = headd.getElementsByTagName('title')[0];
+	}
 }
 window.addEventListener('load', guarantee_stylesheet, false);
