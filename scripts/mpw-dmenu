@@ -1,4 +1,5 @@
 #!/bin/sh -e
+MPWD=$HOME/.mpw.d/
 pwtypes="maximum x
 long l
 medium m
@@ -21,9 +22,18 @@ function exitIfEmpty {
 	fi
 }
 
+function getSites {
+	fullName=$1; shift
+	file=$(printf "$MPWD/%s.mpsites.json" "$fullName")
+	xclip -o | getDomain
+	if [ -f $file ]; then
+		jq ".sites | keys []" < $file | sed  's/\"\(.*\)\"/\1/'
+	fi
+}
+
 fullName=$(dmenu -p "Full Name:")
 exitIfEmpty "$fullName"
-site=$(xclip -o | getDomain | dmenu -p "Site:")
+site=$(getSites $fullName | dmenu -l 10 -p "Site:")
 exitIfEmpty "$site"
 pwtype=$(echo "$pwtypes" | dmenu -p "Type:" | awk '{print $2}')
 exitIfEmpty "$pwtype"
