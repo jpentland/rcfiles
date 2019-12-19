@@ -1,0 +1,5 @@
+#!/bin/sh
+for selection in primary secondary clipboard; do
+	echo -n "$selection: "
+	xclip -o -selection $selection
+done
