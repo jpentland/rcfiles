@@ -1,0 +1,7 @@
+#!/bin/sh
+# Edit a script in the users ~/.local/scripts directory
+SCRIPTS_DIR=~/.local/scripts
+
+pushd $SCRIPTS_DIR
+$EDITOR $(find . -type f -printf "%P\n" | fzf)
+popd
