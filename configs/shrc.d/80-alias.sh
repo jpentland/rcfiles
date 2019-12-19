@@ -23,6 +23,20 @@ alias wttr="curl wttr.in"
 alias xmonadhs="$EDITOR ~/.xmonad/xmonad.hs"
 alias startup="$EDITOR ~/.xmonad/startup.sh"
 
+function install {
+	choice=$(pacman -Sl | awk '{print $2}' | fzf)
+	if ! [ -z $choice ]; then
+		sudo pacman -S $choice
+	fi
+}
+
+function remove {
+	choice=$(pacman -Qs | sed -n 's/^local\/\([^ ]\+\) .*/\1/p' | fzf)
+	if ! [ -z $choice ]; then
+		sudo pacman -R $choice
+	fi
+}
+
 for a in {0..10}; do
 	alias awk$a="awk '{print \$$a}'"
 done
