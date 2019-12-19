@@ -2,7 +2,7 @@
 BOOKMARK_FILE=~/.config/bookmarks.txt
 if [ "$1" == "-n" ]; then
 	shift
-	site=$(xclip -o)
+	site=$(xclip -o -selection clipboard)
 	bookmark=$(dmenu -t -p "Bookmark: $site #")
 	if [ -z "$bookmark" ]; then
 		exit 0

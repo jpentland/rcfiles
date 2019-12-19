@@ -17,6 +17,8 @@ export LESS_TERMCAP_so=$'\E[01;42;30m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;36m'
 
+export ANDROID_HOME=~/Android/Sdk
+export ANDROID_NDK_HOME=~/Android/Sdk/ndk-bundle
 export RANGER_LOAD_DEFAULT_RC=false
 
 # Always use 32 bit wine prefix

@@ -48,6 +48,29 @@ function svim {
 	screen -Rd vim.$dir.$file vim $1
 }
 
+# Find all modified files in all git repositories that are subdirectories of PWD
+function git-find-modified {
+	for dotgit in $(find -name '.git'); do
+		repo=${dotgit%/.git}
+		git -C $repo status |\
+		       	grep modified |\
+		       	awk '{print $2}' |\
+		       	xargs -I{} echo $repo/{};
+	done
+}
+
+# Reset --hard all repositories that are subdirectories of PWD (DANGEROUS)
+function git-reset-subdirs {
+	read -p "Reset all subdirs (dangerous)?" reset
+	if [ "$reset" != "y" ]; then
+		echo "Please type y" > /dev/stderr
+	fi
+	for dotgit in $(find -name '.git'); do
+		repo=${dotgit%/.git}
+		git -C $repo reset --hard HEAD
+	done
+}
+
 function noerr {
 	$@ 2> /dev/null
 }
