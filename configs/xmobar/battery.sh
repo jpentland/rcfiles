@@ -20,10 +20,10 @@ if [ "$charge" -gt 95 ]; then
 	echo -n -e "<fc=#00ff00>$full</fc>"
 elif [ "$charge" -gt 75 ]; then
 	echo -n -e "$high"
-elif [ "$charge" -gt 50 ]; then
+elif [ "$charge" -gt 40 ]; then
 	echo -n -e "$medium"
 elif [ "$charge" -gt 10 ]; then
-	echo -n -e "<fc=#ff0000>$low</fc>"
+	echo -n -e "<fc=#ff0000>$low $charge%</fc>"
 else
-	echo -n -e "$empty"
+	echo -n -e "<fc=#ff0000>$empty $charge%</fc>"
 fi
