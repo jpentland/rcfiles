@@ -26,6 +26,7 @@ function getSites {
 	fullName=$1; shift
 	file=$(printf "$MPWD/%s.mpsites.json" "$fullName")
 	xclip -selection clipboard -o | getDomain
+	echo
 	if [ -f $file ]; then
 		jq ".sites | keys []" < $file | sed  's/\"\(.*\)\"/\1/'
 	fi
