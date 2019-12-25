@@ -138,6 +138,7 @@ main = do
     , ((modm, xK_a), decWindowSpacing 2 >> decScreenSpacing 2)
 
     , ((modm, xK_p), spawn "dmenu_run -l 10")
+    , ((modm .|. controlMask, xK_p), spawn "st -e $(dmenu_path | dmenu -l 10)")
 
     , ((0, xF86XK_AudioRaiseVolume), spawn "pactl set-sink-volume @DEFAULT_SINK@ +1.5%")
     , ((0, xF86XK_AudioLowerVolume), spawn "pactl set-sink-volume @DEFAULT_SINK@  -1.5%")
