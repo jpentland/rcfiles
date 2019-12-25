@@ -78,8 +78,9 @@ autocmd Filetype mail setlocal spell
 let g:andoid_sdk_path="~/Android/Sdk/"
 
 " Linters
-let g:ale_linters = {'haskell': ['ghc']}
+let g:ale_linters = {'haskell': ['ghc'],'java': ['javac']}
 let g:ale_haskell_ghc_options = '-fno-code -v0 -dynamic'
+let g:ale_java_javac_classpath = expand('~/Android/Sdk/platforms/android-25/android.jar')
 
 " Ale colors
 highlight clear ALEWarning
