@@ -168,6 +168,8 @@ main = do
     , ((modm, xK_w), spawn "bookmark")
     , ((modm .|. shiftMask, xK_w), spawn "bookmark -n")
     , ((modm, xK_m), spawn "mpw-dmenu")
+    , ((modm .|. shiftMask, xK_m), spawn "dmenu-pass")
+    , ((modm .|. mod1Mask, xK_m), spawn "dmenu-pass add")
     ]
 
 myMouseBindings XConfig {XMonad.modMask = modMask} = M.fromList
