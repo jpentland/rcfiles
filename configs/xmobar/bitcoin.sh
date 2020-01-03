@@ -1,5 +1,8 @@
 #!/bin/sh
 json=$(curl -s http://api.coindesk.com/v1/bpi/currentprice/USD.json)
+if [ $? != "0" ]; then
+    exit 0
+fi
 rate=$(echo $json | jq '.bpi .USD .rate_float')
 intrate=$(printf "%.0f" $rate)
 
