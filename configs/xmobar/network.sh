@@ -1,5 +1,26 @@
 #!/bin/sh
 # Show active network connections
+function strength_symbol {
+	if [ $1 -lt 10 ]; then
+		echo "#ee0000"
+	elif [ $1 -lt 20 ]; then
+		echo "#ee2200"
+	elif [ $1 -lt 30 ]; then
+		echo "#dd8800"
+	elif [ $1 -lt 30 ]; then
+		echo "#cccc00"
+	elif [ $1 -lt 40 ]; then
+		echo "#88cc00"
+	elif [ $1 -lt 50 ]; then
+		echo "#77dd00"
+	elif [ $1 -lt 60 ]; then
+		echo "#44ee00"
+	else
+		echo "#00cc11"
+	fi
+
+}
+
 colour="#aaee88"
 echo -n -e "<fc=$colour>"
 nmcli connection show --active | \
@@ -15,7 +36,8 @@ nmcli connection show --active | \
 
 		case $ctype in
 			"wifi")
-				echo -n -e " \xef\x87\xab $name"
+				color=$(strength_symbol "$(iwconfig | sed -n 's/.*Quality=\([0-9]\+\).*/\1/p')")
+				echo -n -e " <fc=$color>\xef\x87\xab $name</fc>"
 				;;
 			"ethernet")
 				echo -n -e " \xef\x83\xa8"
@@ -29,7 +51,7 @@ nmcli connection show --active | \
 	done
 
 # Show red disconnected symbol if no network access
-if ! ping -c3 8.8.8.8 1>&2; then
+if ! ping -c3 connectivitycheck.gstatic.com 1>&2; then
 	echo -n -e "<fc=#ff0000> \uf818</fc> "
 fi
 echo -n -e "</fc>"
