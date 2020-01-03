@@ -1,6 +1,9 @@
 #!/bin/sh
-#curl "wttr.in/?format=1" | sed 's/\([a-zA-Z ,]\): \(.*\) \([+-]*[0-9]\+\)/\1: <fn=2>\2<\/fn>\3/'
 json=$(curl "wttr.in/?format=j1")
+if [ $? != "0" ]; then
+    exit 0
+fi
+
 condition=$(echo $json | jq ".current_condition []")
 temp=$(echo $condition | jq " .temp_C" | sed 's/\"//g')
 code=$(echo $condition | jq " .weatherCode" | sed 's/\"//g')
