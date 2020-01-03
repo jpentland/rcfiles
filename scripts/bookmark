@@ -8,6 +8,8 @@ if [ "$1" == "-n" ]; then
 		exit 0
 	fi
 	echo "$site # $bookmark" >> $BOOKMARK_FILE
+elif [ "$1" == "-e" ];then
+	$EDITOR $BOOKMARK_FILE
 else
 	bookmark=$(cat $BOOKMARK_FILE | dmenu -p "Surf: " -i -l 10 | sed 's/[^\\]#.*$//;s/\\#/#/g')
 	if ! [ -z "$bookmark" ]; then
