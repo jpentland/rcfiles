@@ -29,6 +29,7 @@ picom &
 xrdb ~/.Xresources
 singlestart pulseaudio &
 killstart statnot ~/.config/statnot/rc.py &
+singlestart statusbar &
 
 # Dont kill everything when script ends
 wait
