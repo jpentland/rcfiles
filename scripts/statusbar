@@ -1,0 +1,127 @@
+#!/bin/bash
+fifo=/tmp/statusbar
+font=$(sed -n 's/st.font: \(.*\)/\1/p' ~/.Xresources)
+self=$0
+mods="$HOME/.local/dzen2"
+
+# -k option
+if [ "$1" == "-k" ]; then
+	echo "kill 0" >> $fifo
+	exit 0
+fi
+
+# Formatting functions
+function cbg {
+	color=$1; shift
+	echo -n "^bg($color)$@^bg()"
+}
+
+function cfg {
+	color=$1; shift
+	echo -n "^fg($color)$@^fg()"
+}
+
+# dzen commands
+function dzen_left {
+	dzen2 -ta l -dock -fn "$font" -tw 800
+}
+
+function dzen_right {
+	dzen2 -ta r -dock -fn "$font"
+}
+
+# Cleanup on exit
+function cleanup {
+	trap - SIGINT SIGTERM
+	kill -- -$$
+}
+trap cleanup SIGINT SIGTERM
+
+# Periodically run a command and pipe to statusbar
+# Usage: period <name> <period> <command>
+function period {
+	name=$1; shift
+	slp=$1; shift
+	cmd=$@
+	while true; do
+		$cmd 2> /dev/null
+		sleep $slp
+	done | while read output; do
+		echo $name "$output" >> $fifo
+	done
+}
+
+# Start modules
+period date			10s	"$mods/date.sh" &
+period battery		1m 	"$mods/battery.sh" &
+period bitcoin		1m 	"$mods/bitcoin.sh" &
+period bluetooth	10s "$mods/bluetooth.sh" &
+period kbmap		10s "$mods/kbmap.sh" &
+period mail			1m	"$mods/mail.sh" &
+period mem			5s	"$mods/mem.sh" &
+period network		5s	"$mods/network.sh" &
+period song			5s	"$mods/song.sh" &
+period volume		1s	"$mods/volume.sh" &
+period weather		1m	"$mods/weather.sh" &
+
+# Working Varaibles
+ws=""
+layout=""
+title=""
+datev=""
+battery=""
+bitcoin=""
+bluetooth=""
+kbmap=""
+mail=""
+mem=""
+network=""
+song=""
+volume=""
+weather=""
+
+# Parse information from fifo and pass to dzen2
+tail -f -n1 $fifo | while read cmd line; do
+	case $cmd in
+		ws) ws="$line"
+			;;
+		layout) layout="$(cfg "#22ff22" "($line)")"
+			;;
+		title) title="$line"
+			;;
+		date) datev="$(cfg "#88ff88" $line)"
+			;;
+		battery) battery="$line"
+			;;
+		bitcoin) bitcoin="$line"
+			;;
+		bluetooth) bluetooth="$line"
+			;;
+		kbmap) kbmap="$line"
+			;;
+		mail) mail="$line"
+			;;
+		mem) mem="$line"
+			;;
+		network) network="$line"
+			;;
+		song) song="$line"
+			;;
+		volume) volume="$line"
+			;;
+		weather) weather="$line"
+			;;
+
+		kill) echo "Got kill command, exiting..." 1>&2
+			break
+			;;
+	esac
+
+	# Left Bar
+	echo $ws $layout : $title 1>&5
+
+	# Right Bar
+	echo $bitcoin$mail$song$bluetooth$network $kbmap $volume $mem $battery $weather $datev 1>&6
+done 6> >(dzen_right) 5> >(sleep 0.1s && dzen_left)
+
+kill -- -$$
