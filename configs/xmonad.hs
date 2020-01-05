@@ -95,6 +95,9 @@ main = do
                         , ppLayout = (++) "layout "
                         , ppSep = "\n"
                         , ppOrder = \(x:xs) -> ("ws " ++ x) : xs
+                        , ppCurrent = dzenColor "#00ffff" "black"
+                        , ppVisibleNoWindows = Just (dzenColor "#ffff00" "black")
+                        , ppVisible = dzenColor "#ffff00" "black"
                         }
     , modMask = mod4Mask
     , focusFollowsMouse = False
