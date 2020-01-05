@@ -79,7 +79,7 @@ instance UrgencyHook PidginUrgencyHook where
     namedScratchpadAction myScratchpads "pidgin_conversation"
 
 main = do
-  xmproc <- spawnPipe "xmobar"
+  xmproc <- spawnPipe "piper /tmp/statusbar"
   xmonad $ withUrgencyHook PidginUrgencyHook $ def
     { borderWidth    = 2
     , terminal    = myTerminal
@@ -89,9 +89,12 @@ main = do
     , mouseBindings = myMouseBindings
     , layoutHook = myLayout
     , manageHook = myManageHook
-    , logHook = dynamicLogWithPP xmobarPP
+    , logHook = dynamicLogWithPP def
                         { ppOutput = hPutStrLn xmproc
-                        , ppTitle = xmobarColor "green" "" . shorten 50
+                        , ppTitle = shorten 50 . (++) "title "
+                        , ppLayout = (++) "layout "
+                        , ppSep = "\n"
+                        , ppOrder = \(x:xs) -> ("ws " ++ x) : xs
                         }
     , modMask = mod4Mask
     , focusFollowsMouse = False

@@ -1,0 +1,29 @@
+#!/bin/sh
+# Read from stdin into a named pipe,
+# create it if missing
+
+function cleanup {
+	rm $pipe
+	trap - SIGINT SIGTERM
+	kill -- -$$
+}
+
+if [ -z "$1" ]; then
+	echo "Usage: $(basename $0) <pipe path>" 1>&2
+	exit 1
+fi
+pipe=$1; shift
+
+if ! [ -p $pipe ]; then
+	mkfifo $pipe
+	if [ "$?" != "0" ]; then
+		echo "Failed to create FIFO: $pipe" 1>&2
+		exit 1
+	fi
+fi
+
+trap cleanup SIGINT SIGTERM
+
+while read line; do
+	echo "$line" >> $pipe
+done
