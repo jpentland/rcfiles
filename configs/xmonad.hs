@@ -3,6 +3,7 @@ import System.IO
 import XMonad
 import XMonad.Actions.CycleWS
 import XMonad.Actions.GridSelect
+import XMonad.Actions.Submap
 import XMonad.Actions.WindowGo
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.FloatNext
@@ -165,9 +166,14 @@ main = do
     , ((0, xF86XK_AudioNext), spawn "playerctl next")
     , ((0, xF86XK_AudioPrev), spawn "playerctl previous")
     , ((modm .|. shiftMask, xK_i), windowPrompt def { autoComplete = Just 50000 } Goto allWindows)
+
     , ((0, xK_F12), namedScratchpadAction myScratchpads "terminal")
-    , ((modm, xK_F12), namedScratchpadAction myScratchpads "mixer")
-    , ((0 .|. mod1Mask, xK_F12), namedScratchpadAction myScratchpads "spotify")
+    , ((modm, xK_F12), submap . M.fromList $
+        [
+        , ((0, xK_m), namedScratchpadAction myScratchpads "mixer")
+        , ((0, xK_s), namedScratchpadAction myScratchpads "spotify")
+        ])
+
     , ((modm .|. shiftMask, xK_p), namedScratchpadAction myScratchpads "pidgin_list")
     , ((modm .|. mod1Mask, xK_p), namedScratchpadAction myScratchpads "pidgin_conversation")
     , ((modm .|. shiftMask, xK_x), spawn "btmenu")
