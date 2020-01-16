@@ -85,8 +85,8 @@ main = do
   xmonad $ withUrgencyHook PidginUrgencyHook $ def
     { borderWidth    = 2
     , terminal    = myTerminal
-    , normalBorderColor = "#444444"
-    , focusedBorderColor = "#8888dd"
+    , normalBorderColor = "#222222"
+    , focusedBorderColor = "#aaaaff"
     , keys          = \c -> mykeys c `M.union` keys def c
     , mouseBindings = myMouseBindings
     , layoutHook = myLayout
