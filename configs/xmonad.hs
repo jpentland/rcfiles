@@ -67,6 +67,7 @@ myTheme = def { fontName = "xft:SauceCodePro Nerd Font:antialias=true:autohint=t
 
 myScratchpads = [
   NS "terminal" (myTerminal ++ " -c scratchpad") (className =? "scratchpad") (customFloating $ W.RationalRect 0 0.02 1 0.3),
+  NS "khal" (myTerminal ++ " -c khal -e khal interactive") (className =? "khal") (customFloating $ W.RationalRect 0.7 0.02 0.3 0.4),
   NS "mixer" "pavucontrol" (className =? "Pavucontrol") (customFloating $ W.RationalRect 0 0.02 1 0.4),
   NS "spotify" "spotify" (className =? "Spotify") (customFloating $ W.RationalRect 0 0 0.4 1),
   NS "pidgin_list" "pidgin" (role =? "buddy_list") (customFloating $ W.RationalRect 0 0.2 0.2 0.8),
@@ -170,12 +171,14 @@ main = do
     , ((0, xK_F12), namedScratchpadAction myScratchpads "terminal")
     , ((modm, xK_F12), submap . M.fromList $
         [
+          ((0, xK_k), namedScratchpadAction myScratchpads "khal")
         , ((0, xK_m), namedScratchpadAction myScratchpads "mixer")
         , ((0, xK_s), namedScratchpadAction myScratchpads "spotify")
         ])
 
     , ((modm .|. shiftMask, xK_p), namedScratchpadAction myScratchpads "pidgin_list")
     , ((modm .|. mod1Mask, xK_p), namedScratchpadAction myScratchpads "pidgin_conversation")
+
     , ((modm .|. shiftMask, xK_x), spawn "btmenu")
     , ((modm, xK_x), spawn "networkmanager_dmenu")
     , ((modm, xK_q), spawn "~/rcfiles/dmenu-emoji/dmenu-emoji.sh -l 10")
