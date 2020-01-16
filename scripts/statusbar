@@ -3,8 +3,16 @@ fifo=/tmp/statusbar
 font=$(sed -n 's/st.font: \(.*\)/\1/p' ~/.Xresources)
 self=$0
 mods="$HOME/.local/dzen2"
+left_bar_ratio=0.45
 
-# -k option
+# Unicode Chars
+right_triangle="\ue0b0"
+left_triangle="\ue0b2"
+
+# Colors
+cbg1="#444455"
+
+# -k option to kill statusbar
 if [ "$1" == "-k" ]; then
 	echo "kill 0" >> $fifo
 	exit 0
@@ -21,13 +29,39 @@ function cfg {
 	echo -n "^fg($color)$@^fg()"
 }
 
+function shorten {
+	len=$1; shift
+	var="$@"
+	if [ "${#var}" -gt "$len" ]; then
+		echo -n "${var:0:$len}\u2026"
+	else
+		echo -n "$var"
+	fi
+}
+
+# Add a space to non-empty strings
+function pad {
+	if grep -q "[^ ]" <<< "$@"; then
+		echo "$@ "
+	else
+		echo
+	fi
+}
+
+# Get Screen Width
+screen_width=$(xrandr --listactivemonitors | sed -n '2s/.* \([0-9]\+\)\/.*/\1/p')
+left_bar_width=$(bc <<< "( $screen_width * $left_bar_ratio )" | sed 's/\..*//')
+echo "screen width = $screen_width"
+echo "left bar = $left_bar_width"
+
 # dzen commands
 function dzen_left {
-	dzen2 -ta l -dock -fn "$font" -tw 800
+	sleep 0.2s
+	dzen2 -xs 1 -ta l -dock -fn "$font" -tw $left_bar_width -bg "#000000"
 }
 
 function dzen_right {
-	dzen2 -ta r -dock -fn "$font"
+	dzen2 -xs 1 -ta r -dock -fn "$font" -bg "#000000"
 }
 
 # Cleanup on exit
@@ -52,7 +86,12 @@ function period {
 }
 
 # Start modules
-period date			10s	"$mods/date.sh" &
+function sbdate {
+	datev=$(date "+%a %b %_d")
+	timev=$(date "+%k:%M")
+	echo -e "$datev $(cfg "#000000" $(cbg $cbg1 $right_triangle))$(cbg $cbg1 $timev)"
+}
+period date			10s	sbdate &
 period battery		1m 	"$mods/battery.sh" &
 period bitcoin		1m 	"$mods/bitcoin.sh" &
 period bluetooth	10s "$mods/bluetooth.sh" &
@@ -83,9 +122,9 @@ weather=""
 # Parse information from fifo and pass to dzen2
 tail -f -n1 $fifo | while read cmd line; do
 	case $cmd in
-		ws) ws="$line"
+		ws) ws="$(cbg $cbg1 " $line ")$(cfg $cbg1 "$right_triangle")"
 			;;
-		layout) layout="$(cfg "#22ff22" "($line)")"
+		layout) layout="$(cfg "#22ff22" "$line")"
 			;;
 		title) title="$line"
 			;;
@@ -99,29 +138,28 @@ tail -f -n1 $fifo | while read cmd line; do
 			;;
 		kbmap) kbmap="$line"
 			;;
-		mail) mail="$line"
+		mail) mail="$(pad $line)"
 			;;
 		mem) mem="$line"
 			;;
 		network) network="$line"
 			;;
-		song) song="$line"
+		song) song=$(pad $(shorten 50 $line))
 			;;
 		volume) volume="$line"
 			;;
 		weather) weather="$line"
 			;;
-
 		kill) echo "Got kill command, exiting..." 1>&2
 			break
 			;;
 	esac
 
 	# Left Bar
-	echo $ws $layout : $title 1>&5
+	echo -e "$ws $layout $(cfg "#000000" $(cbg $cbg1 $right_triangle))$(cbg $cbg1 ' '$title' ')$(cfg $cbg1 $right_triangle)" 1>&5
 
 	# Right Bar
-	echo $bitcoin$mail$song$bluetooth$network $kbmap $volume $mem $battery $weather $datev 1>&6
-done 6> >(dzen_right) 5> >(sleep 0.1s && dzen_left)
+	echo -e "$bitcoin $mail$song$bluetooth$network $kbmap $volume $mem $battery $weather $datev" 1>&6
+done 6> >(dzen_right) 5> >(dzen_left)
 
 kill -- -$$
