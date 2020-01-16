@@ -1,5 +1,12 @@
 #!/bin/sh
 BOOKMARK_FILE=~/.config/bookmarks.txt
+
+function options {
+	xclip -o -selection clipboard | tr -d '\n'
+	echo " # Clipboard"
+	cat $BOOKMARK_FILE
+}
+
 if [ "$1" == "-n" ]; then
 	shift
 	site=$(xclip -o -selection clipboard)
@@ -11,7 +18,7 @@ if [ "$1" == "-n" ]; then
 elif [ "$1" == "-e" ];then
 	$EDITOR $BOOKMARK_FILE
 else
-	bookmark=$(cat $BOOKMARK_FILE | dmenu -p "Surf: " -i -l 10 | sed 's/[^\\]#.*$//;s/\\#/#/g')
+	bookmark=$(options | dmenu -p "Surf: " -i -l 10 | sed 's/[^\\]#.*$//;s/\\#/#/g')
 	if ! [ -z "$bookmark" ]; then
 		surf -P "$bookmark"
 	fi
