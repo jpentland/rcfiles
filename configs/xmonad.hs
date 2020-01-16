@@ -78,6 +78,8 @@ instance UrgencyHook PidginUrgencyHook where
     runQuery (role =? "conversation") w
     namedScratchpadAction myScratchpads "pidgin_conversation"
 
+dzenfg c s = "^fg(" ++ c ++ ")" ++ s ++ "^fg()"
+
 main = do
   xmproc <- spawnPipe "piper /tmp/statusbar"
   xmonad $ withUrgencyHook PidginUrgencyHook $ def
@@ -95,9 +97,9 @@ main = do
                         , ppLayout = (++) "layout "
                         , ppSep = "\n"
                         , ppOrder = \(x:xs) -> ("ws " ++ x) : xs
-                        , ppCurrent = dzenColor "#00ffff" "black"
-                        , ppVisibleNoWindows = Just (dzenColor "#ffff00" "black")
-                        , ppVisible = dzenColor "#ffff00" "black"
+                        , ppCurrent = dzenfg "#00ffff"
+                        , ppVisibleNoWindows = Just (dzenfg "#ffff00")
+                        , ppVisible = dzenfg "#ffff00"
                         }
     , modMask = mod4Mask
     , focusFollowsMouse = False
