@@ -16,9 +16,4 @@ if which xmonad > /dev/null; then
 	xmonad --recompile
 fi
 
-if which xmobar > /dev/null; then
-	echo "Recompiling xmobar..."
-	yay -S --rebuild xmobar-alsa
-fi
-
 echo "Update Complete"
