@@ -53,8 +53,7 @@ customManageHooks = composeAll
     [ resource =? "Do"    --> doFloat,
       resource =? "Yakuake" --> doFloat,
       resource =? "yakuake" --> doFloat,
-      resource =? "yad" --> doFloat,
-      className =? "Surf" --> insertPosition End Newer]
+      resource =? "yad" --> doFloat]
 
 myManageHook = manageDocks <+>
                customManageHooks <+>
