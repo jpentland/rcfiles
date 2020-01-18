@@ -51,7 +51,7 @@ nmcli connection show --active | \
 	done
 
 # Show red disconnected symbol if no network access
-if ! ping -c3 connectivitycheck.gstatic.com 1>&2; then
+if ! ping -c3 8.8.8.8 1>&2; then
 	echo -n -e "^fg(#ff0000) \uf818^fg() "
 fi
 echo -n -e "^fg()"
