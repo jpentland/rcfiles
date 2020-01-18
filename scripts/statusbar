@@ -144,7 +144,7 @@ tail -f -n1 $fifo | while read cmd line; do
 			;;
 		network) network="$line"
 			;;
-		song) song=$(pad $(shorten 50 $line))
+		song) song=$(pad $(shorten 30 $line))
 			;;
 		volume) volume="$line"
 			;;
