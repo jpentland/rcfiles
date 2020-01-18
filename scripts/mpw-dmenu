@@ -38,7 +38,10 @@ site=$(getSites $fullName | dmenu -l 10 -p "Site:")
 exitIfEmpty "$site"
 pwtype=$(echo "$pwtypes" | dmenu -p "Type:" | awk '{print $2}')
 exitIfEmpty "$pwtype"
-password=$(dmenu -P -p "Password:")
+password=$(pass "mpw-$fullName")
+if [ -z "$password" ]; then
+	password=$(dmenu -P -p "Password:")
+fi
 exitIfEmpty "$password"
 sitepass=$(echo -n "$password" | mpw -U "$fullName" -t $pwtype -m /dev/stdin -q "$site")
 exitIfEmpty "$sitepass"
