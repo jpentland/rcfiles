@@ -1,0 +1,250 @@
+#!/bin/bash
+fifo=/tmp/statusbar
+font=$(sed -n 's/st.font: \(.*\)/\1/p' ~/.Xresources)
+self=$0
+mods="$HOME/.local/dzen2"
+left_bar_ratio=0.45
+
+# Unicode Chars
+right_triangle="\ue0b0"
+left_triangle="\ue0b2"
+
+# Colors
+cbg1="#444455"
+
+# -k option to kill statusbar
+if [ "$1" == "-k" ]; then
+	echo "kill 0" >> $fifo
+	exit 0
+fi
+
+# -r option to replace current statusbar
+if [ "$1" == "-r" ]; then
+	echo "kill 0" >> $fifo
+	sleep 0.5
+fi
+
+# Formatting functions
+function cbg {
+	color=$1; shift
+	echo -n "^bg($color)$@^bg()"
+}
+
+function cfg {
+	color=$1; shift
+	echo -n "^fg($color)$@^fg()"
+}
+
+function shorten {
+	len=$1; shift
+	var="$@"
+	if [ "${#var}" -gt "$len" ]; then
+		echo -n "${var:0:$len}\u2026"
+	else
+		echo -n "$var"
+	fi
+}
+
+# Add a space to non-empty strings
+function pad {
+	if grep -q "[^ ]" <<< "$@"; then
+		echo "$@ "
+	else
+		echo
+	fi
+}
+
+# Get Screen Width
+screen_width=$(xrandr --listactivemonitors | sed -n '2s/.* \([0-9]\+\)\/.*/\1/p')
+left_bar_width=$(bc <<< "( $screen_width * $left_bar_ratio )" | sed 's/\..*//')
+echo "screen width = $screen_width"
+echo "left bar = $left_bar_width"
+
+# dzen commands
+function dzen_left {
+	sleep 0.2s
+	stdbuf -oL -eL uniq \
+		| dzen2 -xs 1 -ta l -dock -fn "$font" -tw $left_bar_width -bg "#000000"
+}
+
+function dzen_right {
+	stdbuf -oL -eL uniq \
+		| dzen2 -xs 1 -ta r -dock -fn "$font" -bg "#000000"
+}
+
+# Cleanup on exit
+function cleanup {
+	trap - TERM
+	kill 0
+}
+trap cleanup INT TERM QUIT EXIT
+
+# Periodically run a command and pipe to statusbar
+# Usage: period <name> <period> <command>
+function period {
+	name=$1; shift
+	slp=$1; shift
+	cmd=$@
+	while true; do
+		$cmd 2> /dev/null
+		sleep $slp
+	done | while read output; do
+		echo $name "$output" >> $fifo
+	done
+}
+
+# Process report from BSPWM
+function process_bspreport {
+	while read line; do
+		ws=
+		focused=true
+		IFS=':'
+		set -- ${line#?}
+		while [ $# -gt 0 ]; do
+			item=$1
+			name=${item#?}
+			case $item in
+				# Unfocused monitor
+				m*)
+					focused=false
+					;;
+				# Focused monitor
+				M*)
+					focused=true
+					;;
+				[fFoOuU]*)
+					case $item in
+						# any focused desktop
+						[FO]*)
+							# Darker green for unfocused monitor
+							if $focused; then
+								ws="${ws}\n${name} #00ff00"
+							else
+								ws="${ws}\n${name} #228822"
+							fi
+							;;
+						# Occupied unfocused desktop
+						o*)
+							ws="$ws\n$name #ffffff"
+							;;
+						# Urgent focused desktop
+						[Uu]*)
+							ws="$ws\n$name #ff0000"
+							;;
+						# Unfocused empty desktop
+						f*)
+							ws="$ws\n$name #888888"
+					esac
+					;;
+				LT)
+					if $focused; then
+						echo "layout tiled" > $fifo
+					fi
+					;;
+				LM)
+					if $focused; then
+						echo "layout monocle" > $fifo
+					fi
+					;;
+			esac
+			shift
+		done
+		# Sort desktops by name instead of by monitor
+		echo -e "$ws" | sort | \
+			sed 's/\([0-9]\) \(#[0-9a-f]\+\)/^fg(\2)\1^fg()/' | \
+			tr '\n' ' ' | \
+			sed 's/\(.*\)/ws \1\n/' | \
+			tee /dev/stderr > $fifo
+	done
+}
+
+period battery		1m 	"$mods/battery.sh" &
+period bitcoin		1m 	"$mods/bitcoin.sh" &
+period bluetooth	10s "$mods/bluetooth.sh" &
+period kbmap		10s "$mods/kbmap.sh" &
+period mail			1m	"$mods/mail.sh" &
+period mem			5s	"$mods/mem.sh" &
+period network		5s	"$mods/network.sh" &
+period song			5s	"$mods/song.sh" &
+period volume		1s	"$mods/volume.sh" &
+period weather		1m	"$mods/weather.sh" &
+xtitle -sf 'title %s\n' | while read line; do
+	echo $line > $fifo
+done &
+
+clock -sf "%a %b %_d" | while read line; do
+	echo "date $line" > $fifo
+done &
+
+clock -sf "%k:%M" | while read line; do
+	echo "time $line" > $fifo
+done &
+
+bspc subscribe report | tee /dev/stderr | process_bspreport &
+
+# Working Varaibles
+ws=""
+layout=""
+title=""
+datev=""
+battery=""
+bitcoin=""
+bluetooth=""
+kbmap=""
+mail=""
+mem=""
+network=""
+song=""
+volume=""
+weather=""
+
+# Parse information from fifo and pass to dzen2
+tail -f -n1 $fifo | while read cmd line; do
+	case $cmd in
+		ws) ws="$(cbg $cbg1 " $line ")$(cfg $cbg1 "$right_triangle")"
+			;;
+		layout) layout="$(cfg "#22ff22" "$line")"
+			;;
+		title) title="$(shorten 50 $line)"
+			;;
+		date) datev="$(cfg "#88ff88" $line)"
+			;;
+		time)
+			  timev="$line"
+			;;
+		battery) battery="$line"
+			;;
+		bitcoin) bitcoin="$line"
+			;;
+		bluetooth) bluetooth="$line"
+			;;
+		kbmap) kbmap="$line"
+			;;
+		mail) mail="$(pad $line)"
+			;;
+		mem) mem="$line"
+			;;
+		network) network="$line"
+			;;
+		song) song=$(pad $(shorten 30 $line))
+			;;
+		volume) volume="$line"
+			;;
+		weather) weather="$line"
+			;;
+		kill) echo "Got kill command, exiting..." 1>&2
+			break
+			;;
+	esac
+
+	# Date
+	datetime="$datev $(cfg "#000000" $(cbg $cbg1 $right_triangle))$(cbg $cbg1 $timev)"
+
+	# Left Bar
+	echo -e "$ws $layout $(cfg "#000000" $(cbg $cbg1 $right_triangle))$(cbg $cbg1 ' '$title' ')$(cfg $cbg1 $right_triangle)" 1>&5
+
+	# Right Bar
+	echo -e "$bitcoin $mail$song$bluetooth$network $kbmap $volume $mem $battery $weather $datetime" 1>&6
+done 6> >(dzen_right) 5> >(dzen_left)
+
+kill -- -$$
