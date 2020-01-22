@@ -22,6 +22,8 @@ alias bt="bluetoothctl"
 alias wttr="curl wttr.in"
 alias xmonadhs="$EDITOR ~/.xmonad/xmonad.hs"
 alias startup="$EDITOR ~/.xmonad/startup.sh"
+alias bspwmrc="$EDITOR ~/.config/bspwm/bspwmrc"
+alias sxhkdrc="$EDITOR ~/.config/sxhkd/sxhkdrc"
 
 function install {
 	choice=$(pacman -Sl | awk '{print $2}' | fzf)
