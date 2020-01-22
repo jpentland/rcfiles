@@ -1,5 +1,5 @@
 #!/bin/sh
-BGFILE="$HOME/.xmonadbg"
+BGFILE="$HOME/.wmbg"
 if [ -z $1 ]; then
 	echo "Usage: $(basename $0) [bgfile]"
 	exit 1
