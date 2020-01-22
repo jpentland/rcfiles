@@ -1,0 +1,11 @@
+#!/bin/env bash
+ids=($(bspc query -N -n .local.window))
+options="$(<<< "${ids[@]}" xargs -r xtitle | awk '{ print ++i": "$0 }')"
+
+[[ -n "$options" ]] || exit
+
+id_index="$(<<< "$options" dmenu -i -l 10 | cut -d: -f1)"
+if [ -z "$id_index" ]; then
+	exit 0
+fi
+bspc node "${ids[$((id_index - 1))]}" -f
