@@ -12,6 +12,11 @@ left_triangle="\ue0b2"
 # Colors
 cbg1="#444455"
 
+if ! [ -p $fifo ]; then
+	rm -f $fifo
+	mkfifo $fifo
+fi
+
 # -k option to kill statusbar
 if [ "$1" == "-k" ]; then
 	echo "kill 0" >> $fifo
