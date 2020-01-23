@@ -1,5 +1,5 @@
 #!/bin/env bash
-ids=($(bspc query -N -n .local.window))
+ids=($(bspc query -N -n .local.window.\!hidden))
 options="$(<<< "${ids[@]}" xargs -r xtitle | awk '{ print ++i": "$0 }')"
 
 [[ -n "$options" ]] || exit
