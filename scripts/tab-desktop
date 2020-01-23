@@ -1,0 +1,129 @@
+#!/bin/sh
+
+# Usage:
+# tab-desktop [--tabbed <wid>] <command>
+# Commands:
+# 	add-all		- add all windows on current desktop to tabs
+#   add 		- add focused window to tabs
+#	remove-all	- Remove all windwos from tabbed
+#	remove		- Remove top window from tabbed
+#	next		- Add next created window to tabbed
+#	close <wid>	- If wid is an instance of tabbed, kill the visible tab, else kill the window
+#
+# Options:
+#   --tabbed	- Instead of creating a desktop-specific instance of tabbed, use wid specified.
+#				  Applies to:
+#					add-all, add, remove-all, remove, next
+
+tabbed_name="tabbed-d$(bspc query -D -d "focused.local" --names)"
+
+# Get wid of root window
+function get_root_wid {
+	xwininfo -root | awk '/Window id:/{print $4}'
+}
+
+# Get all wids that should be placed in tab
+function get_desktop_wids {
+	bspc query -N -n '.local.window.!hidden'
+}
+
+# Get wid of tabbed for current desktop, or return explicit wid
+function get_tabbed_wid {
+	if [ -z "$TABBED_WID" ]; then
+		xdotool search --classname $tabbed_name
+	else
+		echo $TABBED_WID
+	fi
+}
+
+# Get children of tabbed
+function get_children {
+	xwininfo -id $(get_tabbed_wid) -children | sed -n '/[0-9]\+ \(child\|children\):/,$s/ \+\(0x[0-9a-z]\+\).*/\1/p'
+}
+
+# Start tabbed if it is not already running, and no explicit wid has been provided
+function start_tabbed {
+	if [ -z "$TABBED_WID" ] && [ -z "$(get_tabbed_wid)" ]; then
+		(tabbed -n $tabbed_name &)
+		sleep 0.3
+	fi
+}
+
+# Stop tabbed
+function stop_tabbed {
+	get_tabbed_wid | xargs xdotool windowkill
+}
+
+# Add a window to tabbed (assumes it is already running)
+function add_tabbed {
+	wid=$1; shift
+	xdotool windowreparent $wid $(get_tabbed_wid)
+}
+
+# Remove a window from tabbed
+function remove_tabbed {
+	wid=$1; shift
+	xdotool windowreparent $wid $(get_root_wid)
+}
+
+# Get class of a wid
+function get_class {
+	xprop -id $1 | sed -n '/WM_CLASS/s/.*, "\(.*\)"/\1/p'
+}
+
+if [ "$1" == "--tabbed" ]; then
+	shift;
+	TABBED_WID=$1; shift
+	if [ "$(get_class $TABBED_WID)" != "tabbed" ]; then
+		echo "Provided wid is not an instance of tabbed" 1>&2
+		exit 1
+	fi
+else
+	TABBED_WID=
+fi
+
+command=$1;shift
+case $command in
+	add-all)
+		start_tabbed
+		for wid in $(get_desktop_wids); do
+			add_tabbed $wid
+		done
+		;;
+	add)
+		focused=$(bspc query -N -n "focused")
+		start_tabbed
+		add_tabbed $focused
+		;;
+	remove-all)
+		for wid in $(get_children); do
+			remove_tabbed $wid
+		done
+		stop_tabbed
+		;;
+	remove)
+		remove_tabbed $(get_children | sed '1q')
+		if [ "$(get_children | wc -l)" == "0" ]; then
+			stop_tabbed
+		fi
+		;;
+	next)
+		bspc subscribe node_add | while read node_add mon desk ip node; do
+			start_tabbed
+			add_tabbed $node
+			break;
+		done
+		;;
+	close)
+		wid=$1; shift
+		if [ "$(get_class $wid)" != "tabbed" ]; then
+			bspc node $wid -c
+		else
+			TABBED_WID=$wid
+			get_children | sed '1q' | xargs xdotool windowkill
+			if [ "$(get_children | wc -l)" == "0" ]; then
+				stop_tabbed
+			fi
+		fi
+		;;
+esac
