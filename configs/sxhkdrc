@@ -55,6 +55,12 @@ super + {t,shift + t,s,f}
 super + ctrl + {m,x,y,z}
 	bspc node -g {marked,locked,sticky,private}
 
+# hide or show dzen bar
+super + ctrl + {_,shift + }b
+	{cmd=windowmap; padding=20,cmd=windowunmap; padding=0}; \
+	for pid in $(xdotool search --name dzen); do xdotool $cmd $pid; done; \
+	bspc config -m primary top_padding $padding
+
 #
 # focus/swap
 #
@@ -94,7 +100,7 @@ super + {o,i}
 
 # send to the given desktop
 super + shift + {1-9}
-	bspc node -d '^{1-9}'
+	bspc node -d '{1-9}'
 
 # Focus given desktop or swap if on other monitor
 super + {1-9}
