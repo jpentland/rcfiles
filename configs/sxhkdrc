@@ -185,23 +185,32 @@ super + numbersign
 
 # Scratchpads
 F12
-	dropdown.sh "st -c dropdown" "dropdown" 0 0 100 30 20
+	dropdown.sh "st -c dropdown" "dropdown" 0 0 100 30
 
 super + F12; m
-	dropdown.sh "pavucontrol" "Pavucontrol" 0 0 100 30 20
+	dropdown.sh "pavucontrol" "Pavucontrol" 0 0 100 30
 
 super + F12; e
-	dropdown.sh "st -c stmail neomutt" "stmail" 0 0 100 50 20
+	dropdown.sh "st -c stmail neomutt" "stmail" 0 0 100 50
 
 super + F12; {_,ctrl + }k
 	cmd={less,vim}; \
-	dropdown.sh "st -c sxhkdrc$cmd $cmd $HOME/.config/sxhkd/sxhkdrc" "sxhkdrc$cmd" 50 0 50 100 20
+	dropdown.sh "st -c sxhkdrc$cmd $cmd $HOME/.config/sxhkd/sxhkdrc" "sxhkdrc$cmd" 50 0 50 100
 
 super + F12; s
-	dropdown.sh "spotify" "Spotify" 0 0 70 70 20
+	dropdown.sh "spotify" "Spotify" 0 0 70 70
+
+super + F12; i
+	dropdown.sh "st -c irssi irssi" "irssi" 0 0 100 50
+
+super + F12; c
+	dropdown.sh "st -c khal -e khal interactive" "khal" 70 0 30 40
+
+super + F12; g
+	dropdown.sh "st -c gotop -e gotop" "gotop" 0 0 60 70
 
 super + ctrl + p
-	dropdown.sh --role "buddy_list" "pidgin" "Pidgin" 0 20 20 80 0
+	dropdown.sh --role "buddy_list" "pidgin" "Pidgin" 0 20 20 80
 
 super + alt + p
-	dropdown.sh --role "conversation" "pidgin" "Pidgin" 60 60 40 40 0
+	dropdown.sh --role "conversation" "pidgin" "Pidgin" 60 60 40 40
