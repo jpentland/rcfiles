@@ -20,6 +20,9 @@ Plugin 'dense-analysis/ale'
 Plugin 'hsanson/vim-android'
 Plugin 'craigemery/vim-autotag'
 Plugin 'sirtaj/vim-openscad'
+set rtp+=~/.fzf
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -45,7 +48,11 @@ highlight Normal ctermfg=white ctermbg=NONE
 :set so=5
 set omnifunc=syntaxcomplete#Complete
 set tags=./tags,tags;$HOME
+
+" Buffer Navication
 map <tab> :bNext<CR>
+map <C-b> :Buffers<CR>
+map <C-k> :bd<CR>
 
 " Relative number
 :set number relativenumber
