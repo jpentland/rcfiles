@@ -24,6 +24,14 @@ bspc config remove_disabled_monitors true
 bspc config remove_unplugged_monitors true
 bspc config automatic_scheme alternate
 
+# Manually manage ewmh features
+bspc config ignore_ewmh_focus     true
+bspc config ignore_ewmh_fullscreen true
+
+# Only pad master monitor (for status bar)
+bspc config top_padding 0
+bspc config -m ${monitors[0]} top_padding 20
+
 # Rules
 bspc rule -a Screenkey manage=off
 bspc rule -a Surf state=tiled
