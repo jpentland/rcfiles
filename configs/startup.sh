@@ -16,7 +16,7 @@ function singlestart {
 autorandr
 
 # Background image
-feh --bg-scale ~/.xmonadbg
+feh --bg-scale ~/.wmbg
 
 # Set default cursor
 xsetroot -cursor_name left_ptr
