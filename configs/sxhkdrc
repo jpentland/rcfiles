@@ -23,9 +23,13 @@ super + Escape
 super + alt + {q,r}
 	bspc {quit,wm -r}
 
-# close and kill
-super + {_,shift + }c
-	bspc node -{c,k}
+# kill window
+super + shift + c
+	bspc node -{k}
+
+# Close tab or window
+super + c
+	tab-desktop close $(bspc query -N -n focused)
 
 # alternate between the tiled and monocle layout
 super + space
@@ -133,6 +137,19 @@ super + alt + {h,j,k,l}
 # contract a window by moving one of its side inward
 super + alt + shift + {h,j,k,l}
 	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+
+# Add or remove windows from tabbed
+super + ctrl + t; {a,r,shift + a,shift + r}
+	tab-desktop {add,--tabbed $(bspc query -N -n focused) remove,add-all,remove-all}
+
+super + ctrl + t; {h,j,k,l}
+	tab-desktop --tabbed $(bspc query -N -n {west,south,north,east}.local) add
+
+super + ctrl + t; n
+	tabbed
+
+super + ctrl + t; t
+	tab-desktop --tabbed $(bspc query -N -n focused) next
 
 #
 # Start applications
