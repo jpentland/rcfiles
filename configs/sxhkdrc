@@ -99,7 +99,11 @@ super + shift + {1-9}
 # Focus given desktop or swap if on other monitor
 super + {1-9}
 	d='{1-9}'; \
-	bspc desktop -f "$d.local" || bspc desktop -s "$d"; \
+	if ! [ -z "$(bspc query -D -d $d.local)" ]; then \
+		bspc desktop -f "$d"; \
+	else; \
+		bspc desktop -s "$d"; \
+	fi; \
 	bspc monitor focused -o $(bspc query -m focused -D --names | sort)
 
 # focus monitor
