@@ -152,6 +152,7 @@ function process_bspreport {
 					fi
 					;;
 			esac
+			echo "tabs $(check_tabs)" >> $fifo
 			shift
 		done
 		# Sort desktops by name instead of by monitor
@@ -161,6 +162,16 @@ function process_bspreport {
 			sed 's/\(.*\)/ws \1\n/' | \
 			tee /dev/stderr > $fifo
 	done
+}
+
+function check_tabs {
+ 	desktop=$(bspc query -D -d focused)
+	tmp_file="/tmp/$USER-tabbed-$desktop"
+	if [ -f $tmp_file ] && grep -q $(cat $tmp_file) <<< "$(ps -A)"; then
+		echo "(tabs)"
+	else
+		echo ""
+	fi
 }
 
 period battery		1m 	"$mods/battery.sh" &
@@ -173,6 +184,7 @@ period network		5s	"$mods/network.sh" &
 period song			5s	"$mods/song.sh" &
 period volume		1s	"$mods/volume.sh" &
 period weather		1m	"$mods/weather.sh" &
+period tabs			5s  "check_tabs" &
 xtitle -sf 'title %s\n' | while read line; do
 	echo $line > $fifo
 done &
@@ -202,6 +214,7 @@ network=""
 song=""
 volume=""
 weather=""
+tabs=""
 
 # Parse information from fifo and pass to dzen2
 tail -f -n1 $fifo | while read cmd line; do
@@ -209,6 +222,8 @@ tail -f -n1 $fifo | while read cmd line; do
 		ws) ws="$(cbg $cbg1 " $line ")$(cfg $cbg1 "$right_triangle")"
 			;;
 		layout) layout="$(cfg "#22ff22" "$line")"
+			;;
+		tabs) tabs="$(cfg "#ffff00" "$line")"
 			;;
 		title) title="$(shorten 50 $line)"
 			;;
@@ -246,7 +261,7 @@ tail -f -n1 $fifo | while read cmd line; do
 	datetime="$datev $(cfg "#000000" $(cbg $cbg1 $right_triangle))$(cbg $cbg1 $timev)"
 
 	# Left Bar
-	echo -e "$ws $layout $(cfg "#000000" $(cbg $cbg1 $right_triangle))$(cbg $cbg1 ' '$title' ')$(cfg $cbg1 $right_triangle)" 1>&5
+	echo -e "$ws $layout $tabs $(cfg "#000000" $(cbg $cbg1 $right_triangle))$(cbg $cbg1 ' '$title' ')$(cfg $cbg1 $right_triangle)" 1>&5
 
 	# Right Bar
 	echo -e "$bitcoin $mail$song$bluetooth$network $kbmap $volume $mem $battery $weather $datetime" 1>&6
