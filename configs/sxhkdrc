@@ -155,11 +155,29 @@ super + ctrl + t; {a,r,shift + a,shift + r}
 super + ctrl + t; {h,j,k,l}
 	tab-desktop --tabbed $(bspc query -N -n {west,south,north,east}.local) add
 
+# New tabbed window
 super + ctrl + t; n
 	tabbed
 
+# Add next window to tabbed
 super + ctrl + t; t
 	tab-desktop --tabbed $(bspc query -N -n focused) next
+
+# Add all new windows to tabbed
+super + ctrl + t; shift + {_,ctrl + }t
+	tab-desktop next-{all,stop}
+
+# Remove a window from tabbed and move it to another desktop
+super + ctrl + t; {1-9}
+	tab-desktop --tabbed $(bspc query -N -n focused) remove-desktop {1-9}
+
+# Rotate tree around selected node
+super + {_,shift + }r
+	bspc node -R {90,-90}
+
+# Flip tree vertically or horizonally
+super + ctrl {_,shift + }f
+	bspc node -F {vertical,horizontal}
 
 #
 # Start applications
