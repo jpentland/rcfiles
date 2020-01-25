@@ -182,7 +182,7 @@ period mail			1m	"$mods/mail.sh" &
 period mem			5s	"$mods/mem.sh" &
 period network		5s	"$mods/network.sh" &
 period song			5s	"$mods/song.sh" &
-period volume		1s	"$mods/volume.sh" &
+period volume		5s	"$mods/volume.sh" &
 period weather		1m	"$mods/weather.sh" &
 period tabs			5s  "check_tabs" &
 xtitle -sf 'title %s\n' | while read line; do
