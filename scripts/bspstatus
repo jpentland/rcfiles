@@ -1,5 +1,5 @@
 #!/bin/bash
-fifo=/tmp/statusbar
+fifo=/tmp/$USER-statusbar
 font=$(sed -n 's/st.font: \(.*\)/\1/p' ~/.Xresources)
 self=$0
 mods="$HOME/.local/dzen2"
