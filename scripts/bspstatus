@@ -98,72 +98,6 @@ function period {
 	done
 }
 
-# Process report from BSPWM
-function process_bspreport {
-	while read line; do
-		ws=
-		focused=true
-		IFS=':'
-		set -- ${line#?}
-		while [ $# -gt 0 ]; do
-			item=$1
-			name=${item#?}
-			case $item in
-				# Unfocused monitor
-				m*)
-					focused=false
-					;;
-				# Focused monitor
-				M*)
-					focused=true
-					;;
-				[fFoOuU]*)
-					case $item in
-						# any focused desktop
-						[FO]*)
-							# Darker green for unfocused monitor
-							if $focused; then
-								ws="${ws}\n${name} #00ff00"
-							else
-								ws="${ws}\n${name} #228822"
-							fi
-							;;
-						# Occupied unfocused desktop
-						o*)
-							ws="$ws\n$name #ffffff"
-							;;
-						# Urgent focused desktop
-						[Uu]*)
-							ws="$ws\n$name #ff0000"
-							;;
-						# Unfocused empty desktop
-						f*)
-							ws="$ws\n$name #888888"
-					esac
-					;;
-				LT)
-					if $focused; then
-						echo "layout tiled" > $fifo
-					fi
-					;;
-				LM)
-					if $focused; then
-						echo "layout monocle" > $fifo
-					fi
-					;;
-			esac
-			echo "tabs $(check_tabs)" >> $fifo
-			shift
-		done
-		# Sort desktops by name instead of by monitor
-		echo -e "$ws" | sort | \
-			sed 's/\([0-9]\) \(#[0-9a-f]\+\)/^fg(\2)\1^fg()/' | \
-			tr '\n' ' ' | \
-			sed 's/\(.*\)/ws \1\n/' | \
-			tee /dev/stderr > $fifo
-	done
-}
-
 function check_tabs {
  	desktop=$(bspc query -D -d focused)
 	tmp_file="/tmp/$USER-tabbed-$desktop"
@@ -197,7 +131,10 @@ clock -sf "%k:%M" | while read line; do
 	echo "time $line" > $fifo
 done &
 
-bspc subscribe report | tee /dev/stderr | process_bspreport &
+bspc subscribe report | $mods/process_report.py | while read line; do
+	echo $line > $fifo
+	echo "tabs $(check_tabs)" > $fifo
+done &
 
 # Working Varaibles
 ws=""
