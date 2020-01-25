@@ -3,5 +3,5 @@
 SCRIPTS_DIR=~/.local/scripts
 
 pushd $SCRIPTS_DIR
-$EDITOR $(find . -type f -printf "%P\n" | fzf)
+$EDITOR $(find . -type f -printf "%P\n" | fzf --preview="bat {}" -q $@)
 popd
