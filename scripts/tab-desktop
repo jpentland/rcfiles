@@ -69,6 +69,10 @@ function add_tabbed {
 function remove_tabbed {
 	wid=$1; shift
 	xdotool windowreparent $wid $(get_root_wid)
+	preselect=$(bspc query -N -n newest.\!automatic.local)
+	if ! [ -z "$preselect" ]; then
+		bspc node $wid -n $preselect
+	fi
 }
 
 # Get class of a wid
