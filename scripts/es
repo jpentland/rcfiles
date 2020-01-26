@@ -1,7 +1,12 @@
 #!/bin/sh
 # Edit a script in the users ~/.local/scripts directory
 SCRIPTS_DIR=~/.local/scripts
+if ! [ -z "$@" ]; then
+	query="-q $@"
+else
+	query=
+fi
 
 pushd $SCRIPTS_DIR
-$EDITOR $(find . -type f -printf "%P\n" | fzf --preview="bat {}" -q $@)
+$EDITOR $(find . -type f -printf "%P\n" | fzf --preview="bat {}" $query)
 popd
