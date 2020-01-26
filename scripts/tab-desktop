@@ -57,12 +57,20 @@ function stop_tabbed {
 	get_tabbed_wid | xargs xdotool windowkill
 }
 
+function get_leaves {
+	wid=$1
+	for node in $(bspc query -N $wid -n .descendant_of); do
+		bspc query -N -n ${node}.window
+	done
+}
+
 # Add a window to tabbed (assumes it is already running)
 function add_tabbed {
 	wid=$1; shift
-	if [ "$(get_class $1)" != "tabbed" ]; then
-		xdotool windowreparent $wid $(get_tabbed_wid)
-	fi
+	tabbed_wid=$(get_tabbed_wid)
+	for node in $(get_leaves $wid); do
+		xdotool windowreparent $node $tabbed_wid
+	done
 }
 
 # Remove a window from tabbed
