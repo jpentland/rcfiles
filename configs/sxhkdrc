@@ -35,9 +35,13 @@ super + c
 super + space
 	bspc desktop -l next
 
-# send the newest marked node to the newest preselected node
+# send the focused node to the newest preselected node
 super + y
-	bspc node newest.marked.local -n newest.!automatic.local
+	bspc node -n newest.!automatic.local
+
+# Balance nodes
+super + ctrl + b
+	bspc node -B
 
 # swap the current node and the biggest node
 super + g
