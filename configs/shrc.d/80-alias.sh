@@ -25,6 +25,12 @@ alias startup="$EDITOR ~/.xmonad/startup.sh"
 alias bspwmrc="$EDITOR ~/.config/bspwm/bspwmrc"
 alias sxhkdrc="$EDITOR ~/.config/sxhkd/sxhkdrc"
 
+function rcgui {
+	pushd ~/rcfiles > /dev/null
+	git gui
+	popd > /dev/null
+}
+
 function install {
 	choice=$(pacman -Sl | awk '{print $2}' | fzf)
 	if ! [ -z $choice ]; then
