@@ -77,10 +77,7 @@ function add_tabbed {
 function remove_tabbed {
 	wid=$1; shift
 	xdotool windowreparent $wid $(get_root_wid)
-	preselect=$(bspc query -N -n newest.\!automatic.local)
-	if ! [ -z "$preselect" ]; then
-		bspc node $wid -n $preselect
-	fi
+	bspc node $wid -n $(get_tabbed_wid)
 }
 
 # Get class of a wid
@@ -138,7 +135,7 @@ case $command in
 			exit 0
 		fi
 		bspc subscribe node_add | while read node_add mon desk ip node; do
-			if [ "$desk" == "$desktop" ]; then
+			if [ "$desk" == "$desktop" ] && [ -z "$(bspc query -N -n ${node}.floating)" ]; then
 				start_tabbed
 				add_tabbed $node
 			fi
