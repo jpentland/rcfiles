@@ -205,6 +205,9 @@ super + shift + n
 XF86Audio{Play,Pause,Prev,Next}
 	playerctl {play,pause,previous,next}
 
+super + {F9,F10,F11}
+	playerctl {play-pause,previous,next}
+
 XF86Audio{Raise,Lower}Volume
 	pactl set-sink-volume @DEFAULT_SINK@ {+,-}1.5%
 
