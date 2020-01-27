@@ -18,11 +18,7 @@ popd >/dev/null
 count=$(($(echo "$files" | wc -l) + 1))
 
 if ! [ $(echo "$files" | wc -l) == "1" ]; then
-    if [ -z "$DISPLAY" ]; then
-        selection=$(dialog --keep-tite --menu "shrc" 0 0 $count $(for a in $files; do echo "$a ..."; done) --stdout)
-    else
-        selection=$(echo "$files" | dmenu -l 10)
-    fi
+    selection=$(echo "$files" | fzf)
 else
     selection=$files
 fi
