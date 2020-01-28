@@ -29,7 +29,7 @@ super + shift + c
 
 # Close tab or window
 super + c
-	tab-desktop close $(bspc query -N -n focused)
+	bsptab close focused
 
 # alternate between the tiled and monocle layout
 super + space
@@ -152,28 +152,25 @@ super + alt + {h,j,k,l}
 super + alt + shift + {h,j,k,l}
 	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
 
-# Add or remove windows from tabbed
-super + ctrl + t; {a,r,shift + a,shift + r}
-	tab-desktop {add,--tabbed $(bspc query -N -n focused) remove,add-all,remove-all}
-
-super + ctrl + t; {h,j,k,l}
-	tab-desktop --tabbed $(bspc query -N -n {west,south,north,east}.local) add
-
-# New tabbed window
-super + ctrl + t; n
-	tabbed
-
-# Add next window to tabbed
+# Tab focused window
 super + ctrl + t; t
-	tab-desktop --tabbed $(bspc query -N -n focused) next
+	bsptab tab focused
 
-# Add all new windows to tabbed
-super + ctrl + t; shift + {_,ctrl + }t
-	tab-desktop next-{all,stop}
+# Add windows to tabbed
+super + ctrl + t; {_,shift + }{h,j,k,l}
+	bsptab add{_,-all} {west,south,north,east}.local focused
 
-# Remove a window from tabbed and move it to another desktop
-super + ctrl + t; {1-9}
-	tab-desktop --tabbed $(bspc query -N -n focused) remove-desktop {1-9}
+# Remove windows from tabbed
+super + ctrl + t; {_,shift + }r
+	bsptab remove{_,-all} focused
+
+# Add next new window to tabbed
+super + ctrl + t; {_,shift + }n
+	bsptab add-{next,new} focused
+
+# Stop auto-tabbing windows
+super + ctrl + t; s
+	bsptab stop-add-new
 
 # Rotate tree around selected node
 super + {_,shift + }r
