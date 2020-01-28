@@ -200,7 +200,7 @@ super + shift + n
 
 # Media Keys
 XF86Audio{Play,Pause,Prev,Next}
-	playerctl {play,pause,previous,next}
+	playerctl {play-pause,play-pause,previous,next}
 
 super + {F9,F10,F11}
 	playerctl {play-pause,previous,next}
