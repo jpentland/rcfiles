@@ -92,9 +92,13 @@ super + bracket{left,right}
 		bspc monitor focused -o $(bspc query -m focused -D --names | sort); \
 	fi
 
-# focus the last node/desktop
-super + {grave,Tab}
-	bspc {node,desktop} -f last
+# focus the last desktop
+super + grave
+	bspc desktop -f last
+
+# focused the next node
+super + Tab
+	bspc node -f next.local
 
 # focus the older or newer node in the focus history
 super + {o,i}
