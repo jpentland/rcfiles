@@ -51,7 +51,7 @@ RSY=$(bc <<< "(($screen_height - $top_padding) * $SY) / 100 - ($borderWidth * 2)
 # Spawn window if it does not exist
 wids=$(get_wids)
 if [ -z "$wids" ]; then
-        bspc rule -a $class -o state=floating hidden=on
+        bspc rule -a $class -o state=floating hidden=on layer=above
         ($spawn &)
         sleep 0.3
         wids=$(get_wids)
