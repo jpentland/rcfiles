@@ -8,10 +8,13 @@ left_bar_ratio=0.45
 # Unicode Chars
 right_triangle="\ue0b0"
 left_triangle="\ue0b2"
+monocle="\ufbce"
+tiled="\ue75a"
 
 # Colors
 cbg1="#444455"
 
+# Create fifo
 if ! [ -p $fifo ]; then
 	rm -f $fifo
 	mkfifo $fifo
@@ -99,9 +102,7 @@ function period {
 }
 
 function check_tabs {
- 	desktop=$(bspc query -D -d focused)
-	tmp_file="/tmp/$USER-tabbed-$desktop"
-	if [ -f $tmp_file ] && grep -q $(cat $tmp_file) <<< "$(ps -A)"; then
+	if [ "$(bsptab check-add-new)" == "true" ]; then
 		echo "(tabs)"
 	else
 		echo ""
