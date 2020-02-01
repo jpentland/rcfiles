@@ -44,7 +44,7 @@ read screen_width screen_height screen_x screen_y borderWidth top_padding \
         | jq '.rectangle.width, .rectangle.height, .rectangle.x, .rectangle.y, .borderWidth, .padding.top' \
         | tr '\n' ' ')"
 RPX=$(bc <<< "($screen_width * $PX) / 100 + $screen_x")
-RPY=$(bc <<< "($screen_height * $PY) / 100 + $top_padding + $screen_y")
+RPY=$(bc <<< "(($screen_height - $top_padding) * $PY) / 100 + $top_padding + $screen_y")
 RSX=$(bc <<< "($screen_width * $SX) / 100 - ($borderWidth * 2)")
 RSY=$(bc <<< "(($screen_height - $top_padding) * $SY) / 100 - ($borderWidth * 2)")
 
