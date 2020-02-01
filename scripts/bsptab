@@ -24,41 +24,18 @@ function show_usage {
 	echo "		Stop auto-tabbing windows on this desktop."
 	echo "	check-add-new"
 	echo "		Print "true" if windows on current desktop are being auto-tabbed, otherwise print "false""
-	echo "	close <NODE_SEL>"
-	echo "		If NODE_SEL points to an instance of tabbed, close the currently open tab,"
-	echo "		otherwise close the node."
 }
+
+# Command for starting tabbed:
+# -d: Spawn in background and print wid
+# -c: Close when empty
+# -k: Close open tab on windowclose, rather than entire window
+tabbed_cmd="tabbed -dck"
 
 # Get class of a wid
 function get_class {
 	id=$1
 	xprop -id $id | sed -n '/WM_CLASS/s/.*, "\(.*\)"/\1/p'
-}
-
-# Start an instance of tabbed and print its wid
-function start_tabbed {
-	# Watch new nodes until tabbed starts
-	bspc subscribe node_add | while read na monitor desktop ip node; do
-		if [ "$(get_class $node)" == "tabbed" ]; then
-			echo $node
-			break
-		fi
-	done &
-
-	# Start tabbed in background and disown it so it doesn't die after the script exits
-	tabbed >/dev/null &
-	disown >/dev/null
-
-	# Wait for loop to end
-	wait
-}
-
-# Kill tabbed instance if empty
-function kill_if_empty {
-	wid_tabbed=$1
-	if [ "$(tabc $wid_tabbed list | wc -l)" == "0" ]; then
-		xdotool windowkill $1
-	fi
 }
 
 # Get all leaves of a node
@@ -98,7 +75,7 @@ function add_new_running {
 	fi
 	pid=$(cat $tmp_file)
 
-	if ps -A | grep -q "^$pid "; then
+	if ps -A | grep -q "^ *$pid "; then
 		return 0
 	else
 		return 1
@@ -118,7 +95,7 @@ case $cmd in
 		wids_leaf=$(get_leaves $wids_src)
 
 		if ! [ -z "$wids_leaf" ]; then
-			wid_tabbed=$(start_tabbed)
+			wid_tabbed=$($tabbed_cmd)
 			add_all $wid_tabbed $wids_leaf
 		else
 			echo "No leaf nodes selected" 2>&1
@@ -151,7 +128,6 @@ case $cmd in
 		wid_child=$(tabc $wid_tabbed list | head -n1)
 		if ! [ -z "$wid_child" ]; then
 			tabc $wid_tabbed remove $wid_child
-			kill_if_empty $wid_tabbed
 		fi
 		;;
 	remove-all)
@@ -164,7 +140,6 @@ case $cmd in
 			for wid_child in $wid_children; do
 				tabc $wid_tabbed remove $wid_child
 			done
-			kill_if_empty $wid_tabbed
 		fi
 		;;
 	add-next)
@@ -184,7 +159,7 @@ case $cmd in
 		wid_tabbed=$(bspc query -N -n "$ns_tabbed")
 		check_tabbed $wid_tabbed
 		desktop_src=$(bspc query -D -d focused)
-		tmp_file="/tmp/bsptab-$USER-$desktop"
+		tmp_file="/tmp/bsptab-$USER-$desktop_src"
 
 		if add_new_running $desktop_src; then
 			exit 0
@@ -196,7 +171,7 @@ case $cmd in
 
 				# If tabbed instance was closed, start a new one
 				if [ -z "$(bspc query -N -n $wid_tabbed)" ]; then
-					wid_tabbed=$(start_tabbed)
+					wid_tabbed=$($tabbed_cmd)
 				fi
 
 				tabc $wid_tabbed add $node
@@ -230,7 +205,6 @@ case $cmd in
 			if ! [ -z "$wid_child" ]; then
 				xdotool windowkill $wid_child
 			fi
-			kill_if_empty $wid_src
 		else
 			bspc node $ns_src -c
 		fi
