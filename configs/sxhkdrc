@@ -157,8 +157,12 @@ super + ctrl + t; t
 	bsptab tab focused
 
 # Add windows to tabbed
-super + ctrl + t; {_,shift + }{h,j,k,l}
-	bsptab add{_,-all} {west,south,north,east}.local focused
+super + ctrl + t; {h,j,k,l}
+	bsptab add {west,south,north,east}.local focused
+
+# Add all windows to tabbed
+super + ctrl +t; a
+	bsptab add-all focused
 
 # Remove windows from tabbed
 super + ctrl + t; {_,shift + }r
