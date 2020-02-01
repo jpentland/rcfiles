@@ -2,14 +2,16 @@
 
 # Get role of a wid
 function get_role {
-        wid=$1; shift
-        xprop -id $wid | sed -n '/ROLE/s/.*"\(.*\)"/\1/p'
+    wid=$1; shift
+    xprop -id $wid | sed -n '/ROLE/s/.*"\(.*\)"/\1/p'
 }
 
 # Open Pidgin conversation window if urgent flag is set
 bspc subscribe node_flag | \
-	while read cmd monitor desktop node flag; do
-		if [ "$flag" == "urgent on" ] && [ "$(get_role $node)" == "conversation" ]; then
-			dropdown.sh --role "conversation" "pidgin" "Pidgin" 60 60 40 40 0
-		fi
-	done
+    while read cmd monitor desktop node flag; do
+        if [ "$flag" == "urgent on" ] && [ "$(get_role $node)" == "conversation" ]; then
+            if [ -z "$(bspc query -N -n ${node}.\!hidden.local)" ] ; then
+                dropdown.sh --role "conversation" "pidgin" "Pidgin" 60 60 40 40 0
+            fi
+        fi
+    done
