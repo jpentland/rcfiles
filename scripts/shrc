@@ -12,10 +12,9 @@ else
 fi
 
 pushd ~ >/dev/null
-files=".${shell}rc $(find .shrc.d/ -name '*.sh' -o -name "*.$shell" | sort)"
+files="$(echo .${shell}rc && find .shrc.d/ -name '*.sh' -o -name "*.$shell" | sort)"
 files="$(echo "$files" | $match)"
 popd >/dev/null
-count=$(($(echo "$files" | wc -l) + 1))
 
 if ! [ $(echo "$files" | wc -l) == "1" ]; then
     selection=$(echo "$files" | fzf)
