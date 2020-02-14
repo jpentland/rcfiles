@@ -37,3 +37,5 @@
 	    cmd = git pull --rebase
 [cola]
 	spellcheck = false
+[core]
+	pager = cat
