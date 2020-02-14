@@ -1,7 +1,6 @@
 #! /bin/sh -x
 
 # Hotkeys
-killall sxhkd
 sxhkd &
 
 # Auto update xrandr config
