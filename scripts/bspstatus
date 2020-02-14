@@ -71,12 +71,12 @@ echo "left bar = $left_bar_width"
 # dzen commands
 function dzen_left {
 	sleep 0.2s
-	stdbuf -oL -eL uniq \
+	LC_ALL=c stdbuf -oL -eL uniq \
 		| dzen2 -xs 1 -ta l -dock -fn "$font" -tw $left_bar_width -bg "#000000"
 }
 
 function dzen_right {
-	stdbuf -oL -eL uniq \
+	LC_ALL=c stdbuf -oL -eL uniq \
 		| dzen2 -xs 1 -ta r -dock -fn "$font" -bg "#000000"
 }
 
