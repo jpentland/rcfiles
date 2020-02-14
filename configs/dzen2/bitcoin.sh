@@ -19,4 +19,4 @@ if [ "$diffint" -lt "0" ]; then
 else
 	echo -n -e "$bticon = ^fg(#00ff00)\$$intrate^fg()"
 fi
-echo " "
+echo
