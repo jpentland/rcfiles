@@ -24,7 +24,7 @@ bspc config borderless_monocle   true
 bspc config gapless_monocle      true
 bspc config single_monocle       true
 bspc config remove_disabled_monitors false
-bspc config remove_unplugged_monitors true
+bspc config remove_unplugged_monitors false
 bspc config automatic_scheme alternate
 
 # Manually manage ewmh features
@@ -66,6 +66,9 @@ statnot ~/.config/statnot/rc.py &
 # Status bar
 killall bspstatus
 bspstatus &
+
+# Monitor monitor, for hotpluggin
+bspmonmon.py &
 
 # Open pidgin conversation window if urgent flag is set
 pidmon &
