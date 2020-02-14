@@ -1,4 +1,5 @@
 #!/bin/sh
+TAB_NON_TABBED=true
 
 # Print help message
 function show_usage {
@@ -57,12 +58,18 @@ function add_all {
 	done
 }
 
-# Exit with error if wid is not an instance of tabbed
+# Exit with error if wid is not an instance of tabbed, or convert it to tabbed first if TAB_NON_TABBED set
 function check_tabbed {
 	wid_tabbed=$1
 	if [ "$(get_class $wid_tabbed)" != "tabbed" ]; then
-		echo "Not an instance of tabbed" 2>&1
-		exit 1
+		if ! $TAB_NON_TABBED; then
+			echo "Not an instance of tabbed" 2>&1
+			exit 1
+		else
+			$0 tab $wid_tabbed
+		fi
+	else
+		echo $wid_tabbed
 	fi
 }
 
@@ -97,6 +104,7 @@ case $cmd in
 		if ! [ -z "$wids_leaf" ]; then
 			wid_tabbed=$($tabbed_cmd)
 			add_all $wid_tabbed $wids_leaf
+			echo "$wid_tabbed"
 		else
 			echo "No leaf nodes selected" 2>&1
 			exit 1
@@ -106,16 +114,15 @@ case $cmd in
 		ns_tabbed=$1; shift
 		ns_src=$1
 		wid_tabbed=$(bspc query -N -n "$ns_tabbed")
-		check_tabbed $wid_tabbed
-
 		wids_src=$(bspc query -N -n "$ns_src")
+		wid_tabbed=$(check_tabbed $wid_tabbed)
 		add_all $wid_tabbed $(get_leaves $wids_src)
 		;;
 	add-all)
 		ns_tabbed=$1
 
 		wid_tabbed=$(bspc query -N -n "$ns_tabbed")
-		check_tabbed $wid_tabbed
+		wid_tabbed=$(check_tabbed $wid_tabbed)
 
 		add_all $wid_tabbed $(bspc query -N -n ".local.tiled.!hidden")
 		;;
@@ -123,7 +130,7 @@ case $cmd in
 		ns_tabbed=$1
 
 		wid_tabbed=$(bspc query -N -n "$ns_tabbed")
-		check_tabbed $wid_tabbed
+		wid_tabbed=$(check_tabbed $wid_tabbed)
 
 		wid_child=$(tabc $wid_tabbed list | head -n1)
 		if ! [ -z "$wid_child" ]; then
@@ -133,7 +140,7 @@ case $cmd in
 	remove-all)
 		ns_tabbed=$1
 		wid_tabbed=$(bspc query -N -n "$ns_tabbed")
-		check_tabbed $wid_tabbed
+		wid_tabbed=$(check_tabbed $wid_tabbed)
 
 		wid_children=$(tabc $wid_tabbed list)
 		if ! [ -z "$wid_children" ]; then
@@ -145,7 +152,7 @@ case $cmd in
 	add-next)
 		ns_tabbed=$1
 		wid_tabbed=$(bspc query -N -n "$ns_tabbed")
-		check_tabbed $wid_tabbed
+		wid_tabbed=$(check_tabbed $wid_tabbed)
 
 		bspc subscribe node_add | while read na monitor desktop ip node; do
 			if ! [ -z "$(bspc query -N -n "$node.local.tiled.!floating")" ]; then
@@ -157,7 +164,7 @@ case $cmd in
 	add-new)
 		ns_tabbed=$1
 		wid_tabbed=$(bspc query -N -n "$ns_tabbed")
-		check_tabbed $wid_tabbed
+		wid_tabbed=$(check_tabbed $wid_tabbed)
 		desktop_src=$(bspc query -D -d focused)
 		tmp_file="/tmp/bsptab-$USER-$desktop_src"
 
