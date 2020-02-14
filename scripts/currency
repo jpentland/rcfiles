@@ -1,0 +1,49 @@
+#!/bin/sh -e
+
+# Currency converter
+
+function get_rate_fiat {
+	from=$1; shift
+	to=$1; shift
+	curl -s https://api.exchangeratesapi.io/latest\?base\=$from\&symbols\=$to | jq -r ".rates .$to"
+}
+
+function get_rate_btc {
+	curl -s http://api.coindesk.com/v1/bpi/currentprice/USD.json | jq -r '.bpi .USD .rate_float'
+}
+
+function get_rate {
+	from=$1; shift
+	to=$1; shift
+	if [ "$from" == "$to" ]; then
+		echo "1"
+		return
+	fi
+
+	if [ "$from" == "BTC" ]; then
+		rate_to_usd=$(get_rate_btc)
+		rate_to_target=$(get_rate_fiat USD $to)
+		bc <<< "scale=10; $rate_to_usd * $rate_to_target"
+		return
+	fi
+
+	if [ "$to" == "BTC" ]; then
+		rate_to_usd=$(get_rate_fiat $from USD)
+		rate_to_btc=$(get_rate_btc)
+		bc <<< "scale=10; $rate_to_usd / $rate_to_btc"
+		return
+	fi
+
+	get_rate_fiat $from $to
+}
+
+from=${1^^}; shift
+to=${1^^}; shift
+if [ -z "$from$to" ]; then
+	echo "Usage: $(basename $0) from to" 1>&2
+	exit 1
+fi
+rate=$(get_rate $from $to)
+while read amount; do
+	printf "%08f\n" $(bc <<< "scale=2; $rate * $amount")
+done
