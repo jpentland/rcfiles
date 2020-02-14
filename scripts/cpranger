@@ -1,0 +1,7 @@
+#!/bin/sh
+TMP=/tmp/ranger-choose
+src="$1"
+ranger --cmd="echo Choose location for $1" --choosedir=$TMP
+tgt="$(cat $TMP)"
+echo "cp -r $1 $tgt"
+cp -r "$1" "$tgt"
