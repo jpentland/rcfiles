@@ -1,0 +1,24 @@
+#!/bin/sh
+min_time=5
+backoff_default=10
+backoff_inc=10
+backoff=$backoff_default;
+function colcat_loop {
+    while true; do
+        echo "$(basename $0): Waiting for device"
+        adb wait-for-device
+        tb=$(date "+%s")
+        colcat $@
+        ta=$(date "+%s")
+        t=$(expr $ta - $tb)
+        if [ "$t" -lt "$min_time" ]; then
+            echo "$(basename $0): Colcat exited too quickly, waiting $backoff seconds"
+            sleep ${backoff}s
+            backoff=$(expr $backoff + $backoff_inc)
+        else
+            backoff=$backoff_default
+        fi
+    done
+}
+
+colcat_loop $@
