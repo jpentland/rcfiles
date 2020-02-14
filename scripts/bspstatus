@@ -4,6 +4,7 @@ font=$(sed -n 's/st.font: \(.*\)/\1/p' ~/.Xresources)
 self=$0
 mods="$HOME/.local/dzen2"
 left_bar_ratio=0.45
+restart_file=/tmp/$USER-statusbar-restart
 
 # Unicode Chars
 right_triangle="\ue0b0"
@@ -26,10 +27,10 @@ if [ "$1" == "-k" ]; then
 	exit 0
 fi
 
-# -r option to replace current statusbar
+# -r option to restart statusbar
 if [ "$1" == "-r" ]; then
-	echo "kill 0" >> $fifo
-	sleep 0.5
+	echo "restart 0" >> $fifo
+	exit 0
 fi
 
 # Formatting functions
@@ -82,10 +83,16 @@ function dzen_right {
 
 # Cleanup on exit
 function cleanup {
-	trap - TERM
-	kill 0
+	trap - INT TERM
+	killjobs
+	exit 0
 }
-trap cleanup INT TERM QUIT EXIT
+
+function killjobs {
+	kill $(jobs -p)
+}
+
+trap cleanup INT TERM
 
 # Periodically run a command and pipe to statusbar
 # Usage: period <name> <period> <command>
@@ -94,10 +101,8 @@ function period {
 	slp=$1; shift
 	cmd=$@
 	while true; do
-		$cmd 2> /dev/null
+		$cmd 2> /dev/null | sed -u "s/^.*$/$name &/"
 		sleep $slp
-	done | while read output; do
-		echo $name "$output" >> $fifo
 	done
 }
 
@@ -109,33 +114,28 @@ function check_tabs {
 	fi
 }
 
-period battery		1m 	"$mods/battery.sh" &
-period bitcoin		1m 	"$mods/bitcoin.sh" &
-period bluetooth	10s "$mods/bluetooth.sh" &
-period kbmap		10s "$mods/kbmap.sh" &
-period mail			1m	"$mods/mail.sh" &
-period mem			5s	"$mods/mem.sh" &
-period network		5s	"$mods/network.sh" &
-period song			5s	"$mods/song.sh" &
-period volume		5s	"$mods/volume.sh" &
-period weather		1m	"$mods/weather.sh" &
-period tabs			5s  "check_tabs" &
-xtitle -sf 'title %s\n' | while read line; do
-	echo $line > $fifo
-done &
-
-clock -sf "%a %b %_d" | while read line; do
-	echo "date $line" > $fifo
-done &
-
-clock -sf "%k:%M" | while read line; do
-	echo "time $line" > $fifo
-done &
-
+period battery		1m 	"$mods/battery.sh" >> $fifo &
+period bitcoin		1m 	"$mods/bitcoin.sh" >> $fifo &
+period bluetooth	10s "$mods/bluetooth.sh" >> $fifo &
+period kbmap		10s "$mods/kbmap.sh" >> $fifo &
+period mail			1m	"$mods/mail.sh" >> $fifo &
+period mem			5s	"$mods/mem.sh" >> $fifo &
+period network		5s	"$mods/network.sh" >> $fifo &
+period song			5s	"$mods/song.sh" >> $fifo &
+period volume		5s	"$mods/volume.sh" >> $fifo &
+period weather		1m	"$mods/weather.sh" >> $fifo &
+period tabs			5s  "check_tabs" >> $fifo &
+xtitle -sf 'title %s\n' >> $fifo &
+clock -sf "date %a %b %_d" >> $fifo &
+clock -sf "time %k:%M" >> $fifo &
 bspc subscribe report | $mods/process_report.py | while read line; do
-	echo $line > $fifo
-	echo "tabs $(check_tabs)" > $fifo
-done &
+	echo $line
+	echo "tabs $(check_tabs)"
+done >> $fifo &
+
+# Set padding
+bspc config top_padding 0
+bspc config -m primary top_padding 20
 
 # Working Varaibles
 ws=""
@@ -153,9 +153,10 @@ song=""
 volume=""
 weather=""
 tabs=""
+dorestart=false
 
 # Parse information from fifo and pass to dzen2
-tail -f -n1 $fifo | while read cmd line; do
+cat $fifo | while read cmd line; do
 	case $cmd in
 		ws) ws="$(cbg $cbg1 " $line ")$(cfg $cbg1 "$right_triangle")"
 			;;
@@ -193,6 +194,10 @@ tail -f -n1 $fifo | while read cmd line; do
 		kill) echo "Got kill command, exiting..." 1>&2
 			break
 			;;
+		restart) echo "Got restart command, exiting..." 1>&2
+			touch $restart_file
+			break
+			;;
 	esac
 
 	# Date
@@ -205,4 +210,9 @@ tail -f -n1 $fifo | while read cmd line; do
 	echo -e "$bitcoin $mail$song$bluetooth$network $kbmap $volume $mem $battery $weather $datetime" 1>&6
 done 6> >(dzen_right) 5> >(dzen_left)
 
-kill -- -$$
+killjobs
+if [ -f $restart_file ]; then
+	echo "restarting $0..."
+	rm $restart_file
+	($0 &)
+fi
