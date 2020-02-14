@@ -241,7 +241,7 @@ F12
 	dropdown.sh "st -c dropdown" "dropdown" 0 0 100 30
 
 super + F12; m
-	dropdown.sh "pavucontrol" "Pavucontrol" 0 0 100 30
+	dropdown.sh "pavucontrol" "Pavucontrol" 0 0 100 50
 
 super + F12; e
 	dropdown.sh "st -c stmail neomutt" "stmail" 0 0 100 50
