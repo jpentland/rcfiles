@@ -8,6 +8,8 @@ cfg_empty = "#888888"
 cfg_occupied = "#ffffff"
 cfg_urgent = "#ff0000"
 cfg_other = "#228822"
+sym_monocle = "\ufbce"
+sym_tiled = "\ue75a"
 
 # desktop format: {name : {"fg": fg_color},}
 def process_line(line):
@@ -37,9 +39,9 @@ def process_line(line):
             desktops[parm] = { "fg" : cfg_empty }
         elif cmd == "L" and on_focused_monitor:
             if parm == "T":
-                layout = "tiled"
+                layout = sym_tiled
             elif parm == "M":
-                layout = "monocle"
+                layout = sym_monocle
     return (desktops, layout)
 
 def format_desktops(desktops, layout):
