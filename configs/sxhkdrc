@@ -120,6 +120,14 @@ super + {1-9}
 super + Up
 	bspc monitor -f older
 
+# Swap desktops
+super + ctrl + shift + {1-9}
+	local=$(bspc query -D -d focused --names); \
+	remote=$(bspc query -D -d {1-9} --names); \
+	bspc desktop $remote -n $local; \
+	bspc desktop focused -n $remote; \
+	bspc desktop $local -f
+
 #
 # preselect
 #
