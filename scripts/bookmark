@@ -19,13 +19,12 @@ android https://developer.android.com/s/results?q=%s"
 
 function handle_search_engines {
 	url=$1
-	IFS="\n"
 	pattern=$(awk '{print $1}' <<< $url)
 	engine=$(grep "^$pattern " <<< "$ENGINES" | awk '{print $2}')
 	if [ -z "$engine" ]; then
 		echo $url
 	else
-		printf "$engine\n" $(sed 's/[^ ]* *//' <<< $url)
+		printf "$engine\n" "$(sed 's/[^ ]* *//' <<< "$url")"
 	fi
 }
 
