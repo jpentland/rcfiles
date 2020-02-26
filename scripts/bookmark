@@ -1,25 +1,72 @@
 #!/bin/sh
 BOOKMARK_FILE=~/.config/bookmarks.txt
+current=
 
+ENGINES=\
+"g http://www.google.de/search?q=%s
+d http://www.duckduckgo.com/?q=%s
+s http://startpage.com/do/search?q=%s
+leo http://dict.leo.org/ende?search=%s
+arch https://wiki.archlinux.org/index.php?search=%s
+aur https://aur.archlinux.org/packages/?O=0&K=%s
+r https://reddit.com/r/%s
+w https://en.wikipedia.org/wiki/%s
+y https://www.youtube.com/results?search_query=%s
+c https://crates.io/search?q=%s
+a https://www.amazon.de/s?k=%s
+down https://www.downforeveryoneorjustme.com/%s
+android https://developer.android.com/s/results?q=%s"
+
+function handle_search_engines {
+	url=$1
+	IFS="\n"
+	pattern=$(awk '{print $1}' <<< $url)
+	engine=$(grep "^$pattern " <<< "$ENGINES" | awk '{print $2}')
+	if [ -z "$engine" ]; then
+		echo $url
+	else
+		printf "$engine\n" $(sed 's/[^ ]* *//' <<< $url)
+	fi
+}
+
+# Options displayed
 function options {
+	if ! [ -z "$current" ]; then
+		echo "$current # Current url"
+	fi
 	xclip -o -selection clipboard | tr -d '\n'
 	echo " # Clipboard"
 	cat $BOOKMARK_FILE
 }
 
+# Add current url to list of options
+if [ "$1" == "--current" ]; then
+	shift
+	current="$1"; shift
+fi
+
+# New bookmark
 if [ "$1" == "-n" ]; then
 	shift
-	site=$(xclip -o -selection clipboard)
-	bookmark=$(dmenu -t -p "Bookmark: $site #")
+	if [ -z "$current" ]; then
+		site=$(xclip -o -selection clipboard)
+	else
+		site=$current
+	fi
+		bookmark=$(dmenu -t -p "Bookmark: $site #")
 	if [ -z "$bookmark" ]; then
 		exit 0
 	fi
 	echo "$site # $bookmark" >> $BOOKMARK_FILE
+
+# Edit bookmark file
 elif [ "$1" == "-e" ];then
 	$EDITOR $BOOKMARK_FILE
+
+# Normal operations
 else
-	bookmark=$(options | dmenu -p "Surf: " -i -l 10 | sed 's/[^\\]#.*$//;s/\\#/#/g')
+	bookmark=$(options | dmenu -p "Bookmark: " -i -l 10 | sed 's/[^\\]#.*$//;s/\\#/#/g')
 	if ! [ -z "$bookmark" ]; then
-		surf -P "$bookmark"
+		handle_search_engines "$bookmark"
 	fi
 fi
