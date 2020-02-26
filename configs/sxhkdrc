@@ -195,8 +195,11 @@ super + ctrl {_,shift + }f
 #
 # Start applications
 #
-super + {_,shift + } w
-	bookmark {_,-n}
+super + {_,alt +} w
+	{surf,firefox} "$(bookmark)"
+
+super + shift + w
+	bookmark -n
 
 super + {_,shift +} z
 	slock {_, & sleep 2s && systemctl suspend}
