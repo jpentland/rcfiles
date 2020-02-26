@@ -44,6 +44,12 @@ if [ "$1" == "--current" ]; then
 	current="$1"; shift
 fi
 
+# Embed into a window
+if [ "$1" == "-w" ]; then
+	shift
+	alias dmenu="dmenu -w $1"; shift
+fi
+
 # New bookmark
 if [ "$1" == "-n" ]; then
 	shift
