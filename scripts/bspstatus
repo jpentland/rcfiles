@@ -55,10 +55,19 @@ function shorten {
 	fi
 }
 
-# Add a space to non-empty strings
-function pad {
+# Add a space to the right of non-empty strings
+function padr {
 	if grep -q "[^ ]" <<< "$@"; then
 		echo "$@ "
+	else
+		echo
+	fi
+}
+
+# Add a space to the left of non-empty strings
+function padl {
+	if grep -q "[^ ]" <<< "$@"; then
+		echo " $@"
 	else
 		echo
 	fi
