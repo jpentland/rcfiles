@@ -17,6 +17,8 @@ function show_usage {
 	echo "		Remove currently open tab from tabbed."
 	echo "	remove-all <tabbed NODE_SEL>"
 	echo "		Remove all tabs from tabbed"
+	echo "  remove-desktop <tabbed NODE_SEL> <dst DESKTOP_SEL>"
+	echo "		Remove tab and move to desktop"
 	echo "	add-next <tabbed NODE_SEL>"
 	echo "		Add next new window to tabbed."
 	echo "	add-new <tabbed NODE_SEL>"
@@ -147,6 +149,24 @@ case $cmd in
 			for wid_child in $wid_children; do
 				tabc $wid_tabbed remove $wid_child
 			done
+		fi
+		;;
+	remove-desktop)
+		ns_tabbed=$1; shift
+		ds=$1
+		wid_tabbed=$(bspc query -N -n "$ns_tabbed")
+		wid_tabbed=$(check_tabbed $wid_tabbed)
+		wid_child=$(tabc $wid_tabbed list | head -n1)
+		if ! [ -z "$wid_child" ]; then
+			add_new="$($0 check-add-new)"
+			if [ "$add_new" == "true" ]; then
+				$0 stop-add-new
+			fi
+			tabc $wid_tabbed remove $wid_child
+			bspc node $wid_child -d $ds
+			if [ "$add_new" == "true" ]; then
+				$0 add-new $ns_tabbed
+			fi
 		fi
 		;;
 	add-next)
