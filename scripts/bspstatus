@@ -118,7 +118,7 @@ function period {
 
 function check_tabs {
 	if [ "$(bsptab check-add-new)" == "true" ]; then
-		echo "(tabs)"
+		echo " - tabs"
 	else
 		echo ""
 	fi
@@ -172,7 +172,7 @@ cat $fifo | while read cmd line; do
 			;;
 		layout) layout="$(cfg "#22ff22" "$line")"
 			;;
-		tabs) tabs="$(cfg "#ffff00" "$line")"
+		tabs) tabs=$(cfg '#ffff00' "$(padl $line)")
 			;;
 		title) title="$(shorten 50 $line)"
 			;;
@@ -189,13 +189,13 @@ cat $fifo | while read cmd line; do
 			;;
 		kbmap) kbmap="$line"
 			;;
-		mail) mail="$(pad $line)"
+		mail) mail="$(padr $line)"
 			;;
 		mem) mem="$line"
 			;;
 		network) network="$line"
 			;;
-		song) song=$(pad $(shorten 30 $line))
+		song) song=$(padr $(shorten 30 $line))
 			;;
 		volume) volume="$line"
 			;;
@@ -214,7 +214,7 @@ cat $fifo | while read cmd line; do
 	datetime="$datev $(cfg "#000000" $(cbg $cbg1 $right_triangle))$(cbg $cbg1 $timev)"
 
 	# Left Bar
-	echo -e "$ws $layout $tabs $(cfg "#000000" $(cbg $cbg1 $right_triangle))$(cbg $cbg1 ' '$title' ')$(cfg $cbg1 $right_triangle)" 1>&5
+	echo -e "$ws $layout$tabs $(cfg "#000000" $(cbg $cbg1 $right_triangle))$(cbg $cbg1 ' '$title' ')$(cfg $cbg1 $right_triangle)" 1>&5
 
 	# Right Bar
 	echo -e "$bitcoin $mail$song$bluetooth$network $kbmap $volume $mem $battery $weather $datetime" 1>&6
