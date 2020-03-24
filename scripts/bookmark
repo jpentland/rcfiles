@@ -70,14 +70,14 @@ if [ "$1" == "-n" ]; then
 	else
 		site=$current
 	fi
-		bookmark=$(dmenu -t -p "Bookmark: $site #")
+		bookmark=$(dmenu -t -p "Create Bookmark: $site #")
 	if [ -z "$bookmark" ]; then
 		exit 0
 	fi
 	echo "$site # $bookmark" >> $BOOKMARK_FILE
 
 # Edit bookmark file
-elif [ "$1" == "-e" ];then
+elif [ "$1" == "-e" ]; then
 	$EDITOR $BOOKMARK_FILE
 
 # Normal operations
