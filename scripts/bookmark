@@ -44,6 +44,12 @@ function options {
 	cat $BOOKMARK_FILE
 }
 
+# Open in browser
+if [ "$1" == "-b" ]; then
+	shift
+	browser=$1; shift
+fi
+
 # Add current url to list of options
 if [ "$1" == "--current" ]; then
 	shift
@@ -76,8 +82,18 @@ elif [ "$1" == "-e" ];then
 
 # Normal operations
 else
-	bookmark=$(options | dmenu -p "Bookmark: " -i -l 10 | sed 's/[^\\]#.*$//;s/\\#/#/g')
+	if ! [ -z "$browser" ]; then
+		prompt=$browser
+	else
+		prompt="go"
+	fi
+	bookmark=$(options | dmenu -p "$prompt: " -i -l 10 | sed 's/ #.*//g')
 	if ! [ -z "$bookmark" ]; then
-		handle_search_engines "$bookmark"
+		result="$(handle_search_engines "$bookmark")"
+		if ! [ -z "$browser" ]; then
+			($browser "$result" &)
+		else
+			echo $result
+		fi
 	fi
 fi
