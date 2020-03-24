@@ -194,7 +194,7 @@ super + ctrl {_,shift + }f
 # Start applications
 #
 super + {_,alt +} w
-	{surf,firefox} "$(bookmark)"
+	bookmark -b {surf,firefox}
 
 super + shift + w
 	bookmark -n
