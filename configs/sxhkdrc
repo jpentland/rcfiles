@@ -116,7 +116,7 @@ super + {1-9}
 
 # focus monitor
 super + Up
-	bspc monitor -f older
+	bspc monitor -f next
 
 # Swap desktops
 super + ctrl + shift + {1-9}
