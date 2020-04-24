@@ -280,3 +280,6 @@ super + ctrl + p
 
 super + alt + p
 	dropdown.sh --role "conversation" "pidgin" "Pidgin" 60 60 40 40
+
+super + F12; r
+	dropdown.sh "st -c ranger ranger" "ranger" 0 0 70 70
