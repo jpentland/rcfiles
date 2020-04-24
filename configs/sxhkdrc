@@ -198,7 +198,7 @@ super + ctrl {_,shift + }f
 # Start applications
 #
 super + {_,alt +} w
-	bookmark -b {surf,firefox}
+	bookmark {-b surf,-selectbrowser}
 
 super + shift + w
 	bookmark -n
