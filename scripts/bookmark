@@ -2,6 +2,7 @@
 BOOKMARK_FILE=~/.config/bookmarks.txt
 current=
 browser=
+go=
 
 ENGINES=\
 "g http://www.google.de/search?q=%s
@@ -27,6 +28,12 @@ winehq https://www.winehq.org/search?q=%s
 aoe https://ageofempires.fandom.com/wiki/%s
 github https://github.com/search?q=%s"
 
+BROWSERS=\
+"surf
+firefox --new-window
+firefox --private-window
+chromium --new-window
+chromium --new-window --incognito"
 
 function handle_search_engines {
 	url=$1
@@ -48,6 +55,18 @@ function options {
 	echo " # Clipboard"
 	cat $BOOKMARK_FILE
 }
+
+# Go to URL immediately
+if [ "$1" == "-g" ]; then
+	shift
+	go=$1; shift
+fi
+
+# Select browser
+if [ "$1" == "-selectbrowser" ]; then
+	shift
+	browser=$(echo -n "$BROWSERS" | dmenu -l 10 -p "Select browser")
+fi
 
 # Open in browser
 if [ "$1" == "-b" ]; then
@@ -92,7 +111,11 @@ else
 	else
 		prompt="go"
 	fi
-	bookmark=$(options | dmenu -p "$prompt: " -i -l 10 | sed 's/ #.*//g')
+	if [ -z "$go" ]; then
+		bookmark=$(options | dmenu -p "$prompt: " -i -l 10 | sed 's/ #.*//g')
+	else
+		bookmark=$go
+	fi
 	if ! [ -z "$bookmark" ]; then
 		result="$(handle_search_engines "$bookmark")"
 		if ! [ -z "$browser" ]; then
