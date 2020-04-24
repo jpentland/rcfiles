@@ -42,8 +42,9 @@ bspc rule -a Surf state=tiled
 # Set background
 feh --bg-scale ~/.wmbg
 
-# Default Cursor
+# Mouse settings
 xsetroot -cursor_name left_ptr
+mouse-accel.sh
 
 # Keyboard layout
 setxkbmap gb
