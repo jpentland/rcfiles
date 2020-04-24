@@ -165,6 +165,8 @@ weather=""
 tabs=""
 dorestart=false
 
+(sleep 5 && xdo above -t $(xdo id -n root) $(xdo id -n dzen2 | tac)) &
+
 # Parse information from fifo and pass to dzen2
 cat $fifo | while read cmd line; do
 	case $cmd in
