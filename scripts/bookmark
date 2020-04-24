@@ -21,7 +21,12 @@ android https://developer.android.com/s/results?q=%s
 jira http://jira.intern.gsmk.de/browse/%s
 chart https://www.tradingview.com/chart/?symbol=%s
 snap https://snapcraft.io/search?q=%s
-flat https://flathub.org/apps/search/%s"
+flat https://flathub.org/apps/search/%s
+twitch https://www.twitch.tv/%s
+winehq https://www.winehq.org/search?q=%s
+aoe https://ageofempires.fandom.com/wiki/%s
+github https://github.com/search?q=%s"
+
 
 function handle_search_engines {
 	url=$1
