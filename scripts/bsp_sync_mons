@@ -1,0 +1,23 @@
+#!/bin/sh -x
+bsp_mons="$(bspc query -M --names)"
+x_mons="$(xrandr --listactivemonitors | awk '{print $4}' | sed '/^$/d')"
+
+# Exit if bspwm isn't running
+if ! ps -U $USER | grep bspwm; then
+        echo "BSPWM not detected, exiting"
+        exit 1
+fi
+
+# Add all X monitors that bspwm hasn't had configured
+for mon in $x_mons; do
+        if grep -q "Desktop" <<< "$(bspc query -D -m $mon --names)"; then
+                bsp_add_monitor $mon
+        fi
+done
+
+# Remove all bspwm monitors that X doesn't know about.
+for mon in $bsp_mons; do
+        if ! grep -q $mon <<< "$x_mons"; then
+                bsp_del_monitor $mon
+        fi
+done

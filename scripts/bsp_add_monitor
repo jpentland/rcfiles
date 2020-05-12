@@ -1,0 +1,20 @@
+#!/bin/sh -x
+monitor=$1
+
+# Find first unfocused desktop
+unfocused=$(bspc query -D -d '.!focused' --names | grep -v "Desktop" | head -n1)
+
+# Move it to new montior
+bspc desktop $unfocused -m $monitor
+
+# Activate it
+bspc desktop $unfocused -a
+
+# Remove "Desktop" desktop
+bspc desktop Desktop -r
+
+# Re-run "feh" command
+feh --bg-scale ~/.wmbg
+
+# Restart bspstatus
+bspstatus -r

@@ -1,0 +1,25 @@
+#!/bin/sh +x
+monitor=$1
+
+# Create temp desktop on removed monitor
+bspc monitor $1 -a temp
+
+# Activate temp on removed monitor
+bspc desktop temp -a
+
+# Move all desktops on removed monitor to first non-removed monitor
+other_monitor=$(bspc query -M --names | grep -v $monitor | head -n1)
+for desktop in $(bspc query -D -m $monitor --names); do
+        if [ "$desktop" != "temp" ]; then
+                bspc desktop $desktop -m $other_monitor
+        fi
+done
+
+# Remove removed monitor
+bspc monitor $monitor -r
+
+# Re-run "feh" command
+feh --bg-scale ~/.wmbg
+
+# Restart bspstatus
+bspstatus -r
