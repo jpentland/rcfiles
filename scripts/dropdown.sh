@@ -72,5 +72,6 @@ for wid in $wids; do
                 bspc node $wid -g hidden=off -d focused -f -t floating
         else
                 bspc node $wid -g hidden=on -f
+                bspc node $wid -d 1
         fi
 done
