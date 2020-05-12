@@ -215,6 +215,9 @@ super + n
 super + shift + n
 	btmenu
 
+super + {_,alt +,shift +} F8
+	todo {list,add,complete}
+
 # Media Keys
 XF86Audio{Play,Pause,Prev,Next}
 	playerctl {play-pause,play-pause,previous,next}
