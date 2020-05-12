@@ -65,8 +65,5 @@ statnot ~/.config/statnot/rc.py &
 killall bspstatus
 bspstatus &
 
-# Monitor monitor, for hotpluggin
-bspmonmon.py &
-
 # Open pidgin conversation window if urgent flag is set
 pidmon &
