@@ -66,6 +66,9 @@ fi
 if [ "$1" == "-selectbrowser" ]; then
 	shift
 	browser=$(echo -n "$BROWSERS" | dmenu -l 10 -p "Select browser")
+	if [ -z "$browser" ]; then
+		exit 0
+	fi
 fi
 
 # Open in browser
