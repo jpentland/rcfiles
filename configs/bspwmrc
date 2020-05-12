@@ -44,7 +44,7 @@ feh --bg-scale ~/.wmbg
 
 # Mouse settings
 xsetroot -cursor_name left_ptr
-mouse-accel.sh
+mouse-accel.sh &
 
 # Keyboard layout
 setxkbmap gb
