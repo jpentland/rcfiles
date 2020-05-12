@@ -1,0 +1,43 @@
+#!/bin/sh
+TODO_LIST=~/.local/todo.txt
+PRIORITIES="now high medium low background"
+
+command=$1; shift
+
+function list_todo {
+        for prio in $PRIORITIES; do
+                sed -n "s/^$prio/$prio - /p" $TODO_LIST
+        done
+}
+
+function menu {
+        prompt=$1
+        if [ -z "$DISPLAY" ]; then
+                fzf --prompt="$1 "
+        else
+                dmenu -p "$1" -l 10
+        fi
+}
+
+case $command in
+        add)
+                priority=$(echo $PRIORITIES | sed 's/ /\n/g' | dmenu -l 5 -p "ADD priority:")
+                [ -z "$priority" ] && exit 0
+                description=$(menu "ADD description:")
+                [ -z "$description" ] && exit 0
+                echo "$priority $description" >> $TODO_LIST
+                notify-send "todo" "Priority $prority task added"
+                break
+                ;;
+        list)
+                list_todo | menu "TODO LIST"
+                break
+                ;;
+        complete)
+                complete=$(list_todo | menu "COMPLETE" | sed 's/\(^[a-z]\+\) - /\1/')
+                [ -z "$complete" ] && exit 0
+                sed -i "/$complete/d" $TODO_LIST
+                notify-send "todo" "$complete removed"
+                break
+                ;;
+esac
