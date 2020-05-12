@@ -49,9 +49,6 @@ mouse-accel.sh &
 # Keyboard layout
 setxkbmap gb
 
-# Compositing
-picom &
-
 # Load xresources
 xrdb ~/.Xresources
 
