@@ -1,0 +1,7 @@
+#!/bin/sh
+cmd=$@
+if $@; then
+        notify-send "command" "$cmd completed"
+else
+        notify-send "command" "$cmd failed"
+fi
