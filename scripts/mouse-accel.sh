@@ -1,6 +1,6 @@
 #!/bin/sh
 # Rerun mouse accel setup on new input devices
-SPEED=-0.8
+SPEED=-0.6
 function set_mouse_speed {
         speed=$1
         deviceids="$(xinput list | sed -n '/[Mm]ouse/s/.*id=\([0-9]\+\).*/\1/p')"
