@@ -20,8 +20,12 @@ super + Escape
 #
 
 # quit/restart bspwm
-super + alt + {q,r}
-	bspc {quit,wm -r}
+super + alt + q
+	zenity --question --text="Quit BSPWM?" && bspc quit
+
+# quit/restart bspwm
+super + alt + r
+	zenity --question --text="Restart BSPWM?" && bspc wm -r
 
 # kill window
 super + {_,shift + }c
