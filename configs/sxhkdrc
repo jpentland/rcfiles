@@ -98,12 +98,6 @@ super + bracket{left,right}
 super + {_,shift + }Tab
 	bspc node -f {next,prev}.local
 
-# focus the older or newer node in the focus history
-super + {o,i}
-	bspc wm -h off; \
-	bspc node {older,newer} -f; \
-	bspc wm -h on
-
 # send to the given desktop
 super + shift + {1-9}
 	bspc node -d '{1-9}'
