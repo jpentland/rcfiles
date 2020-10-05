@@ -15,6 +15,10 @@ super + {_,ctrl + } Return
 super + Escape
 	pkill -USR1 -x sxhkd
 
+# Restart bspstatus
+super + grave
+	bspstatus -r
+
 #
 # bspwm hotkeys
 #
@@ -89,10 +93,6 @@ super + bracket{left,right}
 		bspc desktop -s $next; \
 		bspc monitor focused -o $(bspc query -m focused -D --names | sort); \
 	fi
-
-# focus the last desktop
-super + grave
-	bspc desktop -f last
 
 # focused the next node
 super + {_,shift + }Tab
