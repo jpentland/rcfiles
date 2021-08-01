@@ -107,3 +107,26 @@ cconv() {
 urlencode() {
   python -c "from urllib.parse import quote; print(quote('''$@''', safe=''))"
 }
+
+function homedirs {
+  find $HOME -maxdepth 4 -type d -printf '%P\n' 2> /dev/null
+}
+
+function fuzzydirs {
+  cd $(homedirs | grep -v '^\.' | fzf)
+}
+
+function fuzzyranger {
+  ranger $(homedirs | grep -v '^\.' | fzf) < $TTY
+}
+
+function zshrcbind {
+  zshrc < $TTY
+}
+
+zle -N fuzzydirs
+zle -N fuzzyranger
+zle -N zshrcbind
+bindkey "^g" fuzzydirs
+bindkey "^r" fuzzyranger
+bindkey "^h" zshrcbind
