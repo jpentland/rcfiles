@@ -1,9 +1,9 @@
 #!/bin/sh
-full=""
-high=""
-medium=""
-low=""
-empty=""
+full="  "
+high="  "
+medium="  "
+low="  "
+empty="  "
 powered=""
 
 battery=$( upower -e | grep battery | sed 1q )
