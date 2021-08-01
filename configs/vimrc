@@ -49,6 +49,35 @@ highlight Normal ctermfg=white ctermbg=NONE
 set omnifunc=syntaxcomplete#Complete
 set tags=./tags,tags;$HOME
 
+" Nice keyboard shortcuts
+nnoremap Y y$
+nnoremap n nzzzv
+nnoremap U Uzzzv
+nnoremap <C-p> :GFiles<Cr>
+
+" undo breakpoints
+inoremap , ,<c-g>u
+inoremap . .<c-g>u
+inoremap ! !<c-g>u
+inoremap ? ?<c-g>u
+inoremap , ,<c-g>u
+inoremap [ [<c-g>u
+inoremap ] ]<c-g>u
+inoremap ( (<c-g>u
+inoremap ) )<c-g>u
+inoremap { {<c-g>u
+inoremap } }<c-g>u
+inoremap = =<c-g>u
+inoremap <space> <space><c-g>u
+
+" Moving text
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+inoremap <C-j> <esc>:m .+1<CR>==i
+inoremap <C-k> <esc>:m .-2<CR>==i
+inoremap <leader>j :m .+1<CR>==
+inoremap <leader>k :m .-2<CR>==
+
 " Buffer Navication
 map <tab> :bNext<CR>
 map <C-b> :Buffers<CR>
