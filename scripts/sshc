@@ -1,0 +1,2 @@
+#!/bin/sh
+ssh $@ $(cat ~/.ssh/config | sed -n 's/^Host \(.*\)/\1/p' | fzf)
