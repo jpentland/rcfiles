@@ -5,28 +5,35 @@ browser=
 go=
 
 ENGINES=\
-"g http://www.google.de/search?q=%s
-d http://www.duckduckgo.com/?q=%s
-s http://startpage.com/do/search?q=%s
+"g https://www.google.de/search?q=%s
+d https://www.duckduckgo.com/?q=%s
+di https://www.duckduckgo.com/?q=%s&iax=images&ia=images
+s https://startpage.com/do/search?q=%s
+si https://www.startpage.com/do/search?q=%s&iax=images&ia=images
 x https://search.snopyta.org/?q=%s&categories=general&language=en-US
 leo http://dict.leo.org/ende?search=%s
 arch https://wiki.archlinux.org/index.php?search=%s
 aur https://aur.archlinux.org/packages/?O=0&K=%s
 r https://reddit.com/r/%s
 w https://en.wikipedia.org/wiki/%s
+wiki https://en.wikipedia.org/wiki/%s
 y https://www.youtube.com/results?search_query=%s
 c https://crates.io/search?q=%s
+cargo https://crates.io/search?q=%s
 a https://www.amazon.de/s?k=%s
+amazon https://www.amazon.de/s?k=%s
 down https://www.downforeveryoneorjustme.com/%s
 android https://developer.android.com/s/results?q=%s
 jira http://jira.intern.gsmk.de/browse/%s
+conf https://confluence.intern.gsmk.de/dosearchsite.action?cql=siteSearch+~+\"%s\"
 chart https://www.tradingview.com/chart/?symbol=%s
 snap https://snapcraft.io/search?q=%s
 flat https://flathub.org/apps/search/%s
 twitch https://www.twitch.tv/%s
 winehq https://www.winehq.org/search?q=%s
 aoe https://ageofempires.fandom.com/wiki/%s
-github https://github.com/search?q=%s"
+github https://github.com/search?q=%s
+br https://boardreader.com/s/%s.html"
 
 BROWSERS=\
 "surf
