@@ -38,6 +38,19 @@ function get_wids {
         fi
 }
 
+# Wait for wids to appear with timeout in seconds
+function wait_wids {
+        remaining=$(( $1 * 10 ))
+
+        while [ -z "$(get_wids)" ]; do
+                sleep 0.1
+                remaining=$(( $remaining - 1 ))
+                if [ "$remaining" == "0" ]; then
+                        break
+                fi
+        done
+}
+
 # Calculate size in pixels
 read screen_width screen_height screen_x screen_y borderWidth top_padding \
         <<< "$(bspc query -T -m focused \
@@ -54,7 +67,9 @@ if [ -z "$wids" ]; then
         bspc rule -a $class -o state=floating hidden=on layer=above
         ($spawn &)
         sleep 0.3
+        wait_wids 5
         wids=$(get_wids)
+        bspc rule -r $class -o state=floating hidden=on layer=above
 fi
 
 # Fail if wid didn't appear
