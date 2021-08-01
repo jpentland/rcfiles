@@ -27,4 +27,4 @@ fi
 site=$(xclip -o -selection clipboard | getDomain | dmenu -p "Site: ")
 exitIfEmpty $site
 password=$(pass $site) || notify-send $(basename $0) "Pass failed"
-echo $password | xclip -selection clipboard && notify-send $(basename $0) "Password for $site copied to clipboard"
+echo -n $password | xclip -selection clipboard && notify-send $(basename $0) "Password for $site copied to clipboard"
