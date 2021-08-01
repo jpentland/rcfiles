@@ -142,6 +142,10 @@ bspc subscribe report | $mods/process_report.py | while read line; do
 	echo $line
 	echo "tabs $(check_tabs)"
 done >> $fifo &
+while true; do cat /tmp/detect-caps; done | while read line; do
+	caps=$(xset -q | sed -n 's/.*Caps Lock:\s\+\(on\|off\).*/\1/p')
+	echo "caps $caps"
+done >> $fifo &
 
 # Set padding
 bspc config top_padding 0
@@ -210,6 +214,14 @@ cat $fifo | while read cmd line; do
 			touch $restart_file
 			break
 			;;
+		caps) if [ "$line" == "off" ]; then
+			    echo "caps off"
+				cbg1="#444455"
+			  elif [ "$line" == "on" ]; then
+				echo "caps on"
+				cbg1="#ff0000"
+			  fi
+			  ;;
 	esac
 
 	# Date
