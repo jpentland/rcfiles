@@ -1,0 +1,425 @@
+#!/bin/sh
+BC_SCALE=4
+
+# Convert meters to feet and inches
+# E.g. 1.5m = 5'10"
+function convert_meters_to_feet_and_inches {
+    value=$1; shift
+
+    feet=$(echo "scale=$BC_SCALE;$value / 0.3048" | bc)
+
+    # round feet down to nearest whole number
+    feet=$(echo "$feet / 1 * 1" | bc)
+
+    total_inches=$(echo "scale=$BC_SCALE;$value / 0.0254" | bc)
+    inches=$(echo "scale=$BC_SCALE;$total_inches - $feet * 12" | bc)
+
+    # use awk to round inches to nearest whole number
+    inches=$(echo $inches | awk '{printf("%.0f\n", $1)}')
+
+    printf "%d'%d\"" $feet $inches
+}
+
+# Parse feet and inches from string and return value in meters
+# E.g. "5'10\"" = 1.5
+function convert_feet_and_inches_to_meters {
+    value=$1; shift
+
+    # use sed to replace single and double quotes with spaces
+    value=$(echo $value | sed "s/[\'\"]/ /g")
+
+    # split into feet and inches
+    feet=$(echo $value | awk '{print $1}')
+    inches=$(echo $value | awk '{print $2}')
+
+    # convert feet and inches to meters
+    value=$(echo "scale=$BC_SCALE;$feet * 0.3048 + $inches * 0.0254" | bc)
+
+    printf "%f" $value
+}
+
+# Convert between various distance units
+function convert_length {
+    check_enough_args $# 3
+    from_unit=$1; shift
+    to_unit=$1; shift
+    value=$1; shift
+
+    # Convert all units to meters
+    case $from_unit in
+        km)
+            value=$(echo "scale=$BC_SCALE;$value * 1000" | bc)
+            ;;
+        m)
+            ;;
+        cm)
+            value=$(echo "scale=$BC_SCALE;$value / 100" | bc)
+            ;;
+        mm)
+            value=$(echo "scale=$BC_SCALE;$value / 1000" | bc)
+            ;;
+        mi)
+            value=$(echo "scale=$BC_SCALE;$value * 1609.344" | bc)
+            ;;
+        yd)
+            value=$(echo "scale=$BC_SCALE;$value * 0.9144" | bc)
+            ;;
+        ft)
+            value=$(echo "scale=$BC_SCALE;$value * 0.3048" | bc)
+            ;;
+        in)
+            value=$(echo "scale=$BC_SCALE;$value * 0.0254" | bc)
+            ;;
+        ftin)
+            value=$(convert_feet_and_inches_to_meters $value)
+            ;;
+        *)
+            echo "Unknown unit: $from_unit"
+            print_length_units
+            return 1
+            ;;
+    esac
+
+    # Convert meters to all units
+    case $to_unit in
+        km)
+            value=$(echo "scale=$BC_SCALE;$value / 1000" | bc)
+            ;;
+        m)
+            ;;
+        cm)
+            value=$(echo "scale=$BC_SCALE;$value * 100" | bc)
+            ;;
+        mm)
+            value=$(echo "scale=$BC_SCALE;$value * 1000" | bc)
+            ;;
+        mi)
+            value=$(echo "scale=$BC_SCALE;$value / 1609.344" | bc)
+            ;;
+        yd)
+            value=$(echo "scale=$BC_SCALE;$value / 0.9144" | bc)
+            ;;
+        ft)
+            value=$(echo "scale=$BC_SCALE;$value / 0.3048" | bc)
+            ;;
+        in)
+            value=$(echo "scale=$BC_SCALE;$value / 0.0254" | bc)
+            ;;
+        ftin)
+            value=$(convert_meters_to_feet_and_inches $value)
+            ;;
+        *)
+            echo "Unknown unit: $to_unit"
+            print_length_units
+            return 1
+            ;;
+    esac
+    echo $value
+}
+
+# Convert between various time units
+function convert_time {
+    check_enough_args $# 3
+    from_unit=$1; shift
+    to_unit=$1; shift
+    value=$1; shift
+
+    # Convert all units to seconds
+    case $from_unit in
+        s)
+            ;;
+        min)
+            value=$(echo "scale=$BC_SCALE;$value * 60" | bc)
+            ;;
+        h)
+            value=$(echo "scale=$BC_SCALE;$value * 3600" | bc)
+            ;;
+        d)
+            value=$(echo "scale=$BC_SCALE;$value * 86400" | bc)
+            ;;
+        w)
+            value=$(echo "scale=$BC_SCALE;$value * 604800" | bc)
+            ;;
+        y)
+            value=$(echo "scale=$BC_SCALE;$value * 31536000" | bc)
+            ;;
+        *)
+            echo "Unknown unit: $from_unit"
+            print_time_units
+            return 1
+            ;;
+    esac
+
+    # Convert seconds to all units
+    case $to_unit in
+        s)
+            ;;
+        min)
+            value=$(echo "scale=$BC_SCALE;$value / 60" | bc)
+            ;;
+        h)
+            value=$(echo "scale=$BC_SCALE;$value / 3600" | bc)
+            ;;
+        d)
+            value=$(echo "scale=$BC_SCALE;$value / 86400" | bc)
+            ;;
+        w)
+            value=$(echo "scale=$BC_SCALE;$value / 604800" | bc)
+            ;;
+        y)
+            value=$(echo "scale=$BC_SCALE;$value / 31536000" | bc)
+            ;;
+        *)
+            echo "Unknown unit: $to_unit"
+            print_time_units
+            return 1
+            ;;
+    esac
+    echo $value
+}
+
+# Convert between various weight units
+function convert_weights {
+    check_enough_args $# 3
+    from_unit=$1; shift
+    to_unit=$1; shift
+    value=$1; shift
+
+    # Convert all units to kilograms
+    case $from_unit in
+        kg)
+            ;;
+        g)
+            value=$(echo "scale=$BC_SCALE;$value / 1000" | bc)
+            ;;
+        lb)
+            value=$(echo "scale=$BC_SCALE;$value * 0.45359237" | bc)
+            ;;
+        oz)
+            value=$(echo "scale=$BC_SCALE;$value * 0.028349523125" | bc)
+            ;;
+        *)
+            echo "Unknown unit: $from_unit"
+            print_weight_units
+            return 1
+            ;;
+    esac
+
+    # Convert kilograms to all units
+    case $to_unit in
+        kg)
+            ;;
+        g)
+            value=$(echo "scale=$BC_SCALE;$value * 1000" | bc)
+            ;;
+        lb)
+            value=$(echo "scale=$BC_SCALE;$value / 0.45359237" | bc)
+            ;;
+        oz)
+            value=$(echo "scale=$BC_SCALE;$value / 0.028349523125" | bc)
+            ;;
+        *)
+            echo "Unknown unit: $to_unit"
+            print_weight_units
+            return 1
+            ;;
+    esac
+    echo $value
+}
+
+# Convert between various volume units
+function convert_volumes {
+    from_unit=$1; shift
+    to_unit=$1; shift
+    value=$1; shift
+
+    # Convert all units to liters
+    case $from_unit in
+        l)
+            ;;
+        gal)
+            value=$(echo "scale=$BC_SCALE;$value * 3.78541" | bc)
+            ;;
+        pt)
+            value=$(echo "scale=$BC_SCALE;$value * 0.56826125" | bc)
+            ;;
+        qt)
+            value=$(echo "scale=$BC_SCALE;$value * 0.1365225" | bc)
+            ;;
+        c)
+            value=$(echo "scale=$BC_SCALE;$value * 0.0044028" | bc)
+            ;;
+        ml)
+            value=$(echo "scale=$BC_SCALE;$value * 0.001" | bc)
+            ;;
+        *)
+            echo "Unknown unit: $from_unit"
+            print_volume_units
+            return 1
+            ;;
+    esac
+
+    # Convert liters to all units
+    case $to_unit in
+        l)
+            ;;
+        gal)
+            value=$(echo "scale=$BC_SCALE;$value / 3.78541" | bc)
+            ;;
+        pt)
+            value=$(echo "scale=$BC_SCALE;$value / 0.56826125" | bc)
+            ;;
+        qt)
+            value=$(echo "scale=$BC_SCALE;$value / 0.1365225" | bc)
+            ;;
+        c)
+            value=$(echo "scale=$BC_SCALE;$value / 0.0044028" | bc)
+            ;;
+        ml)
+            value=$(echo "scale=$BC_SCALE;$value / 0.001" | bc)
+            ;;
+        *)
+            echo "Unknown unit: $to_unit"
+            print_volume_units
+            return 1
+            ;;
+    esac
+
+    echo $value
+}
+
+function convert_temperature {
+    check_enough_args $# 3
+    from_unit=$1; shift
+    to_unit=$1; shift
+    value=$1; shift
+
+    # Convert all units to celsius
+    case $from_unit in
+        c)
+            ;;
+        f)
+            value=$(echo "scale=$BC_SCALE;($value - 32) * 5 / 9" | bc)
+            ;;
+        k)
+            value=$(echo "scale=$BC_SCALE;$value - 273.15" | bc)
+            ;;
+        *)
+            echo "Unknown unit: $from_unit"
+            print_temperature_units
+            return 1
+            ;;
+    esac
+
+    # Convert celsius to all units
+    case $to_unit in
+        c)
+            ;;
+        f)
+            value=$(echo "scale=$BC_SCALE;$value * 9 / 5 + 32" | bc)
+            ;;
+        k)
+            value=$(echo "scale=$BC_SCALE;$value + 273.15" | bc)
+            ;;
+        *)
+            echo "Unknown unit: $to_unit"
+            print_temperature_units
+            return 1
+            ;;
+    esac
+    echo $value
+}
+
+function check_enough_args {
+    if [ $1 -lt $2 ]; then
+        echo "Not enough arguments"
+        print_usage
+        exit 1
+    fi
+}
+
+function main {
+    # Check for enough arguments
+    if [ $# -lt 1 ]; then
+        echo "Not enough arguments"
+        print_usage
+        exit 1
+    fi
+
+    unit_type=$1; shift
+
+    case $unit_type in
+        length)
+            convert_length $@
+            ;;
+        time)
+            convert_time $@
+            ;;
+        weight)
+            convert_weights $@
+            ;;
+        volume)
+            convert_volumes $@
+            ;;
+        temperature)
+            convert_temperature $@
+            ;;
+        -h)
+            print_help
+            exit 0
+            ;;
+        *)
+            echo "Unknown unit type: $unit_type"
+            print_usage
+            exit 1
+            ;;
+    esac
+}
+
+function print_usage {
+    echo "Usage: $0 [length|time|weight|volume|temperature] <from_unit> <to_unit> <value>"
+}
+
+function print_length_units {
+    echo "length units: m, cm, mm, in, ft, yd, mi, ftin"
+}
+
+function print_time_units {
+    echo "time units: s, min, h, d, w, y"
+}
+
+function print_weight_units {
+    echo "weight units: kg, g, lb, oz"
+}
+
+function print_volume_units {
+    echo "volume units: l, gal, pt, qt, c, ml"
+}
+
+function print_temperature_units {
+    echo "temperature units: c, f, k"
+}
+
+function print_help {
+    echo "Convert between various units of measurement"
+    print_usage
+    echo
+    echo "Available unit types:"
+    echo "  length"
+    echo -ne "\t"
+    print_length_units
+    echo "  time"
+    echo -ne "\t"
+    print_time_units
+    echo "  weight"
+    echo -ne "\t"
+    print_weight_units
+    echo "  volume"
+    echo -ne "\t"
+    print_volume_units
+    echo "  temperature"
+    echo -ne "\t"
+    print_temperature_units
+}
+
+main $@
