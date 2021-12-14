@@ -23,6 +23,7 @@ delete_and_link "vim"			".vim"
 delete_and_link "vimrc"			".vimrc"
 vim +PluginInstall +qall
 vim +PluginClean +qall
+nvim +PlugInstall
 
 # General Files Source filename		# Destination filebane (relative to $HOME)
 delete_and_link "bashrc"		".bashrc"
