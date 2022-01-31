@@ -1,0 +1,9 @@
+#!/bin/sh
+if [ -z "$1" ]; then
+        echo "Usage: $(basename $0) playerName"
+        exit 1
+fi
+player=$1; shift
+
+curl -s "https://aoe2.net/api/leaderboard?game=aoe2de&leaderboard_id=3&start=1&search=$player" \
+        | jq '.leaderboard[0].rating'
