@@ -1,0 +1,13 @@
+#!/bin/sh
+CITY="Berlin"
+
+function get_wttr {
+    curl wttr.in/$CITY
+}
+
+while true; do
+    clear
+    echo "Getting weather for $CITY...."
+    get_wttr
+    sleep 60
+done
