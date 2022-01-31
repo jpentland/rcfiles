@@ -1,0 +1,16 @@
+#!/bin/sh
+vol="vol 0.5"
+function good {
+    play -n -c1 synth 0.25 sin A5 fade 0.01 0.25 0.1  $vol 2> /dev/null
+    play -n -c1 synth 0.25 sin C6 fade 0.01 0.25 0.1 $vol 2> /dev/null
+    play -n -c1 synth 0.25 sin C4 fade 0.01 0.25 0.1 $vol 2> /dev/null
+    play -n -c1 synth 0.4 sin F4 fade 0.01 0.4 0.1 $vol 2> /dev/null
+}
+
+function bad {
+    play -n -c1 synth 0.25 sin A5 fade 0.01 0.25 0.1 $vol 2> /dev/null
+    play -n -c1 synth 0.25 sin C6 fade 0.01 0.25 0.1 $vol 2> /dev/null
+    play -n -c1 synth 0.4 sin B3 fade 0.01 0.4 0.1 $vol 2> /dev/null
+}
+
+"$@" && good || bad
