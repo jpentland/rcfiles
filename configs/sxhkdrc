@@ -297,3 +297,6 @@ super + F12; d
 super + F12; w
     dropdown.sh "st -c wttr wttr-loop" "wttr" 20 10 60 78
 
+super + F12; z
+    dropdown.sh --role "PictureInPicture" "true" "firefox" 79 1 20 22
+
