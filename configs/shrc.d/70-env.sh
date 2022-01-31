@@ -1,7 +1,7 @@
 # Environment Variables
 export PATH=~/.local/bin:$PATH
 export PATH=/var/lib/snapd/snap/bin:$PATH
-export EDITOR=vim
+export EDITOR=nvim
 export BROWSER=$HOME/.local/bin/surf
 export GOPATH=~/.gopath
 export PATH=$GOPATH/bin:/opt/google-cloud-sdk/platform/google_appengine/:$PATH
