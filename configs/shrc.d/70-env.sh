@@ -8,6 +8,7 @@ export PATH=$GOPATH/bin:/opt/google-cloud-sdk/platform/google_appengine/:$PATH
 export PATH=$HOME/.local/scripts:$PATH
 export shell=$(sh -c 'ps -p $$ -o ppid=' | xargs ps -o comm= -p)
 export XDG_CONFIG_HOME="$HOME/.config"
+export CHARM_HOST=$(cat ~/.charm_host)
 
 # Add some colour to LESS/MAN pages
 export LESS_TERMCAP_mb=$'\E[01;31m'
