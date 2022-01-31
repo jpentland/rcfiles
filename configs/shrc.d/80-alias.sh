@@ -25,6 +25,10 @@ alias startup="$EDITOR ~/.xmonad/startup.sh"
 alias bspwmrc="$EDITOR ~/.config/bspwm/bspwmrc"
 alias sxhkdrc="$EDITOR ~/.config/sxhkd/sxhkdrc"
 
+function commits {
+    git log --oneline | fzf | awk '{print $1}' | xargs git show
+}
+
 function rcgui {
 	pushd ~/rcfiles > /dev/null
 	git gui
