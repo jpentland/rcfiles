@@ -286,7 +286,7 @@ super + F12; r
 	dropdown.sh "st -c ranger ranger" "ranger" 0 0 70 70
 
 super + F12; p
-    dropdown.sh "st -c gomuks gomuks" "gomuks" 10 10 80 80
+    dropdown.sh "element-desktop" "element" 5 5 90 90
 
 super + F12; t
     dropdown.sh "telegram-desktop" "Telegram" 15 5 70 90
