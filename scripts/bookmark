@@ -1,39 +1,11 @@
 #!/bin/sh
 BOOKMARK_FILE=~/.config/bookmarks.txt
+ENGINES_FILE=~/.config/engines.txt
 current=
 browser=
 go=
 
-ENGINES=\
-"g https://www.google.de/search?q=%s
-d https://www.duckduckgo.com/?q=%s
-di https://www.duckduckgo.com/?q=%s&iax=images&ia=images
-s https://startpage.com/do/search?q=%s
-si https://www.startpage.com/do/search?q=%s&iax=images&ia=images
-x https://search.snopyta.org/?q=%s&categories=general&language=en-US
-leo http://dict.leo.org/ende?search=%s
-arch https://wiki.archlinux.org/index.php?search=%s
-aur https://aur.archlinux.org/packages/?O=0&K=%s
-r https://reddit.com/r/%s
-w https://en.wikipedia.org/wiki/%s
-wiki https://en.wikipedia.org/wiki/%s
-y https://www.youtube.com/results?search_query=%s
-c https://crates.io/search?q=%s
-cargo https://crates.io/search?q=%s
-a https://www.amazon.de/s?k=%s
-amazon https://www.amazon.de/s?k=%s
-down https://www.downforeveryoneorjustme.com/%s
-android https://developer.android.com/s/results?q=%s
-jira http://jira.intern.gsmk.de/browse/%s
-conf https://confluence.intern.gsmk.de/dosearchsite.action?cql=siteSearch+~+\"%s\"
-chart https://www.tradingview.com/chart/?symbol=%s
-snap https://snapcraft.io/search?q=%s
-flat https://flathub.org/apps/search/%s
-twitch https://www.twitch.tv/%s
-winehq https://www.winehq.org/search?q=%s
-aoe https://ageofempires.fandom.com/wiki/%s
-github https://github.com/search?q=%s
-br https://boardreader.com/s/%s.html"
+ENGINES=$(cat $ENGINES_FILE)
 
 BROWSERS=\
 "surf
@@ -41,6 +13,58 @@ firefox --new-window
 firefox --private-window
 chromium --new-window
 chromium --new-window --incognito"
+
+function charm_sync {
+    charm_key="$1"; shift
+    file="$1"; shift
+
+    # Back up the bookmarks file
+    echo "Backing up $file to $file.bak"
+    cp $file $file.bak
+
+    if ! which charm > /dev/null; then
+        echo "Charm not found. Please install it."
+        return
+    fi
+
+    charm_data="$(charm kv get $charm_key)"
+    if [ "$?" -ne 0 ]; then
+        charm_data=""
+    fi
+    local_data="$(cat $file)"
+
+    # Combine both sets of data and use sort -u to remove duplicates
+    if [ -z "$charm_data" ]; then
+        echo "No data found in Charm. Using local data."
+        new_data="$local_data"
+    elif [ -z "$local_data" ]; then
+        echo "No local data found. Using data from Charm."
+        new_data="$charm_data"
+    else
+        echo "Merging local and charm data."
+        new_data="$(echo -e "$local_data\n$charm_data" | sort -u | awk NF)"
+    fi
+    
+    diff_len=$(( $(echo "$new_data" | wc -l) - $(echo "$data_local" | wc -l) ))
+    echo "Difference: $diff_len"
+
+    # Write the combined data to the file
+    echo "$new_data" > $file
+    charm kv set "$charm_key" "$new_data"
+
+    if [ -z "$CHARM_HOST" ]; then
+        hosts=cloud.charm.sh
+    else
+        hosts="$CHARM_HOST"
+    fi
+
+    echo "$charm_key synced to $hosts"
+}
+
+function charm_sync_all {
+    charm_sync "bookmarks" "$BOOKMARK_FILE"
+    charm_sync "engines" "$ENGINES_FILE"
+}
 
 function handle_search_engines {
 	url=$1
@@ -113,6 +137,11 @@ if [ "$1" == "-n" ]; then
 # Edit bookmark file
 elif [ "$1" == "-e" ]; then
 	$EDITOR $BOOKMARK_FILE
+
+# Sync bookmarks
+elif [ "$1" == "-s" ]; then
+    shift
+    charm_sync_all
 
 # Normal operations
 else
