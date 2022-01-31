@@ -293,3 +293,7 @@ super + F12; t
 
 super + F12; d
     dropdown.sh "discord" "Discord" 15 5 70 90
+
+super + F12; w
+    dropdown.sh "st -c wttr wttr-loop" "wttr" 20 10 60 78
+
