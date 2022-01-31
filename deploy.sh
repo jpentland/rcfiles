@@ -21,6 +21,7 @@ git submodule update
 # Update vim plugins
 delete_and_link "vim"			".vim"
 delete_and_link "vimrc"			".vimrc"
+delete_and_link "nvim" ".config/nvim"
 vim +PluginInstall +qall
 vim +PluginClean +qall
 nvim +PlugInstall
@@ -53,3 +54,4 @@ delete_and_link "surf"	".local/lib/surf"
 delete_and_link "dzen2"	".local/dzen2"
 delete_and_link "sxhkdrc"	".config/sxhkd/sxhkdrc"
 delete_and_link "bspwmrc"	".config/bspwm/bspwmrc"
+delete_and_link "tmux.conf"	".tmux.conf"
