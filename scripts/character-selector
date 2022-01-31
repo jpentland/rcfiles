@@ -1,0 +1,34 @@
+#!/bin/sh
+# This script uses dmenu to select a unicode character and copy it to the clipboard.
+EMOJI_DATA_URL=https://unicode.org/Public/emoji/1.0/emoji-data.txt
+EMOJI_DATA=~/.emoji-data.txt
+
+# Download emoji data if it doesn't exist or is older than a week.
+function download_emoji_data {
+    if [ ! -f $EMOJI_DATA ] || [ $(find $EMOJI_DATA -mtime +7) ]; then
+        curl -s $EMOJI_DATA_URL > $EMOJI_DATA
+    fi
+}
+
+# Generate a list of emoji from the emoji data file.
+# Input format: 00A9 ;	text ;	L1 ;	none ;	j	# V1.1 (©) COPYRIGHT SIGN
+# Output format: © - Copyright Sign
+# Any lines beginning with # are ignored.
+# Read from stdin and write to stdout.
+function parse_emoji_list {
+    while read line; do
+        if [ "${line:0:1}" != "#" ]; then
+            code=$(awk '{print $1}' <<< "$line")
+
+            comment=$(sed -e 's/^.*) //' <<< "$line")
+            comment=$(tr '[:upper:]' '[:lower:]' <<< "$comment")
+            comment=$(sed -e 's/\b\(.\)/\u\1/g' <<< "$comment")
+
+            echo -e "\\u$code - $comment"
+        fi
+    done
+}
+
+download_emoji_data
+emoji=$(parse_emoji_list < $EMOJI_DATA | dmenu -i -l 20 -p "Emoji: " | awk '{print $1}')
+printf "$emoji" | xclip -selection clipboard
