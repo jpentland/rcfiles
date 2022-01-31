@@ -205,7 +205,7 @@ super + {_,shift +} z
 	slock {_, & sleep 2s && systemctl suspend}
 
 super + q
-	~/rcfiles/dmenu-emoji/dmenu-emoji.sh -l 10
+    character-selector
 
 super + n
 	networkmanager_dmenu
