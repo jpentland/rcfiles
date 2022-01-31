@@ -300,3 +300,10 @@ super + F12; w
 super + F12; z
     dropdown.sh --role "PictureInPicture" "true" "firefox" 79 1 20 22
 
+super + F12; comma
+    if pidof trayer; then \
+        kill  $(pidof trayer); \
+    else \
+        trayer --monitor 1; \
+    fi
+
