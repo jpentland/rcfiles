@@ -11,6 +11,11 @@ function get_device_ip {
 	ip addr show $device | sed -n 's/.*inet \([0-9\.]\+\)\/.*/\1/p'
 }
 
+function get_device_ipv6 {
+    device=$1; shift
+    ip addr show $device | sed -n 's/.*inet6 \([0-9a-f\:]\+\)\/.*/\1/p'
+}
+
 function show_devices {
 	echo "Available devices:" >> /dev/stderr
 	for d in $devices; do
