@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+CALCIUM_FACTOR = 7.1
+MAGNESIUM_FACTOR = 4.35
+BICARBONATE_FACTOR = 21.8
+
+def total_hardness(calcium, magnesium):
+    return calcium / CALCIUM_FACTOR + magnesium / MAGNESIUM_FACTOR
+
+def alkalinity(bicarbonate, calcium, magnesium):
+    return bicarbonate / BICARBONATE_FACTOR
+
+calcium = float(input("Enter the amount of calcium (mg/L): "))
+magnesium_input = float(input("Enter the amount of magnesium (mg/L): "))
+bicarbonate_input = float(input("Enter the amount of bicarbonate (mg/L): "))
+
+# Round to 2 decimal places
+print(f"Total Hardness: {round(total_hardness(calcium, magnesium_input), 2)}")
+print(f"Alkalinity: {round(alkalinity(bicarbonate_input, calcium, magnesium_input), 2)}")
