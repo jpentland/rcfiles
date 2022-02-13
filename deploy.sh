@@ -1,6 +1,9 @@
 #!/bin/bash
 CFGDIR=configs
 FORCE=$1; shift
+VIM_PLUG_SHA256=0d4dc422c3151ff651063b251933b3465714c5b9f3226faf0ca7f8b4a440a552
+VIM_PLUG_INSTALL=$HOME/.vim/autoload/plug.vim
+NVIM_PLUG_INSTALL=$HOME/.local/share/nvim/site/autoload
 
 function delete_and_link {
 	SOURCE=$1
@@ -8,6 +11,34 @@ function delete_and_link {
 	mkdir -p $(dirname $HOME/$DEST)
 	rm -ir $FORCE "$HOME/$DEST"
 	ln -s "$PWD/$CFGDIR/$SOURCE" "$HOME/$DEST"
+}
+
+function install_vim_plug {
+    wget https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	sum=$(sha256sum plug.vim | awk '{print $1}')
+	if [ "$sum" != "$VIM_PLUG_SHA256" ]; then
+		while true; do
+			read -p "WARNING: Vim plug sha256 does not match, install anyway? [y]es,[n]o,[v]iew > " answer
+			case $answer in
+				y)
+					break
+					;;
+				n)
+					return
+					;;
+				v)
+					less plug.vim
+					continue
+			esac
+		done
+	fi
+
+	set -x
+	mkdir -p $VIM_PLUG_INSTALL
+	mkdir -p $NVIM_PLUG_INSTALL
+	cp plug.vim $VIM_PLUG_INSTALL
+	cp plug.vim $NVIM_PLUG_INSTALL
+	set +x
 }
 
 if [ " $FORCE" != " -f" ]; then
@@ -22,6 +53,7 @@ git submodule update
 delete_and_link "vim"			".vim"
 delete_and_link "vimrc"			".vimrc"
 delete_and_link "nvim" ".config/nvim"
+install_vim_plug
 vim +PluginInstall +qall
 vim +PluginClean +qall
 nvim +PlugInstall
