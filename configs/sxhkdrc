@@ -307,3 +307,5 @@ super + F12; comma
         trayer --monitor 1; \
     fi
 
+super + F12; q
+    qrcode.sh $(xclip -selection clipboard -o)
