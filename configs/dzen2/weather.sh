@@ -8,6 +8,8 @@ condition=$(echo $json | jq ".current_condition []")
 temp=$(echo $condition | jq " .temp_C" | sed 's/\"//g')
 code=$(echo $condition | jq " .weatherCode" | sed 's/\"//g')
 
+# TODO: Fix temperature intervals
+
 function codetodesc {
 	case $1 in
 	113)
@@ -217,11 +219,36 @@ case $(codetodesc $code) in
 		;;
 esac
 
-if [ "$temp" -lt "5" ]; then
-    col="#aaaaff"
-elif [ "$temp" -gt "30" ]; then
-    col="#ff0000"
-else
-    col="#ffffff"
+if [ "$temp" -le "0" ]; then
+    col="#F9F8FF"
+elif [ "$temp" -le "3" ]; then
+    col="#D9D9FF"
+elif [ "$temp" -le "6" ]; then
+    col="#BBC1FF"
+elif [ "$temp" -le "9" ]; then
+    col="#A3B7FF"
+elif [ "$temp" -le "12" ]; then
+    col="#8FC1FF"
+elif [ "$temp" -le "15" ]; then
+    col="#80E3FF"
+elif [ "$temp" -le "18" ]; then
+    col="#75FFD4"
+elif [ "$temp" -le "21" ]; then
+    col="#74FF6D"
+elif [ "$temp" -le "24" ]; then
+    col="#DEFF66"
+elif [ "$temp" -le "27" ]; then
+    col="#FFD161"
+elif [ "$temp" -le "30" ]; then
+    col="#FF9C5E"
+elif [ "$temp" -le "33" ]; then
+    col="#FF7B5B"
+elif [ "$temp" -le "36" ]; then
+    col="#FF665A"
+elif [ "$temp" -le "39" ]; then
+    col="#FF5C59"
+elif [ "$temp" -le "42" ]; then
+    col="#FF5959"
 fi
+
 echo -e " ^fg($col)$temp\u00b0C^fg()"
