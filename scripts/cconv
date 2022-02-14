@@ -1,0 +1,63 @@
+#!/bin/sh
+LNBITS_URL=$(cat $HOME/.cconv_url)
+name=$(basename $0)
+function help {
+    echo "Usage: $name <amount> <currency_from> <currency_to>"
+}
+
+if [ $# -ne 3 ]; then
+    help 1>&2
+    exit 1
+fi
+
+function converion_api {
+    amount=$1
+    from=$2
+    to=$3
+    data='{"amount":'$amount',"from":"'$from'","to":"'$to'"}'
+    headers='Content-Type: application/json'
+    uri="$LNBITS_URL/api/v1/conversion"
+    curl -s -X POST -H "$headers" -d "$data" "$uri"
+}
+
+function get_rate {
+    from=$1; shift
+    to=$1; shift
+
+    to_upper=$(echo $to | tr '[:lower:]' '[:upper:]')
+
+    # lnbits only converts from BTC to other currencies or to sat from other currencies
+    # so if we want to convert between two other currencies, we need to get the sat rate first
+    if [ "$from" == "BTC" ]; then
+        to_sat_rate=100000000
+    elif [ "$from" == "sat" ]; then
+        to_sat_rate=1
+    else
+        to_sat_rate=$(converion_api 1 "$from" "sat" | jq -r '.sats')
+    fi
+
+    if [ "$to" == "BTC" ]; then
+        from_sat_rate=100000000
+    elif [ "$to" == "sat" ]; then
+        from_sat_rate=1
+    else
+        from_sat_rate=$(converion_api 1 "sat" "$to" | jq -r ".$to_upper")
+    fi
+
+    echo "$to_sat_rate*$from_sat_rate" | bc -l
+}
+
+amount=$1; shift
+from=$1; shift
+to=$1;
+if ! [ -f "$HOME/.cconv_url" ]; then
+    echo "Please create $HOME/.cconv_url with a valid lnbits URL" 1>&2
+    exit 1
+fi
+if ! [ -f "$HOME/.cconv_user" ]; then
+    echo "Please create $HOME/.cconv_user with a valid lnbits user ID for URL $LNBITS_URL" 1>&2
+    exit 1
+fi
+LNBITS_USER=$(cat $HOME/.cconv_user)
+rate=$(get_rate "$from" "$to")
+printf "%.04f\n" $(echo "$rate * $amount" | bc)
