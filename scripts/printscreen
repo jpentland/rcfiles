@@ -1,0 +1,34 @@
+#!/bin/bash
+pushd $HOME/Pictures > /dev/null
+echo -n "Enter file name: "
+read file
+
+if [ "$file" == "" ]; then
+    echo "No file name entered"
+    exit 1
+fi
+
+if [ -f "$file" ]; then
+    echo "File already exists"
+    exit 1
+fi
+
+if [[ "$file" != *".png" ]]; then
+    file="$file.png"
+fi
+
+echo "Taking picture in"
+echo "3..."
+sleep 1
+echo "2..."
+sleep 1
+echo "1..."
+sleep 1
+scrot -s $file
+if [ -f $file ]; then
+    echo "File written to $HOME/Pictures/$file"
+else
+    echo "File not written"
+fi
+popd > /dev/null
+
