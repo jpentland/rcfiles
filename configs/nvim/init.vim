@@ -114,8 +114,9 @@ autocmd Filetype mail setlocal spell
 autocmd Filetype mail Copilot disable
 
 " Only enable copilot if the file ".copilot" exists in the current directory
+autocmd VimEnter * Copilot disable
 if filereadable('.copilot')
-    :Copilot enable
+    autocmd VimEnter * Copilot enable
 endif
 nnoremap <leader>c :Copilot enable<CR>
 
