@@ -265,10 +265,10 @@ super + F12; {_,ctrl + }k
 	dropdown.sh "st -c sxhkdrc$cmd $cmd $HOME/.config/sxhkd/sxhkdrc" "sxhkdrc$cmd" 50 0 50 100
 
 super + F12; s
-	dropdown.sh "spotify" "Spotify" 0 0 70 70
+	dropdown.sh "spotify" "Spotify" 5 5 90 90
 
 super + F12; i
-	dropdown.sh "st -c irssi screen -R irssi irssi" "irssi" 0 0 100 50
+	dropdown.sh "st -c irssi screen -R irssi irssi" "irssi" 20 10 60 78
 
 super + F12; c
 	dropdown.sh "st -c khal -e khal interactive" "khal" 70 0 30 40
