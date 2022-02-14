@@ -19,38 +19,31 @@ function charm_sync {
     file="$1"; shift
 
     # Back up the bookmarks file
-    echo "Backing up $file to $file.bak"
-    cp $file $file.bak
+    cp $file $file.local
 
     if ! which charm > /dev/null; then
         echo "Charm not found. Please install it."
         return
     fi
 
-    charm_data="$(charm kv get $charm_key)"
+    charm kv get $charm_key > $file.charm
     if [ "$?" -ne 0 ]; then
-        charm_data=""
+        echo "" > $file.charm
+        while true; do
+            read -p "Charm failed, continue? [y/n]" yn
+            case $yn in
+                [Yy]* ) break;;
+                [Nn]* ) exit 1;;
+                * ) echo "Please answer yes or no.";;
+            esac
+        done
     fi
-    local_data="$(cat $file)"
 
-    # Combine both sets of data and use sort -u to remove duplicates
-    if [ -z "$charm_data" ]; then
-        echo "No data found in Charm. Using local data."
-        new_data="$local_data"
-    elif [ -z "$local_data" ]; then
-        echo "No local data found. Using data from Charm."
-        new_data="$charm_data"
-    else
-        echo "Merging local and charm data."
-        new_data="$(echo -e "$local_data\n$charm_data" | sort -u | awk NF)"
-    fi
-    
-    diff_len=$(( $(echo "$new_data" | wc -l) - $(echo "$data_local" | wc -l) ))
-    echo "Difference: $diff_len"
+    cat $file.local $file.charm | sort -u | grep -v '^$' > $file
+    charm kv set "$charm_key" "$(cat $file)"
 
-    # Write the combined data to the file
-    echo "$new_data" > $file
-    charm kv set "$charm_key" "$new_data"
+    echo "Differences:"
+    diff -su $file.charm $file.local
 
     if [ -z "$CHARM_HOST" ]; then
         hosts=cloud.charm.sh
@@ -69,7 +62,7 @@ function charm_sync_all {
 function handle_search_engines {
 	url=$1
 	pattern=$(awk '{print $1}' <<< $url)
-	engine=$(grep "^$pattern " <<< "$ENGINES" | awk '{print $2}')
+    engine=$(grep "^$pattern " <<< "$ENGINES" | cut -f 2- -d ' ')
 	if [ -z "$engine" ]; then
 		echo $url
 	else
