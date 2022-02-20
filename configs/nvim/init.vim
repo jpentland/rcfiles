@@ -15,6 +15,7 @@ if has('nvim-0.6')
 endif
 Plug 'yggdroot/indentLine'
 Plug 'neomake/neomake'
+Plug 'rust-lang/rust.vim'
 call plug#end()
 
 " Color options
@@ -53,6 +54,7 @@ syntax on
 :set so=5
 set tags=./tags,tags;$HOME
 :set laststatus=0 ruler
+:let g:rustfmt_autosave = 1
 
 " Enable indent lines
 :let g:indentLine_enabled=1
