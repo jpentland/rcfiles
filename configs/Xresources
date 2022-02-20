@@ -1,5 +1,5 @@
 Xcursor.size:  16
-st.alpha: 0.95
+st.alpha: 1
 st.font: SauceCodePro Nerd Font:antialias=true:autohint=true:pixelsize=15:style=Medium,Regular
 st.color0: #002b36
 st.color1: #dc322f
