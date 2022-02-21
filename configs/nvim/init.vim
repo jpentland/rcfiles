@@ -5,10 +5,14 @@
 call plug#begin('~/.config/nvim/plugged')
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'neovim/nvim-lspconfig'
-Plug 'folke/lsp-colors.nvim'
+if has('nvim-0.6.1')
+  Plug 'neovim/nvim-lspconfig'
+  Plug 'folke/lsp-colors.nvim'
+endif
 Plug 'cespare/vim-toml'
-Plug 'github/copilot.vim'
+if has('nvim-0.6')
+  Plug 'github/copilot.vim'
+endif
 Plug 'yggdroot/indentLine'
 Plug 'neomake/neomake'
 call plug#end()
@@ -17,17 +21,19 @@ call plug#end()
 :colorscheme peachpuff
 
 " lsp setup
+if has('nvim-0.6.1')
 lua << EOF
-require("lspconfig").pylsp.setup{}
-require("lsp-colors").setup({
-  Error = "#db4b4b",
-  Warning = "#e0af68",
-  Information = "#0db9d7",
-  Hint = "#10B981"
-})
+  require("lspconfig").pylsp.setup{}
+  require("lsp-colors").setup({
+    Error = "#db4b4b",
+    Warning = "#e0af68",
+    Information = "#0db9d7",
+    Hint = "#10B981"
+  })
 EOF
-set completeopt-=preview
 autocmd Filetype python setlocal omnifunc=v:lua.vim.lsp.omnifunc
+endif
+set completeopt-=preview
 autocmd Filetype javascript setlocal sw=2
 autocmd Filetype vue setlocal sw=2
 
@@ -111,14 +117,17 @@ augroup filetypedetect
   autocmd BufRead,BufNewFile *mutt-*              setfiletype mail
 augroup END
 autocmd Filetype mail setlocal spell
-autocmd Filetype mail Copilot disable
 
-" Only enable copilot if the file ".copilot" exists in the current directory
-autocmd VimEnter * Copilot disable
-if filereadable('.copilot')
-    autocmd VimEnter * Copilot enable
+if has('nvim-0.6')
+  autocmd Filetype mail Copilot disable
+
+  " Only enable copilot if the file ".copilot" exists in the current directory
+  autocmd VimEnter * Copilot disable
+  if filereadable('.copilot')
+      autocmd VimEnter * Copilot enable
+  endif
+  nnoremap <leader>c :Copilot enable<CR>
 endif
-nnoremap <leader>c :Copilot enable<CR>
 
 " Moving text
 vnoremap J :m '>+1<CR>gv=gv
