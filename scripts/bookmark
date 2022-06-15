@@ -1,9 +1,14 @@
-#!/bin/sh
-BOOKMARK_FILE=~/.config/bookmarks.txt
-ENGINES_FILE=~/.config/engines.txt
+#!/bin/bash
+CONFIG_DIR=~/.config/bookmark
+BOOKMARK_FILE=$CONFIG_DIR/bookmarks.txt
+ENGINES_FILE=$CONFIG_DIR/engines.txt
+PASSPHRASE_FILE=$CONFIG_DIR/bookmark-passphrase.txt
+SSH_HOST=$(cat $CONFIG_DIR/ssh-host.txt)
 current=
 browser=
 go=
+
+mkdir -p $CONFIG_DIR
 
 ENGINES=$(cat $ENGINES_FILE)
 
@@ -14,49 +19,79 @@ firefox --private-window
 chromium --new-window
 chromium --new-window --incognito"
 
-function charm_sync {
-    charm_key="$1"; shift
+function encrypt {
+    local file=$1
+
+    if ! [ -f $PASSPHRASE_FILE ]; then
+        echo "Please create $PASSPHRASE_FILE" 2>&1
+        exit 1
+    fi
+
+    rm -f $BOOKMARK_FILE.aes
+
+    gpg \
+        --batch \
+        --passphrase-file \
+        $PASSPHRASE_FILE \
+        --output \
+        $file.aes \
+        --symmetric \
+        --cipher-algo AES256 \
+        $file
+}
+
+function decrypt {
+    local file=$1
+
+    if ! [ -f $PASSPHRASE_FILE ]; then
+        echo "Please create $PASSPHRASE_FILE" 2>&1
+        exit 1
+    fi
+
+    rm -f $BOOKMARK_FILE.dec
+
+    gpg \
+        --batch \
+        --passphrase-file \
+        $PASSPHRASE_FILE \
+        --output \
+        $file.dec \
+        --decrypt $file.aes
+}
+
+function ssh_sync {
     file="$1"; shift
+    if [ -z "$SSH_HOST" ]; then
+        echo "Please set SSH_HOST variable"
+        exit 1
+    fi
 
     # Back up the bookmarks file
     cp $file $file.local
 
-    if ! which charm > /dev/null; then
-        echo "Charm not found. Please install it."
+    if ! which scp > /dev/null; then
+        echo "ssh not found. Please install it."
         return
     fi
 
-    charm kv get $charm_key > $file.charm
-    if [ "$?" -ne 0 ]; then
-        echo "" > $file.charm
-        while true; do
-            read -p "Charm failed, continue? [y/n]" yn
-            case $yn in
-                [Yy]* ) break;;
-                [Nn]* ) exit 1;;
-                * ) echo "Please answer yes or no.";;
-            esac
-        done
-    fi
+    scp $SSH_HOST:$(basename $file).aes $file.aes
+    decrypt $file
 
-    cat $file.local $file.charm | sort -u | grep -v '^$' > $file
-    charm kv set "$charm_key" "$(cat $file)"
+    # Combine old and new files
+    cat $file.local $file.dec | sort -u | grep -v '^$' > $file
+
+    encrypt $file
+    scp $file.aes $SSH_HOST:$(basename $file).aes
 
     echo "Differences:"
-    diff -su $file.charm $file.local
+    diff -su $file.dec $file.local
 
-    if [ -z "$CHARM_HOST" ]; then
-        hosts=cloud.charm.sh
-    else
-        hosts="$CHARM_HOST"
-    fi
-
-    echo "$charm_key synced to $hosts"
+    echo "$file synced to $SSH_HOST"
 }
 
-function charm_sync_all {
-    charm_sync "bookmarks" "$BOOKMARK_FILE"
-    charm_sync "engines" "$ENGINES_FILE"
+function ssh_sync_all {
+    ssh_sync "$BOOKMARK_FILE"
+    ssh_sync "$ENGINES_FILE"
 }
 
 function handle_search_engines {
@@ -134,7 +169,7 @@ elif [ "$1" == "-e" ]; then
 # Sync bookmarks
 elif [ "$1" == "-s" ]; then
     shift
-    charm_sync_all
+    ssh_sync_all
 
 # Normal operations
 else
